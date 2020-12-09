@@ -1,7 +1,8 @@
-package com.example.screenbindger
+package com.example.screenbindger.view.activity.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.screenbindger.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
