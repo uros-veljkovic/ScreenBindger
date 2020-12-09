@@ -1,6 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
+    id 'dagger.hilt.android.plugin'
+    id "androidx.navigation.safeargs.kotlin"
 }
 
 android {
@@ -23,6 +27,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -37,9 +47,66 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    def version_material_design = "1.2.0"
+    def version_hilt = "2.28-alpha"
+    def version_hilt_viewmodel = "1.0.0-alpha02"
+    def version_lifecycle = "2.2.0"
+    def version_nav = "2.3.1"
+    def version_retrofit = "2.9.0"
+    def version_blitz_validator = "0.0.1"
+    def version_easy_permissions = "3.0.0"
+    def version_glide = "4.11.0"
+
+    //Material design
+    implementation "com.google.android.material:material:${version_material_design}"
+
+    //RecyclerView
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+    //Hilt
+    implementation "com.google.dagger:hilt-android:$version_hilt"
+    kapt "com.google.dagger:hilt-android-compiler:$version_hilt"
+
+    //Hilt with ViewModel
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$version_hilt_viewmodel"
+    kapt "androidx.hilt:hilt-compiler:$version_hilt_viewmodel"
+
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$version_lifecycle"
+
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$version_lifecycle"
+
+    // Saved state module for ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$version_lifecycle"
+
+    // Navigation component
+    implementation "androidx.navigation:navigation-fragment-ktx:$version_nav"
+    implementation "androidx.navigation:navigation-ui-ktx:$version_nav"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:$version_nav"
+
+    //  KenBurnsView
+    implementation 'com.flaviofaria:kenburnsview:1.0.7'
+
+    //  Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$version_retrofit"
+    implementation "com.google.code.gson:gson:2.8.6"
+    implementation "com.squareup.retrofit2:converter-gson:$version_retrofit"
+
+    //  Blitz form validator
+    implementation "bloder.com:blitz:$version_blitz_validator"
+
+    // Easy permissions
+    implementation "pub.devrel:easypermissions:$version_easy_permissions"
+
+    //Glide
+    implementation "com.github.bumptech.glide:glide:$version_glide"
+    kapt "com.github.bumptech.glide:compiler:$version_glide"
+
+
 }
