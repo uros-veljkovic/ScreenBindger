@@ -63,6 +63,7 @@ dependencies {
     def version_easy_permissions = "3.0.0"
     def version_glide = "4.11.0"
     def version_leak_canary = "2.5"
+    def version_room = "2.2.5"
 
     //Material design
     implementation "com.google.android.material:material:${version_material_design}"
@@ -113,4 +114,10 @@ dependencies {
     // LeakCanary
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$version_leak_canary"
 
+    //Room
+    implementation "androidx.room:room-runtime:$version_room"
+    kapt "androidx.room:room-compiler:$version_room"
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$version_room"
 }
