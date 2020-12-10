@@ -8,6 +8,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name=".app.ScreenBindger"
         android:theme="@style/Theme.ScreenBindger">
         <activity android:name=".view.activity.onboarding.OnboardingActivity"></activity>
         <activity android:name=".view.activity.main.MainActivity">
