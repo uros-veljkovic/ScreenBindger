@@ -3,6 +3,7 @@
 
         <dimen name="small_50">4dp</dimen>
         <dimen name="small_100">8dp</dimen>
+        <dimen name="small_125">12dp</dimen>
 
         <dimen name="normal_100">16dp</dimen>
         <dimen name="normal_125">20dp</dimen>

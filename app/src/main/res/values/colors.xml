@@ -9,4 +9,9 @@
     <color name="secondaryDarkColor">#aa0000</color>
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#ffffff</color>
+
+    <color name="defaultBackground">#e5e5e5</color>
+    <color name="defaultButtonColor">#3c3c3c</color>
+    <color name="defaultCircularImageViewBackground">#797979</color>
+    <color name="text_input_layout_box_stroke_color">#8a8a8a</color>
 </resources>
