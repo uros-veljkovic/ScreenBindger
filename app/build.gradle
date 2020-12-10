@@ -62,6 +62,7 @@ dependencies {
     def version_blitz_validator = "0.0.1"
     def version_easy_permissions = "3.0.0"
     def version_glide = "4.11.0"
+    def version_leak_canary = "2.5"
 
     //Material design
     implementation "com.google.android.material:material:${version_material_design}"
@@ -109,5 +110,7 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$version_glide"
     kapt "com.github.bumptech.glide:compiler:$version_glide"
 
+    // LeakCanary
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$version_leak_canary"
 
 }
