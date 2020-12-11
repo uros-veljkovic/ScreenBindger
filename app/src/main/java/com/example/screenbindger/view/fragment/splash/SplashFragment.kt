@@ -44,29 +44,22 @@ class SplashFragment : Fragment() {
      */
     private fun observeIfUserLoggedIn() {
         viewModel.isLoggedIn().observe(viewLifecycleOwner, Observer { isLoggedIn ->
-            if (isLoggedIn != null) {
-                gotoLoginFragment()
-            } else {
-                gotoMainActivity()
-            }
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (isLoggedIn != null) {
+                    gotoLoginFragment()
+                } else {
+                    gotoMainActivity()
+                }
+            }, 1000)
         })
     }
 
     private fun gotoLoginFragment() {
-        Toast.makeText(context, "Logged in !", Toast.LENGTH_SHORT).show()
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
-        }, 3000)
+        findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
     }
 
     private fun gotoMainActivity() {
-        Toast.makeText(context, "Not logged in...", Toast.LENGTH_SHORT).show()
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(requireActivity(), MainActivity::class.java))
-            requireActivity().finish()
-        }, 3000)
-
+        startActivity(Intent(requireActivity(), MainActivity::class.java))
+        requireActivity().finish()
     }
 }
