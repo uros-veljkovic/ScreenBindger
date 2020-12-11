@@ -24,35 +24,22 @@ constructor(
 ) : TextInputEditText(context, attributeSet, defStyleAttr) {
 
     private lateinit var datePicker: MaterialDatePicker<*>
+    private val dateFormat: SimpleDateFormat
 
     init {
         showSoftInputOnFocus = false
-    }
-
-/*    override fun onFocusChanged(focused: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
-        super.onFocusChanged(focused, direction, previouslyFocusedRect)
-        if(focused){
-            showDatePicker()
+        dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
         }
     }
-
-    override fun setOnClickListener(l: OnClickListener?) {
-        super.setOnClickListener(l)
-        showDatePicker()
-    }*/
-
 
     fun showDatePicker(parentFragmentManager: FragmentManager) {
         datePicker = MaterialDatePicker.Builder
             .datePicker()
             .setTitleText("Select your date of birth")
             .build()
-        val outputDateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).apply {
-            timeZone = TimeZone.getTimeZone("UTC")
-        }
         datePicker.addOnPositiveButtonClickListener {
-            val text = outputDateFormat.format(it)
-            datePicker.headerText
+            val text = dateFormat.format(it)
             setText(text)
             clearFocus()
         }

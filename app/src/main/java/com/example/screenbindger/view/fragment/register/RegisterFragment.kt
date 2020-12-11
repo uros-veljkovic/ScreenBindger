@@ -22,10 +22,9 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
 
         val view = bind(inflater, container)
-        initOnClickListeners()
+        observeDatePicker()
 
         return view
     }
@@ -36,8 +35,8 @@ class RegisterFragment : Fragment() {
         return binding.root
     }
 
-    private fun initOnClickListeners() {
-        binding.etUserDateOfBirth.setOnFocusChangeListener { v, hasFocus ->
+    private fun observeDatePicker() {
+        binding.etUserDateOfBirth.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus)
                 etUserDateOfBirth.showDatePicker(parentFragmentManager)
         }
