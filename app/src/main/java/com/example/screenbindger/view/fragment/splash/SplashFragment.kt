@@ -45,7 +45,7 @@ class SplashFragment : Fragment() {
     private fun observeIfUserLoggedIn() {
         viewModel.isLoggedIn().observe(viewLifecycleOwner, Observer { isLoggedIn ->
             Handler(Looper.getMainLooper()).postDelayed({
-                if (isLoggedIn != null) {
+                if (isLoggedIn == null) {
                     gotoLoginFragment()
                 } else {
                     gotoMainActivity()
