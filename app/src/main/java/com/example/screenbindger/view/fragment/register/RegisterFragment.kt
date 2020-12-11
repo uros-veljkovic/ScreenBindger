@@ -6,18 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
-import com.example.screenbindger.R
+import androidx.fragment.app.viewModels
 import com.example.screenbindger.databinding.FragmentRegisterBinding
-import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_register.*
-import java.util.*
 
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
 
     lateinit var binding: FragmentRegisterBinding
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,35 +24,24 @@ class RegisterFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
-        binding = FragmentRegisterBinding.inflate(layoutInflater)
+        val view = bind(inflater, container)
         initOnClickListeners()
 
+        return view
+    }
+
+    private fun bind(inflater: LayoutInflater, container: ViewGroup?): View {
+        binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
         return binding.root
     }
 
-    fun initOnClickListeners(){
-        binding.etUserDateOfBirth.setOnFocusChangeListener { _, gotFocus ->
-            if(gotFocus){
-                createDatePicker()
-            }
+    private fun initOnClickListeners() {
+        binding.etUserDateOfBirth.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus)
+                etUserDateOfBirth.showDatePicker(parentFragmentManager)
         }
-
     }
-
-    private fun createDatePicker(){
-        val datePicker = MaterialDatePicker.Builder
-            .datePicker()
-            .setTitleText("Select your date of birth")
-            .build()
-
-        datePicker.addOnPositiveButtonClickListener {
-            etUserDateOfBirth.setText(datePicker.headerText)
-            binding.etUserDateOfBirth.clearFocus()
-        }
-
-        datePicker.show(parentFragmentManager, "MATERIAL_DATE_PICKER")
-    }
-
 }
 
 inline fun EditText.onFocusChange(crossinline hasFocus: (Boolean) -> Unit) {

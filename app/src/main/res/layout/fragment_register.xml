@@ -6,8 +6,8 @@
 
     <data>
         <variable
-            name="user"
-            type="com.example.screenbindger.db.local.entity.user.observable.UserObservable" />
+            name="viewModel"
+            type="com.example.screenbindger.view.fragment.register.RegisterViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,7 +42,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etUserFullName"
-                android:text="@={user.fullName}"
+                android:text="@={viewModel.user.fullName}"
                 android:inputType="textPersonName"
                 style="@style/Widget.ScreenBindger.TextInputEditText"
                 android:layout_width="match_parent"
@@ -63,7 +63,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etUserEmail"
-                android:text="@={user.email}"
+                android:text="@={viewModel.user.email}"
                 style="@style/Widget.ScreenBindger.TextInputEditText"
                 android:layout_width="match_parent"
                 android:inputType="textEmailAddress"
@@ -84,7 +84,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etUserPassword"
-                android:text="@={user.password}"
+                android:text="@={viewModel.user.password}"
                 style="@style/Widget.ScreenBindger.TextInputEditText"
                 android:layout_width="match_parent"
                 android:inputType="textPassword"
@@ -103,10 +103,11 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilUserPassword">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <com.example.screenbindger.view.custom.edittext.DatePickerEditText
                 android:id="@+id/etUserDateOfBirth"
                 style="@style/Widget.ScreenBindger.TextInputEditText"
                 android:layout_width="match_parent"
+                android:text="@={viewModel.user.dateOfBirth}"
                 android:inputType="date"
                 android:layout_height="match_parent" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -118,6 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/large_100"
             android:text="@string/register_placeholder"
+            android:onClick="@{() -> viewModel.register()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
