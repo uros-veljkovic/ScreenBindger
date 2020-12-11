@@ -12,13 +12,14 @@
         android:theme="@style/Theme.ScreenBindger">
         <activity
             android:name=".view.activity.onboarding.OnboardingActivity"
-            android:theme="@style/Theme.ScreenBindger.NoActionbar" />
-        <activity android:name=".view.activity.main.MainActivity">
+            android:theme="@style/Theme.ScreenBindger.NoActionbar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".view.activity.main.MainActivity">
         </activity>
     </application>
 

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_activity_onboarding"
-    app:startDestination="@id/genresFragment">
+    app:startDestination="@id/splashFragment2">
 
     <fragment
         android:id="@+id/genresFragment"
@@ -54,4 +54,13 @@
             android:id="@+id/action_genreMoviesFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
     </fragment><action android:id="@+id/action_global_profileFragment" app:destination="@id/profileFragment"/>
+    <fragment
+        android:id="@+id/splashFragment2"
+        android:name="com.example.screenbindger.view.fragment.splash.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment2_to_trendingFragment"
+            app:destination="@id/trendingFragment" />
+    </fragment>
 </navigation>

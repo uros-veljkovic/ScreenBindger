@@ -64,6 +64,7 @@ dependencies {
     def version_glide = "4.11.0"
     def version_leak_canary = "2.5"
     def version_room = "2.2.5"
+    def version_coroutines = "1.4.2"
 
     //Material design
     implementation "com.google.android.material:material:${version_material_design}"
@@ -120,4 +121,7 @@ dependencies {
 
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$version_room"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version_coroutines"
+
 }
