@@ -1,6 +1,5 @@
 package com.example.screenbindger.di.module.db.local
 
-import androidx.room.Room
 import androidx.room.Room.databaseBuilder
 import com.example.screenbindger.app.ScreenBindger
 import com.example.screenbindger.db.local.db.ScreenBindgerDatabase
@@ -17,12 +16,12 @@ class ScreenBindgerDatabaseModule {
 
     @Singleton
     @Provides
-    fun provideScreenBindgerDatabase(): ScreenBindgerDatabase{
+    fun provideScreenBindgerDatabase(): ScreenBindgerDatabase {
         return databaseBuilder(
             ScreenBindger.context(),
             ScreenBindgerDatabase::class.java,
             LOCAL_DATABASE_NAME
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
 
