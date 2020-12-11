@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.screenbindger.db.local.entity.UserEntity
+import com.example.screenbindger.db.local.entity.user.UserEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

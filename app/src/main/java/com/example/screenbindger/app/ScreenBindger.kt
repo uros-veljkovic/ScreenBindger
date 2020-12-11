@@ -2,7 +2,6 @@ package com.example.screenbindger.app
 
 import android.app.Application
 import android.content.Context
-import com.example.screenbindger.db.local.entity.UserEntity
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
