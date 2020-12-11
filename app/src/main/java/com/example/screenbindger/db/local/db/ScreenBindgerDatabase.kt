@@ -6,7 +6,7 @@ import com.example.screenbindger.db.local.dao.UserDao
 import com.example.screenbindger.db.local.entity.user.UserEntity
 import kotlinx.coroutines.flow.Flow
 
-@Database(entities = [UserEntity::class], version = 2)
+@Database(entities = [UserEntity::class], version = 3)
 abstract class ScreenBindgerDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
