@@ -3,7 +3,7 @@ package com.example.screenbindger.view.fragment.register
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.local.db.ScreenBindgerDatabase
-import com.example.screenbindger.db.local.entity.UserEntity
+import com.example.screenbindger.db.local.entity.user.UserEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
