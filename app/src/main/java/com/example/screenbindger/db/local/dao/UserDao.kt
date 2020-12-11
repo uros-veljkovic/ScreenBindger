@@ -7,6 +7,6 @@ import com.example.screenbindger.db.local.entity.UserEntity
 @Dao
 interface UserDao {
 
-    @Query("SELECT * FROM userentity WHERE is_logged_in == 1")
-    suspend fun findLoggedInUser(): UserEntity?
+    @Query("SELECT is_logged_in FROM userentity WHERE is_logged_in == 1")
+    suspend fun isLoggedIn(): Boolean?
 }
