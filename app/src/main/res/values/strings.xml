@@ -10,4 +10,7 @@
     <string name="register_placeholder">Register</string>
     <string name="already_have_an_account_placeholder">Already have an account? Login </string>
     <string name="here_placeholder">here</string>
+    <string name="email_required_placeholder">Email (Required)</string>
+    <string name="full_name_required_placeholder">Full name (Required)</string>
+    <string name="password_required_placeholder">Password (Required)</string>
 </resources>

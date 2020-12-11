@@ -1,15 +1,17 @@
 package com.example.screenbindger.view.fragment.register
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import bloder.com.blitzcore.enableWhenUsing
 import com.example.screenbindger.databinding.FragmentRegisterBinding
+import com.example.screenbindger.util.validator.FieldValidator
+import com.example.screenbindger.view.activity.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_register.*
 
 
 @AndroidEntryPoint
@@ -25,7 +27,8 @@ class RegisterFragment : Fragment() {
 
         val view = bind(inflater, container)
         observeDatePicker()
-
+        observeFieldValidation()
+        initOnClickListeners()
         return view
     }
 
@@ -38,11 +41,31 @@ class RegisterFragment : Fragment() {
     private fun observeDatePicker() {
         binding.etUserDateOfBirth.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus)
-                etUserDateOfBirth.showDatePicker(parentFragmentManager)
+                binding.etUserDateOfBirth.showDatePicker(parentFragmentManager)
         }
     }
-}
 
-inline fun EditText.onFocusChange(crossinline hasFocus: (Boolean) -> Unit) {
-    setOnFocusChangeListener(View.OnFocusChangeListener { view, gotFocus -> })
+    private fun observeFieldValidation() {
+        binding.btnRegister.enableWhenUsing(FieldValidator()) {
+            binding.apply {
+                etUserFullName.isNotEmpty()
+                etUserEmail.isNotEmpty()
+                etUserPassword.isNotEmpty()
+            }
+        }
+    }
+
+    private fun initOnClickListeners() {
+        binding.btnRegister.setOnClickListener {
+            viewModel.register()
+            gotoMainActivity()
+        }
+    }
+
+    private fun gotoMainActivity() {
+        startActivity(Intent(requireActivity(), MainActivity::class.java))
+        requireActivity().finish()
+    }
+
+
 }

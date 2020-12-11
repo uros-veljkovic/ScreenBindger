@@ -15,8 +15,6 @@ class RegisterViewModel
     val user: UserObservable
 ) : ViewModel(){
 
-
-
     fun register(){
         CoroutineScope(Dispatchers.IO).launch {
             db.register(user.toEntity())

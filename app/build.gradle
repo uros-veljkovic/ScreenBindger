@@ -65,6 +65,8 @@ dependencies {
     def version_leak_canary = "2.5"
     def version_room = "2.2.5"
     def version_coroutines = "1.4.2"
+    def version_blitz_form_validator = "0.0.1"
+
 
     //Material design
     implementation "com.google.android.material:material:${version_material_design}"
@@ -122,6 +124,10 @@ dependencies {
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$version_room"
 
+    // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version_coroutines"
+
+    //  Blitz form validator
+    implementation "bloder.com:blitz:$version_blitz_form_validator"
 
 }
