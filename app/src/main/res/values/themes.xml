@@ -46,7 +46,7 @@
     <!-- TextInputLayout styling-->
     <style name="Widget.ScreenBindger.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="shapeAppearance">@style/Widget.ScreenBindger.ShapeAppearance.NoCut</item>
-        <item name="android:layout_marginHorizontal" tools:targetApi="o">@dimen/normal_100</item>
+        <item name="android:layout_marginHorizontal" tools:targetApi="o">@dimen/large_125</item>
         <item name="android:paddingBottom">@dimen/small_100</item>
         <item name="hintTextAppearance">@style/TextAppearance.ScreenBindger.HintText</item>
         <item name="hintTextColor">@color/primaryDarkColor</item>
@@ -62,8 +62,11 @@
         <item name="autoSizeTextType">uniform</item>
     </style>
 
+    <!-- Outlined button styling-->
     <style name="Widget.ScreenBindger.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="shapeAppearance">@style/Widget.ScreenBindger.ShapeAppearance.NoCut</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="textAllCaps">false</item>
         <item name="android:paddingHorizontal" tools:targetApi="o">@dimen/large_100</item>
         <item name="android:paddingVertical" tools:targetApi="o">@dimen/small_125</item>
         <item name="android:backgroundTint">@color/defaultButtonColor</item>

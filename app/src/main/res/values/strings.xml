@@ -3,4 +3,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="screen_bindger">Screen Bindger</string>
+    <string name="full_name_placeholder">Full name</string>
+    <string name="email_placeholder">Email</string>
+    <string name="password_placeholder">Password</string>
+    <string name="date_of_birth_placeholder">Date of birth</string>
+    <string name="register_placeholder">Register</string>
+    <string name="already_have_an_account_placeholder">Already have an account? Login </string>
+    <string name="here_placeholder">here</string>
 </resources>
