@@ -10,4 +10,5 @@ interface UserDao {
 
     @Query("SELECT is_logged_in FROM userentity WHERE is_logged_in == 1")
     fun isLoggedIn(): Flow<Boolean?>
+
 }

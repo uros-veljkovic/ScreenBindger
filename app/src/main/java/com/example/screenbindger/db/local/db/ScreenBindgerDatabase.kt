@@ -8,9 +8,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Database(entities = [UserEntity::class], version = 1)
 abstract class ScreenBindgerDatabase : RoomDatabase() {
+
     abstract fun userDao(): UserDao
 
     fun isLoggedIn(): Flow<Boolean?> {
         return userDao().isLoggedIn()
     }
+
 }

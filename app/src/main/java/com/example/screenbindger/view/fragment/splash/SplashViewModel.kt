@@ -16,4 +16,5 @@ constructor(
     fun isLoggedIn(): LiveData<Boolean?> {
         return db.isLoggedIn().asLiveData()
     }
+
 }

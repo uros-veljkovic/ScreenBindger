@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/nav_host_fragment_activity_main"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        app:navGraph="@navigation/nav_graph_activity_main"
+        app:navGraph="@navigation/nav_graph_main"
         app:defaultNavHost="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
