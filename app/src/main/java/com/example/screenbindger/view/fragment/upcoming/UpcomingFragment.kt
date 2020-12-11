@@ -1,4 +1,4 @@
-package com.example.screenbindger.view.fragment
+package com.example.screenbindger.view.fragment.upcoming
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
