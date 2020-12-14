@@ -1,5 +1,6 @@
 package com.example.screenbindger.db.remote.service.movie
 
+import com.example.screenbindger.db.remote.response.TrendingMoviesResponse
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
 import com.example.screenbindger.util.constants.POSTER_SIZE_SMALL
@@ -12,7 +13,7 @@ constructor(
     private val movieApi: MovieApi
 ) {
 
-    suspend fun getTrending(): Response<List<MovieEntity>>{
+    suspend fun getTrending(): Response<TrendingMoviesResponse>{
         return movieApi.getTrending()
     }
 
