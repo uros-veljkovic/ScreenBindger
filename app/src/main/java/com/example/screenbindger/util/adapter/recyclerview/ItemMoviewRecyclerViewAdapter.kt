@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.screenbindger.databinding.ItemMovieBinding
 import com.example.screenbindger.model.domain.GenreEntity
 import com.example.screenbindger.model.domain.MovieEntity
+import com.example.screenbindger.model.global.Genres
 import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
 import com.example.screenbindger.util.constants.API_KEY
 import com.example.screenbindger.util.constants.POSTER_SIZE_SMALL
@@ -36,7 +37,7 @@ class ItemMoviewRecyclerViewAdapter(
 
         holder.bind(movie)
         bindPoster(poster, movie.smallPosterUrl)
-        bindGenres(tvGenres, movie.genreIds)
+//        bindGenres(tvGenres, movie.genreIds)
 
         holder.itemView.setOnClickListener { listener.onOfferItemClick(position) }
     }
@@ -52,14 +53,22 @@ class ItemMoviewRecyclerViewAdapter(
 
         imageView.refreshDrawableState()
     }
-
+/*
     private fun bindGenres(tvGenres: TextView, genres: List<Int>?){
         var stringGenres = ""
-        genres?.forEach{
-            stringGenres += "$it, "
+
+        genres?.let {genreIds ->
+            Genres.list.forEach { globalGenre ->
+                if (genreIds.contains(globalGenre.id)){
+                    stringGenres += "${globalGenre.name}, "
+                }
+            }
         }
+        stringGenres.dropLast(2)
         tvGenres.text = stringGenres
-    }
+        tvGenres.invalidate()
+        tvGenres.refreshDrawableState()
+    }*/
 
     override fun getItemCount(): Int {
         return list.size

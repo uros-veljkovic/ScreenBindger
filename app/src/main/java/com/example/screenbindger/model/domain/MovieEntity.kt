@@ -4,25 +4,23 @@ import android.util.Log
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
-import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
-import com.example.screenbindger.util.constants.API_KEY
-import com.example.screenbindger.util.constants.POSTER_SIZE_SMALL
+import com.example.screenbindger.model.global.Genres
 import com.google.gson.annotations.SerializedName
 
-class MovieEntity : BaseObservable(){
+class MovieEntity : BaseObservable() {
 
     @SerializedName("poster_path")
     @get: Bindable
     var bigPosterUrl: String? = null
-    set(value){
-        field = value
-        notifyPropertyChanged(BR.bigPosterUrl)
-    }
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.bigPosterUrl)
+        }
 
     @SerializedName("backdrop_path")
     @get: Bindable
     var smallPosterUrl: String? = null
-        set(value){
+        set(value) {
             field = value
             notifyPropertyChanged(BR.smallPosterUrl)
         }
@@ -30,7 +28,7 @@ class MovieEntity : BaseObservable(){
     @SerializedName("title")
     @get: Bindable
     var title: String? = null
-        set(value){
+        set(value) {
             field = value
             notifyPropertyChanged(BR.title)
         }
@@ -38,7 +36,7 @@ class MovieEntity : BaseObservable(){
     @SerializedName("vote_average")
     @get: Bindable
     var rating: Double? = null
-        set(value){
+        set(value) {
             field = value
             notifyPropertyChanged(BR.rating)
         }
@@ -46,22 +44,22 @@ class MovieEntity : BaseObservable(){
     @SerializedName("overview")
     @get: Bindable
     var description: String? = null
-        set(value){
+        set(value) {
             field = value
             notifyPropertyChanged(BR.description)
         }
 
     @SerializedName("genre_ids")
     var genreIds: List<Int>? = null
-        set(value){
+        set(value) {
             field = value
         }
 
     @get: Bindable
-    var genres: List<GenreEntity>? = null
+    var genres: String = ""
     set(value){
         field = value
-        // Preuzmi zanrove iz singleton klase
+        notifyPropertyChanged(BR.genres)
     }
 
     var casts: List<CastEntity?>? = null

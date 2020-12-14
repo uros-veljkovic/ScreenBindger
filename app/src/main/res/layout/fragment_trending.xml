@@ -13,18 +13,9 @@
         android:layout_height="match_parent"
         tools:context=".view.fragment.trending.TrendingFragment">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:elevation="16dp"
-            android:background="#33000000"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTrending"
+            android:layout_marginBottom="56dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
             android:layoutAnimation="@anim/recyclerview_animation"
