@@ -2,6 +2,8 @@ package com.example.screenbindger.view.fragment.register
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +13,12 @@ import androidx.navigation.fragment.findNavController
 import bloder.com.blitzcore.enableWhenUsing
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentRegisterBinding
+import com.example.screenbindger.util.extensions.hide
+import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.validator.FieldValidator
 import com.example.screenbindger.view.activity.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_register.*
 
 
 @AndroidEntryPoint
@@ -59,6 +64,7 @@ class RegisterFragment : Fragment() {
 
     private fun initOnClickListeners() {
         binding.btnRegister.setOnClickListener {
+            progressBar.show()
             viewModel.register()
             gotoMainActivity()
         }
@@ -69,11 +75,15 @@ class RegisterFragment : Fragment() {
     }
 
     private fun gotoMainActivity() {
-        startActivity(Intent(requireActivity(), MainActivity::class.java))
-        requireActivity().finish()
+        Handler(Looper.myLooper()!!).postDelayed({
+            progressBar.hide()
+
+            startActivity(Intent(requireActivity(), MainActivity::class.java))
+            requireActivity().finish()
+        }, 1000)
     }
 
-    private fun gotoLoginFragment(){
+    private fun gotoLoginFragment() {
         findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
     }
 
