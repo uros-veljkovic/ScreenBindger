@@ -3,7 +3,7 @@ package com.example.screenbindger.view.fragment.login
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.screenbindger.db.local.db.ScreenBindgerDatabase
+import com.example.screenbindger.db.local.repo.ScreenBindgerLocalDatabase
 import com.example.screenbindger.db.local.entity.user.UserEntity
 import com.example.screenbindger.db.local.entity.user.observable.UserObservable
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +16,7 @@ import kotlinx.coroutines.runBlocking
 class LoginViewModel
 @ViewModelInject constructor(
     val user: UserObservable,
-    val db: ScreenBindgerDatabase
+    val db: ScreenBindgerLocalDatabase
 ) : ViewModel() {
 
     var loginTrigger: MutableLiveData<Boolean?> = MutableLiveData(null)
