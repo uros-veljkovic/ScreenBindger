@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/trendingFragment"
+        android:icon="@drawable/ic_star_black_24"
+        android:title="@string/trending_placeholder" />
+    <item
+        android:id="@+id/genresFragment"
+        android:icon="@drawable/ic_list_black_24"
+        android:title="@string/search_placeholder" />
+    <item
+        android:id="@+id/upcomingFragment"
+        android:icon="@drawable/ic_trending_black_24"
+        android:title="@string/upcoming_placeholder" />
+
+
+</menu>
