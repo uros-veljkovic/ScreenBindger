@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-        <dimen name="small_50">4sdp</dimen>
+        <dimen name="small_50">4dp</dimen>
         <dimen name="small_100">8dp</dimen>
         <dimen name="small_125">12dp</dimen>
 
