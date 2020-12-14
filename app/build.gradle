@@ -66,6 +66,8 @@ dependencies {
     def version_room = "2.2.5"
     def version_coroutines = "1.4.2"
     def version_blitz_form_validator = "0.0.1"
+    def version_sdp = "1.0.6"
+    def version_ssp = "1.0.6"
 
 
     //Material design
@@ -129,5 +131,8 @@ dependencies {
 
     //  Blitz form validator
     implementation "bloder.com:blitz:$version_blitz_form_validator"
+
+    implementation "com.intuit.sdp:sdp-android:$version_sdp"
+    implementation "com.intuit.ssp:ssp-android:$version_ssp"
 
 }
