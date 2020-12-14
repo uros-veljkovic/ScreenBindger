@@ -1,4 +1,4 @@
-package com.example.screenbindger.db.local.db
+package com.example.screenbindger.db.local.repo
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -7,7 +7,7 @@ import com.example.screenbindger.db.local.entity.user.UserEntity
 import kotlinx.coroutines.flow.Flow
 
 @Database(entities = [UserEntity::class], version = 3)
-abstract class ScreenBindgerDatabase : RoomDatabase() {
+abstract class ScreenBindgerLocalDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
 

@@ -2,7 +2,7 @@ package com.example.screenbindger.di.module.db.local
 
 import androidx.room.Room.databaseBuilder
 import com.example.screenbindger.app.ScreenBindger
-import com.example.screenbindger.db.local.db.ScreenBindgerDatabase
+import com.example.screenbindger.db.local.repo.ScreenBindgerLocalDatabase
 import com.example.screenbindger.util.constants.LOCAL_DATABASE_NAME
 import dagger.Module
 import dagger.Provides
@@ -12,14 +12,14 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
-class ScreenBindgerDatabaseModule {
+class ScreenBindgerLocalDatabaseModule {
 
     @Singleton
     @Provides
-    fun provideScreenBindgerDatabase(): ScreenBindgerDatabase {
+    fun provideScreenBindgerDatabase(): ScreenBindgerLocalDatabase {
         return databaseBuilder(
             ScreenBindger.context(),
-            ScreenBindgerDatabase::class.java,
+            ScreenBindgerLocalDatabase::class.java,
             LOCAL_DATABASE_NAME
         ).fallbackToDestructiveMigration().build()
     }
