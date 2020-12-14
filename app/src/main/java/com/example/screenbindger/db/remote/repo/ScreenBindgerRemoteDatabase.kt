@@ -1,9 +1,9 @@
 package com.example.screenbindger.db.remote.repo
 
+import com.example.screenbindger.db.remote.response.GenresResponse
 import com.example.screenbindger.db.remote.response.TrendingMoviesResponse
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieService
-import com.example.screenbindger.model.domain.GenreEntity
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ class ScreenBindgerRemoteDatabase
         return movieService.getTrending()
     }
 
-    suspend fun getGenres(): Response<List<GenreEntity>>{
+    suspend fun getGenres(): Response<GenresResponse>{
         return genreService.getAll()
     }
 
