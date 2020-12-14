@@ -1,9 +1,11 @@
 package com.example.screenbindger.model.domain
 
+import android.util.Log
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
 import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
+import com.example.screenbindger.util.constants.API_KEY
 import com.example.screenbindger.util.constants.POSTER_SIZE_SMALL
 import com.google.gson.annotations.SerializedName
 
@@ -13,7 +15,7 @@ class MovieEntity : BaseObservable(){
     @get: Bindable
     var bigPosterUrl: String? = null
     set(value){
-        field = "$API_IMAGE_BASE_URL/t/p/$POSTER_SIZE_SMALL/${value}"
+        field = value
         notifyPropertyChanged(BR.bigPosterUrl)
     }
 
@@ -21,7 +23,7 @@ class MovieEntity : BaseObservable(){
     @get: Bindable
     var smallPosterUrl: String? = null
         set(value){
-            field = "$API_IMAGE_BASE_URL/t/p/$POSTER_SIZE_SMALL/${value}"
+            field = value
             notifyPropertyChanged(BR.smallPosterUrl)
         }
 
@@ -58,6 +60,7 @@ class MovieEntity : BaseObservable(){
     @get: Bindable
     var genres: List<GenreEntity>? = null
     set(value){
+        field = value
         // Preuzmi zanrove iz singleton klase
     }
 
