@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.screenbindger">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".app.ScreenBindger"
         android:allowBackup="true"
@@ -12,15 +14,14 @@
         android:theme="@style/Theme.ScreenBindger">
         <activity
             android:name=".view.activity.onboarding.OnboardingActivity"
-            android:theme="@style/Theme.ScreenBindger.NoActionbar" >
+            android:theme="@style/Theme.ScreenBindger.NoActionbar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.main.MainActivity">
-        </activity>
+        <activity android:name=".view.activity.main.MainActivity"></activity>
     </application>
 
 </manifest>
