@@ -76,7 +76,7 @@ class RegisterFragment : Fragment() {
 
     private fun gotoMainActivity() {
         Handler(Looper.myLooper()!!).postDelayed({
-            progressBar.hide()
+            binding.progressBar.hide()
 
             startActivity(Intent(requireActivity(), MainActivity::class.java))
             requireActivity().finish()

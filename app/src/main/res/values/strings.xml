@@ -13,4 +13,8 @@
     <string name="email_required_placeholder">Email (Required)</string>
     <string name="full_name_required_placeholder">Full name (Required)</string>
     <string name="password_required_placeholder">Password (Required)</string>
+    <string name="login_placeholder">Login</string>
+    <string name="do_not_have_account_placeholder">"Don't have an account? Register "</string>
+    <string name="login_success_message">Hello Bindger :) !</string>
+    <string name="login_fail_message">Failed to login !</string>
 </resources>
