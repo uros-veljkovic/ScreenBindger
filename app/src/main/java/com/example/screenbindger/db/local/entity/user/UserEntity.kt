@@ -3,6 +3,7 @@ package com.example.screenbindger.db.local.entity.user
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.screenbindger.db.local.entity.user.observable.UserObservable
 
 @Entity
 data class UserEntity(

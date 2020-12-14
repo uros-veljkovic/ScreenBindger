@@ -15,4 +15,10 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun register(userEntity: UserEntity)
+
+    @Query("SELECT * FROM userentity WHERE email = :email AND password = :password")
+    suspend fun find(email: String, password: String): UserEntity?
+
+    @Query("UPDATE userentity SET is_logged_in = 1 WHERE _id = :id")
+    suspend fun login(id: Int)
 }

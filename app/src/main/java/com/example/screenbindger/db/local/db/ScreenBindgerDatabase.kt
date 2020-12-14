@@ -19,4 +19,13 @@ abstract class ScreenBindgerDatabase : RoomDatabase() {
         userDao().register(userEntity)
     }
 
+    suspend fun find(userEntity: UserEntity): UserEntity?{
+        val user = userDao().find(userEntity.email, userEntity.password)
+        return user
+    }
+
+    suspend fun login(userEntity: UserEntity){
+        userDao().login(userEntity._id)
+    }
+
 }

@@ -40,8 +40,15 @@ class UserObservable : BaseObservable() {
             notifyPropertyChanged(BR.dateOfBirth)
         }
 
+    @get: Bindable
+    var isLoggedIn: Boolean = false
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.loggedIn)
+        }
+
     override fun toString(): String {
-        return "$fullName $email $password $dateOfBirth"
+        return "$fullName $email $password $dateOfBirth IsLoggedIn: $isLoggedIn"
     }
 
     fun toEntity(): UserEntity {
