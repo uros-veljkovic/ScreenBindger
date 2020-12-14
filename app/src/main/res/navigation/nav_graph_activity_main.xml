@@ -2,14 +2,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph_activity_onboarding"
+    android:id="@+id/nav_graph_activity_main"
     app:startDestination="@id/trendingFragment">
 
     <fragment
         android:id="@+id/genresFragment"
         android:name="com.example.screenbindger.view.fragment.genres.GenresFragment"
         android:label="fragment_genres"
-        tools:layout="@layout/fragment_genres" >
+        tools:layout="@layout/fragment_genres">
         <action
             android:id="@+id/action_genresFragment_to_genreMoviesFragment"
             app:destination="@id/genreMoviesFragment" />
@@ -28,7 +28,7 @@
         android:id="@+id/trendingFragment"
         android:name="com.example.screenbindger.view.fragment.trending.TrendingFragment"
         android:label="fragment_trending"
-        tools:layout="@layout/fragment_trending" >
+        tools:layout="@layout/fragment_trending">
         <action
             android:id="@+id/action_trendingFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
@@ -37,24 +37,39 @@
         android:id="@+id/upcomingFragment"
         android:name="com.example.screenbindger.view.fragment.upcoming.UpcomingFragment"
         android:label="fragment_upcoming"
-        tools:layout="@layout/fragment_upcoming" >
+        tools:layout="@layout/fragment_upcoming">
         <action
             android:id="@+id/action_upcomingFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
     </fragment>
-    <action android:id="@+id/action_global_genresFragment" app:destination="@id/genresFragment" />
-    <action android:id="@+id/action_global_upcomingFragment" app:destination="@id/upcomingFragment" />
-    <action android:id="@+id/action_global_trendingFragment" app:destination="@id/trendingFragment" />
+    <action
+        android:id="@+id/action_global_genresFragment"
+        app:destination="@id/genresFragment" />
+    <action
+        android:id="@+id/action_global_upcomingFragment"
+        app:destination="@id/upcomingFragment" />
+    <action
+        android:id="@+id/action_global_trendingFragment"
+        app:destination="@id/trendingFragment" />
     <fragment
         android:id="@+id/genreMoviesFragment"
         android:name="com.example.screenbindger.view.fragment.genre_movies.GenreMoviesFragment"
         android:label="fragment_genre_movies"
-        tools:layout="@layout/fragment_genre_movies" >
+        tools:layout="@layout/fragment_genre_movies">
         <action
             android:id="@+id/action_genreMoviesFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
-    </fragment><action android:id="@+id/action_global_profileFragment" app:destination="@id/profileFragment"/>
-    <action android:id="@+id/action_global_trendingFragment2" app:destination="@id/trendingFragment" />
-    <action android:id="@+id/action_global_upcomingFragment2" app:destination="@id/upcomingFragment" />
-    <action android:id="@+id/action_global_genresFragment2" app:destination="@id/genresFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_profileFragment"
+        app:destination="@id/profileFragment" />
+    <action
+        android:id="@+id/action_global_trendingFragment2"
+        app:destination="@id/trendingFragment" />
+    <action
+        android:id="@+id/action_global_upcomingFragment2"
+        app:destination="@id/upcomingFragment" />
+    <action
+        android:id="@+id/action_global_genresFragment2"
+        app:destination="@id/genresFragment" />
 </navigation>
