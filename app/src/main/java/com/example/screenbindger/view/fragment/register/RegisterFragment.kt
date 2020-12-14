@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import bloder.com.blitzcore.enableWhenUsing
+import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentRegisterBinding
 import com.example.screenbindger.util.validator.FieldValidator
 import com.example.screenbindger.view.activity.main.MainActivity
@@ -60,11 +62,19 @@ class RegisterFragment : Fragment() {
             viewModel.register()
             gotoMainActivity()
         }
+
+        binding.tvHere.setOnClickListener {
+            gotoLoginFragment()
+        }
     }
 
     private fun gotoMainActivity() {
         startActivity(Intent(requireActivity(), MainActivity::class.java))
         requireActivity().finish()
+    }
+
+    private fun gotoLoginFragment(){
+        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
     }
 
 

@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.screenbindger.view.fragment.register.RegisterViewModel" />
@@ -37,17 +38,17 @@
             app:layout_constraintBottom_toTopOf="@+id/tilUserEmail"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:startIconDrawable="@drawable/ic_profile_filled_black_24"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivScreenBindger">
+            app:layout_constraintTop_toBottomOf="@+id/ivScreenBindger"
+            app:startIconDrawable="@drawable/ic_profile_filled_black_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etUserFullName"
-                android:text="@={viewModel.user.fullName}"
-                android:inputType="textPersonName"
                 style="@style/Widget.ScreenBindger.TextInputEditText"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:inputType="textPersonName"
+                android:text="@={viewModel.user.fullName}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -59,39 +60,39 @@
             app:layout_constraintBottom_toTopOf="@+id/tilUserPassword"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:startIconDrawable="@drawable/ic_email_24"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilUserFullName">
+            app:layout_constraintTop_toBottomOf="@+id/tilUserFullName"
+            app:startIconDrawable="@drawable/ic_email_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etUserEmail"
-                android:text="@={viewModel.user.email}"
                 style="@style/Widget.ScreenBindger.TextInputEditText"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:inputType="textEmailAddress"
-                android:layout_height="match_parent" />
+                android:text="@={viewModel.user.email}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilUserPassword"
             style="@style/Widget.ScreenBindger.TextInputLayout"
             android:layout_width="match_parent"
-            app:startIconDrawable="@drawable/ic_lock_24"
             android:layout_height="wrap_content"
             android:hint="@string/password_required_placeholder"
             app:layout_constraintBottom_toTopOf="@+id/tilUserDateOfBirth"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilUserEmail">
+            app:layout_constraintTop_toBottomOf="@+id/tilUserEmail"
+            app:startIconDrawable="@drawable/ic_lock_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etUserPassword"
-                android:text="@={viewModel.user.password}"
                 style="@style/Widget.ScreenBindger.TextInputEditText"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:inputType="textPassword"
-                android:layout_height="match_parent" />
+                android:text="@={viewModel.user.password}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -99,21 +100,21 @@
             style="@style/Widget.ScreenBindger.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:startIconDrawable="@drawable/ic_calendar_24"
             android:hint="@string/date_of_birth_placeholder"
             app:layout_constraintBottom_toTopOf="@+id/btnRegister"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilUserPassword">
+            app:layout_constraintTop_toBottomOf="@+id/tilUserPassword"
+            app:startIconDrawable="@drawable/ic_calendar_24">
 
             <com.example.screenbindger.view.custom.edittext.DatePickerEditText
                 android:id="@+id/etUserDateOfBirth"
                 style="@style/Widget.ScreenBindger.TextInputEditText"
                 android:layout_width="match_parent"
-                android:text="@={viewModel.user.dateOfBirth}"
+                android:layout_height="match_parent"
                 android:inputType="date"
-                android:layout_height="match_parent" />
+                android:text="@={viewModel.user.dateOfBirth}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
