@@ -56,8 +56,8 @@ class TrendingFragment : Fragment(), ItemMoviewRecyclerViewAdapter.OnMovieItemCl
 
     override fun onOfferItemClick(position: Int) {
         val movieId = viewModel.list?.get(position)?.id
-        if(movieId != -1){
-            val action = TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(movieId!!)
+        if(movieId != null && movieId != -1){
+            val action = TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(movieId)
             findNavController().navigate(action)
         }
     }
