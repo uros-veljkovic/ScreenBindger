@@ -69,7 +69,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="8dp"
                 android:textColor="@color/primaryDarkColor"
-                android:text="@={movie.genres}"
+                android:text="@={movie.genresString}"
                 android:textSize="11dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"

@@ -9,7 +9,6 @@ import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.model.global.Genres
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
@@ -41,11 +40,11 @@ class TrendingViewModel
         entity.genreIds?.forEach { singleEntityGenreId ->
             Genres.list.forEach {
                 if (it.id == singleEntityGenreId) {
-                    entity.genres += "${it.name}, "
+                    entity.genresString += "${it.name}, "
                 }
             }
         }
-        entity.genres = entity.genres.dropLast(2)
+        entity.genresString = entity.genresString.dropLast(2)
     }
 
 }

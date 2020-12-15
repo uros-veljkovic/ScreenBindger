@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/normal_100"
             android:layout_marginTop="@dimen/small_50"
-            android:text="@{movie.genres}"
+            android:text="@{movie.genresString}"
             android:textSize="18sp"
             android:textStyle="italic"
             app:layout_constraintStart_toStartOf="parent"
