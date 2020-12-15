@@ -24,8 +24,10 @@ import kotlinx.android.synthetic.main.fragment_register.*
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
 
-    lateinit var binding: FragmentRegisterBinding
+    private var _binding: FragmentRegisterBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: RegisterViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +42,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun bind(inflater: LayoutInflater, container: ViewGroup?): View {
-        binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         return binding.root
     }
@@ -85,6 +87,11 @@ class RegisterFragment : Fragment() {
 
     private fun gotoLoginFragment() {
         findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 
