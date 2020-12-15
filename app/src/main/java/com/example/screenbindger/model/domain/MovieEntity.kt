@@ -11,7 +11,7 @@ class MovieEntity : BaseObservable(), Item {
     @SerializedName("id")
     var id: Int? = null
 
-    @SerializedName("poster_path")
+    @SerializedName("backdrop_path")
     @get: Bindable
     var bigPosterUrl: String? = null
         set(value) {
@@ -19,7 +19,7 @@ class MovieEntity : BaseObservable(), Item {
             notifyPropertyChanged(BR.bigPosterUrl)
         }
 
-    @SerializedName("backdrop_path")
+    @SerializedName("poster_path")
     @get: Bindable
     var smallPosterUrl: String? = null
         set(value) {
