@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.screenbindger.R
 import com.example.screenbindger.databinding.ItemMovieBinding
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
@@ -31,7 +32,7 @@ class ItemMoviewRecyclerViewAdapter(
         holder.bind(movie)
         bindPoster(poster, movie.smallPosterUrl)
 
-        holder.itemView.setOnClickListener { listener.onOfferItemClick(position) }
+        holder.itemView.setOnClickListener { listener.onMovieCardItemClick(position) }
     }
 
     private fun bindPoster(imageView: ImageView, smallPosterUrl: String?) {
@@ -69,6 +70,6 @@ class ItemMoviewRecyclerViewAdapter(
     }
 
     interface OnMovieItemClickListener {
-        fun onOfferItemClick(position: Int)
+        fun onMovieCardItemClick(position: Int)
     }
 }
