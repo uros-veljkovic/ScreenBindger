@@ -15,14 +15,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/ivMoviePoster"
             android:layout_width="0dp"
-            android:layout_height="650dp"
-            android:scaleType="fitXY"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/movie_poster"
+            android:scaleType="fitXY"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -64,7 +64,6 @@
             android:layout_marginTop="@dimen/normal_100"
             android:text="@string/rating_placeholder"
             android:textSize="18sp"
-            android:textStyle="italic"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvMovieGenres" />
 
@@ -81,28 +80,38 @@
             app:layout_constraintTop_toTopOf="@id/tvRatingPlaceholder"
             tools:text="7.4" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.borjabravo.readmoretextview.ReadMoreTextView
             android:id="@+id/tvMovieDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="@dimen/normal_100"
+            android:layout_marginTop="@dimen/small_100"
+            android:layout_marginBottom="@dimen/normal_100"
             android:justificationMode="inter_word"
             android:text="@{movie.description}"
             android:textSize="14sp"
+            app:colorClickableText="#FF0000"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvRatingPlaceholder"
+            app:showTrimExpandedText="true"
+            app:trimCollapsedText="@string/show_more"
+            app:trimExpandedText="@string/show_less"
+            app:trimLength="100"
+            app:trimMode="trimModeLength"
             tools:targetApi="o"
             tools:text="@string/lorem" />
 
         <TextView
+            android:id="@+id/tvCastPlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/normal_100"
             android:layout_marginStart="@dimen/normal_100"
-            android:layout_marginTop="@dimen/normal_100"
             android:text="@string/cast_placeholder"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvMovieDescription" />
 

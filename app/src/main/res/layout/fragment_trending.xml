@@ -8,23 +8,23 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.fragment.trending.TrendingFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTrending"
-            android:layout_marginBottom="56dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
             android:layoutAnimation="@anim/recyclerview_animation"
             tools:listitem="@layout/item_movie"
+            android:scrollbars="none"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

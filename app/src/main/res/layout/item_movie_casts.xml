@@ -19,7 +19,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/defaultBackground">
 
             <ImageView
@@ -28,7 +28,6 @@
                 posterUrl="@{cast.imageUrl}"
                 android:layout_width="@dimen/small_img_person"
                 android:layout_height="@dimen/small_img_person"
-                android:layout_marginHorizontal="@dimen/small_100"
                 android:layout_marginVertical="@dimen/small_100"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -37,13 +36,15 @@
 
             <TextView
                 android:id="@+id/tvCastMovieName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/normal_100"
+                android:maxLines="2"
                 android:text="@={cast.movieName}"
                 android:textSize="18sp"
                 android:textStyle="bold|italic"
                 app:layout_constraintBottom_toTopOf="@+id/tvCastRealName"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/ivCastImage"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed"
@@ -51,11 +52,12 @@
 
             <TextView
                 android:id="@+id/tvCastRealName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@={cast.realName}"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tvCastMovieName"
                 app:layout_constraintTop_toBottomOf="@+id/tvCastMovieName"
                 tools:text="@string/real_name_placeholder" />

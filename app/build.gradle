@@ -68,6 +68,7 @@ dependencies {
     def version_blitz_form_validator = "0.0.1"
     def version_sdp = "1.0.6"
     def version_ssp = "1.0.6"
+    def version_readmore_textview = "2.1.0"
 
 
     //Material design
@@ -134,5 +135,8 @@ dependencies {
 
     implementation "com.intuit.sdp:sdp-android:$version_sdp"
     implementation "com.intuit.ssp:ssp-android:$version_ssp"
+
+    // ExpandableTextView
+    implementation "com.borjabravo:readmoretextview:${version_readmore_textview}"
 
 }

@@ -21,11 +21,11 @@ class MovieDetailsRecyclerViewAdapter(
 
         when (viewType) {
             ItemType.MOVIE_DETAILS.value -> {
-                val binding = ItemMovieDetailsBinding.inflate(inflater)
+                val binding = ItemMovieDetailsBinding.inflate(inflater, parent, false)
                 viewHolder = MovieDetailsViewHolder(binding)
             }
             ItemType.CAST.value -> {
-                val binding = ItemMovieCastsBinding.inflate(inflater)
+                val binding = ItemMovieCastsBinding.inflate(inflater, parent, false)
                 viewHolder = MovieCastsViewHolder(binding)
             }
         }
@@ -59,7 +59,7 @@ class MovieDetailsRecyclerViewAdapter(
         when (itemType) {
             ItemType.MOVIE_DETAILS -> {
                 val movies = items as List<MovieEntity>
-                movies.forEach { movie->
+                movies.forEach { movie ->
                     movie.generateGenreString()
                 }
                 list.addAll(0, movies)

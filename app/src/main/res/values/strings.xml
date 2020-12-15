@@ -28,4 +28,6 @@
     <string name="cast_placeholder">"Cast: "</string>
     <string name="real_name_placeholder">Real name</string>
     <string name="movie_name_placeholder">Movie name</string>
+    <string name="show_more">" Show more"</string>
+    <string name="show_less">" Show less"</string>
 </resources>
