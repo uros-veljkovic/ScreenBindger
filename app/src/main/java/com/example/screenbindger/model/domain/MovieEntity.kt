@@ -1,13 +1,12 @@
 package com.example.screenbindger.model.domain
 
-import android.util.Log
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
-import com.example.screenbindger.model.global.Genres
+import com.example.screenbindger.model.enums.ItemType
 import com.google.gson.annotations.SerializedName
 
-class MovieEntity : BaseObservable() {
+class MovieEntity : BaseObservable(), Item {
 
     @SerializedName("id")
     var id: Int? = null
@@ -61,18 +60,18 @@ class MovieEntity : BaseObservable() {
     @SerializedName("genres")
     @get: Bindable
     var genres: List<GenreEntity>? = null
-    set(value){
-        field = value
-        notifyPropertyChanged(BR.genres)
-    }
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.genres)
+        }
 
     @get: Bindable
     var genresString: String = ""
-    set(value){
-        field = value
-        notifyPropertyChanged(BR.genresString)
-    }
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.genresString)
+        }
 
-    var casts: List<CastEntity?>? = null
+    override fun getItemType(): ItemType = ItemType.MOVIE_DETAILS
 
 }

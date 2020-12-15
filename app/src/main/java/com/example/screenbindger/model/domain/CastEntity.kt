@@ -1,5 +1,6 @@
 package com.example.screenbindger.model.domain
 
+import com.example.screenbindger.model.enums.ItemType
 import com.google.gson.annotations.SerializedName
 
 class CastEntity constructor(
@@ -9,4 +10,6 @@ class CastEntity constructor(
     val movieName: String?,
     @SerializedName("original_name")
     val realName: String?
-)
+): Item{
+    override fun getItemType(): ItemType = ItemType.CAST
+}
