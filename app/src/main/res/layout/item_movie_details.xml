@@ -19,14 +19,14 @@
 
         <ImageView
             android:id="@+id/ivMoviePoster"
-            android:layout_width="match_parent"
-            android:layout_height="335dp"
-            android:background="@android:color/holo_orange_light"
+            android:layout_width="0dp"
+            android:layout_height="650dp"
+            android:scaleType="fitXY"
             android:contentDescription="@string/movie_poster"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:posterSize="@{ConstantsKt.POSTER_SIZE_BIG}"
+            app:posterSize="@{ConstantsKt.POSTER_SIZE_ORIGINAL}"
             app:posterUrl="@{movie.bigPosterUrl}"
             tools:src="@drawable/ic_star_black_24" />
 
