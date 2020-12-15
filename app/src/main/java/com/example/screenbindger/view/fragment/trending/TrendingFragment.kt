@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.databinding.FragmentTrendingBinding
 import com.example.screenbindger.util.adapter.recyclerview.ItemMoviewRecyclerViewAdapter
@@ -54,7 +55,11 @@ class TrendingFragment : Fragment(), ItemMoviewRecyclerViewAdapter.OnMovieItemCl
     }
 
     override fun onOfferItemClick(position: Int) {
-        TODO("Not yet implemented")
+        val movieId = viewModel.list?.get(position)?.id
+        if(movieId != -1){
+            val action = TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(movieId!!)
+            findNavController().navigate(action)
+        }
     }
 
     override fun onDestroyView() {

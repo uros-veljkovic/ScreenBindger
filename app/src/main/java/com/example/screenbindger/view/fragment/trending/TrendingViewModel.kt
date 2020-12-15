@@ -19,6 +19,7 @@ class TrendingViewModel
 ) : ViewModel() {
 
     var response: MutableLiveData<Response<TrendingMoviesResponse>?> = MutableLiveData(null)
+    val list: List<MovieEntity>? get() = response.value?.body()?.list
 
     init {
         fetchTrendingMovies()

@@ -9,6 +9,9 @@ import com.google.gson.annotations.SerializedName
 
 class MovieEntity : BaseObservable() {
 
+    @SerializedName("id")
+    var id: Int? = null
+
     @SerializedName("poster_path")
     @get: Bindable
     var bigPosterUrl: String? = null

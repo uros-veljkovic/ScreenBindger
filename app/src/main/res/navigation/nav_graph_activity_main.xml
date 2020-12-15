@@ -13,12 +13,19 @@
         <action
             android:id="@+id/action_genresFragment_to_genreMoviesFragment"
             app:destination="@id/genreMoviesFragment" />
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/movieDetailsFragment"
         android:name="com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragment"
         android:label="fragment_movie_details"
-        tools:layout="@layout/fragment_movie_details" />
+        tools:layout="@layout/fragment_movie_details">
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.screenbindger.view.fragment.profile.ProfileFragment"
