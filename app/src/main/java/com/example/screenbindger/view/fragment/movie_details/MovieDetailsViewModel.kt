@@ -24,16 +24,13 @@ class MovieDetailsViewModel
 
 
     fun fetchData(movieId: Int) {
-        // 577922
         runBlocking {
             launch(IO) {
                 val response = db.getMovieDetails(movieId)
-                Log.d("MovieDetails", "fetchData: ${response.body()}")
                 responseMovieDetails.postValue(response)
             }
             launch(IO) {
                 val response = db.getMovieCasts(movieId)
-                Log.d("MovieDetails", "fetchData: ${response.body()}")
                 responseMovieDetailsCast.postValue(response)
             }
         }
