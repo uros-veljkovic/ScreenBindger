@@ -2,10 +2,10 @@ package com.example.screenbindger.db.remote.repo
 
 import com.example.screenbindger.db.remote.response.GenresResponse
 import com.example.screenbindger.db.remote.response.MovieDetailsCastResponse
-import com.example.screenbindger.db.remote.response.MovieDetailsResponse
 import com.example.screenbindger.db.remote.response.TrendingMoviesResponse
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieService
+import com.example.screenbindger.model.domain.MovieEntity
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ class ScreenBindgerRemoteDatabase
         return genreService.getAll()
     }
 
-    suspend fun getMovieDetails(movieId: Int): Response<MovieDetailsResponse>{
+    suspend fun getMovieDetails(movieId: Int): Response<MovieEntity>{
         return movieService.getMovieDetails(movieId)
     }
 

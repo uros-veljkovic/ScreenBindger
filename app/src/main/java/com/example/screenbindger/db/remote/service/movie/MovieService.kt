@@ -24,7 +24,7 @@ constructor(
         return movieApi.getSmallPoster("$API_IMAGE_BASE_URL/t/p/$POSTER_SIZE_SMALL/${movieEntity.smallPosterUrl}")
     }
 
-    suspend fun getMovieDetails(movieId: Int): Response<MovieDetailsResponse>{
+    suspend fun getMovieDetails(movieId: Int): Response<MovieEntity>{
         return movieApi.getMovieDetails(movieId)
     }
 
