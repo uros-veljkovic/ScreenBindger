@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.example.screenbindger.util.constants.ConstantsKt" />
+
+        <variable
+            name="movie"
+            type="com.example.screenbindger.model.domain.MovieEntity" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivMoviePoster"
+            android:layout_width="match_parent"
+            android:layout_height="335dp"
+            android:background="@android:color/holo_orange_light"
+            android:contentDescription="@string/movie_poster"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:posterSize="@{ConstantsKt.POSTER_SIZE_BIG}"
+            app:posterUrl="@{movie.bigPosterUrl}"
+            tools:src="@drawable/ic_star_black_24" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvMovieTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/normal_100"
+            android:layout_marginTop="@dimen/normal_100"
+            android:text="@{movie.title}"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivMoviePoster"
+            tools:text="Movie Title" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvMovieGenres"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/normal_100"
+            android:layout_marginTop="@dimen/small_50"
+            android:text="@{movie.genres}"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieTitle"
+            tools:text="Genre 1, Genre 2, Genre 3" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvRatingPlaceholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/normal_100"
+            android:layout_marginTop="@dimen/normal_100"
+            android:text="@string/rating_placeholder"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieGenres" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvMovieRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_50"
+            android:text="@{String.valueOf(movie.rating)}"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tvRatingPlaceholder"
+            app:layout_constraintStart_toEndOf="@id/tvRatingPlaceholder"
+            app:layout_constraintTop_toTopOf="@id/tvRatingPlaceholder"
+            tools:text="7.4" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvMovieDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="@dimen/normal_100"
+            android:justificationMode="inter_word"
+            android:text="@{movie.description}"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvRatingPlaceholder"
+            tools:targetApi="o"
+            tools:text="@string/lorem" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/normal_100"
+            android:layout_marginTop="@dimen/normal_100"
+            android:text="@string/cast_placeholder"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieDescription" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
