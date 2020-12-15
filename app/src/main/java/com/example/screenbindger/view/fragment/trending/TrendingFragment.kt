@@ -49,8 +49,8 @@ class TrendingFragment : Fragment(), ItemMoviewRecyclerViewAdapter.OnMovieItemCl
 
     private fun observeViewModel() {
         viewModel.response.observe(viewLifecycleOwner, Observer { response ->
-            val list = response?.body()?.list?.toMutableList() ?: mutableListOf()
-            binding.rvTrending.adapter = ItemMoviewRecyclerViewAdapter(this, list)
+            val list = viewModel.list ?: mutableListOf()
+            binding.rvTrending.adapter = ItemMoviewRecyclerViewAdapter(this, list.toMutableList())
         })
     }
 
