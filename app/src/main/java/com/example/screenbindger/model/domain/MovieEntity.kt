@@ -72,6 +72,13 @@ class MovieEntity : BaseObservable(), Item {
             notifyPropertyChanged(BR.genresString)
         }
 
+    fun generateGenreString() {
+        genres?.forEach { genre ->
+            genresString += genre.name + ", "
+        }
+        genresString = genresString.dropLast(2)
+    }
+
     override fun getItemType(): ItemType = ItemType.MOVIE_DETAILS
 
 }
