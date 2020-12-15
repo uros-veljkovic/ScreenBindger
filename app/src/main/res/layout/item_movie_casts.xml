@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/defaultBackground">
+
+    <ImageView
+        android:id="@+id/ivCastImage"
+        android:layout_width="@dimen/small_img_person"
+        android:layout_height="@dimen/small_img_person"
+        android:layout_marginHorizontal="@dimen/small_100"
+        android:layout_marginVertical="@dimen/small_100"
+        android:background="@android:color/holo_orange_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvCastMovieName"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_profile_filled_black_24" />
+
+    <TextView
+        android:id="@+id/tvCastMovieName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toBottomOf="@id/ivCastImage"
+        app:layout_constraintEnd_toStartOf="@+id/tvCastRealName"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ivCastImage"
+        app:layout_constraintTop_toTopOf="@id/ivCastImage"
+        tools:text="@string/movie_name_placeholder" />
+
+    <TextView
+        android:id="@+id/tvCastRealName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvCastMovieName"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/normal_100"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvCastMovieName"
+        app:layout_constraintTop_toTopOf="@id/tvCastMovieName"
+        tools:text="@string/real_name_placeholder" />
+</androidx.constraintlayout.widget.ConstraintLayout>
