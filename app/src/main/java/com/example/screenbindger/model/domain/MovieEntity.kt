@@ -58,11 +58,19 @@ class MovieEntity : BaseObservable() {
             field = value
         }
 
+    @SerializedName("genres")
     @get: Bindable
-    var genres: String = ""
+    var genres: List<GenreEntity>? = null
     set(value){
         field = value
         notifyPropertyChanged(BR.genres)
+    }
+
+    @get: Bindable
+    var genresString: String = ""
+    set(value){
+        field = value
+        notifyPropertyChanged(BR.genresString)
     }
 
     var casts: List<CastEntity?>? = null
