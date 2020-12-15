@@ -89,8 +89,9 @@ class RegisterFragment : Fragment() {
         findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        
         _binding = null
     }
 

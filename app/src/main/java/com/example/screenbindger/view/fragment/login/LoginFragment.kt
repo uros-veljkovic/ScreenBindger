@@ -26,7 +26,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     val viewModel: LoginViewModel by viewModels()
-    lateinit var binding: FragmentLoginBinding
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +41,7 @@ class LoginFragment : Fragment() {
     }
 
     fun bind(inflater: LayoutInflater, container: ViewGroup?): View {
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         return binding.root
     }
@@ -110,6 +111,12 @@ class LoginFragment : Fragment() {
             startActivity(Intent(requireActivity(), MainActivity::class.java))
             requireActivity().finish()
         }, 1500)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 
 }
