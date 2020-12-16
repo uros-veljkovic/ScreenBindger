@@ -6,7 +6,7 @@ import com.example.screenbindger.db.local.dao.UserDao
 import com.example.screenbindger.db.local.entity.user.UserEntity
 import kotlinx.coroutines.flow.Flow
 
-@Database(entities = [UserEntity::class], version = 3, exportSchema = false)
+@Database(entities = [UserEntity::class], version = 4, exportSchema = false)
 abstract class ScreenBindgerLocalDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
@@ -19,6 +19,10 @@ abstract class ScreenBindgerLocalDatabase : RoomDatabase() {
         userDao().register(userEntity)
     }
 
+    suspend fun update(userEntity: UserEntity){
+        userDao().update(userEntity)
+    }
+
     suspend fun find(userEntity: UserEntity): UserEntity?{
         val user = userDao().find(userEntity.email, userEntity.password)
         return user
@@ -26,6 +30,10 @@ abstract class ScreenBindgerLocalDatabase : RoomDatabase() {
 
     suspend fun login(userEntity: UserEntity){
         userDao().login(userEntity._id)
+    }
+
+    suspend fun findLoggedInUser() : UserEntity{
+        return userDao().findLoggedInUser()
     }
 
 }

@@ -12,6 +12,15 @@ import com.example.screenbindger.db.local.entity.user.UserEntity
  */
 class UserObservable : BaseObservable() {
 
+    var id: Int? = null
+
+    @get: Bindable
+    var imageUri: String? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.imageUri)
+        }
+
     @get: Bindable
     var fullName: String = ""
         set(value) {
@@ -34,31 +43,28 @@ class UserObservable : BaseObservable() {
         }
 
     @get: Bindable
-    var dateOfBirth: String = ""
+    var dateOfBirth: String? = null
         set(value) {
             field = value
             notifyPropertyChanged(BR.dateOfBirth)
         }
 
     @get: Bindable
-    var isLoggedIn: Boolean = false
+    var isLoggedIn: Boolean = true
         set(value) {
             field = value
             notifyPropertyChanged(BR.loggedIn)
         }
 
-    override fun toString(): String {
-        return "$fullName $email $password $dateOfBirth IsLoggedIn: $isLoggedIn"
-    }
-
     fun toEntity(): UserEntity {
         return UserEntity(
-            0,
+            id,
+            imageUri,
             fullName,
             email,
             password,
             dateOfBirth,
-            true
+            isLoggedIn
         )
     }
 

@@ -71,4 +71,9 @@
         <item name="android:paddingVertical" tools:targetApi="o">@dimen/small_125</item>
         <item name="android:backgroundTint">@color/defaultButtonColor</item>
     </style>
+
+    <style name="Widget.ScreenBindger.ImageView.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

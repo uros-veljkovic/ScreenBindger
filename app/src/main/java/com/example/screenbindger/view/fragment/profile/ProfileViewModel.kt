@@ -1,0 +1,54 @@
+package com.example.screenbindger.view.fragment.profile
+
+import android.net.Uri
+import androidx.databinding.ObservableField
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.example.screenbindger.db.local.entity.user.observable.UserObservable
+import com.example.screenbindger.db.local.repo.ScreenBindgerLocalDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
+
+class ProfileViewModel
+@ViewModelInject constructor(
+    val db: ScreenBindgerLocalDatabase
+): ViewModel(){
+
+    var user: UserObservable? = null
+    var isEditMode = ObservableField(false)
+    var updated = MutableLiveData(false)
+
+    init {
+        fetchData()
+    }
+
+    private fun fetchData(){
+        CoroutineScope(IO).launch {
+            user = db.findLoggedInUser().toObservable()
+        }
+    }
+
+    fun changeFieldEnablability(){
+        isEditMode.set(isEditMode.get()!!.xor(true))
+        isEditMode.notifyChange()
+
+        if(!isEditMode.get()!!){
+            persistUser()
+        }
+    }
+
+    fun setUserImage(imageUri: Uri?) {
+        user?.imageUri = imageUri.toString()
+    }
+
+    fun persistUser(){
+        CoroutineScope(IO).launch {
+            if (user != null) {
+                db.update(user!!.toEntity())
+                updated.postValue(true)
+            }
+        }
+    }
+}

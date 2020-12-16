@@ -1,19 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.fragment.profile.ProfileFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/iconsssss"
-        android:layout_width="200dp"
-        android:src="@drawable/ic_profile_filled_black_24"
-        android:layout_height="200dp"/>
+    <data>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewModel"
+            type="com.example.screenbindger.view.fragment.profile.ProfileViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.fragment.profile.ProfileFragment">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivUserImage"
+            android:scaleType="centerCrop"
+            android:layout_width="150dp"
+            app:uri="@{viewModel.user.imageUri}"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_profile_outlined_black_24"
+            app:layout_constraintBottom_toTopOf="@+id/tilUserFullName"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:shapeAppearance="@style/Widget.ScreenBindger.ImageView.Circle" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAddPicture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/orange"
+            android:enabled="@{viewModel.isEditMode}"
+            android:visibility="@{viewModel.isEditMode() ? View.VISIBLE : View.GONE}"
+            android:tint="@{viewModel.isEditMode() ? @color/green : @android:color/white}"
+            android:src="@drawable/ic_image_plus_black_24"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@id/ivUserImage"
+            app:layout_constraintEnd_toEndOf="@id/ivUserImage" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUserFullName"
+            style="@style/Widget.ScreenBindger.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="@{viewModel.isEditMode}"
+            android:hint="@string/full_name_required_placeholder"
+            app:layout_constraintBottom_toTopOf="@+id/tilUserEmail"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:startIconDrawable="@drawable/ic_profile_filled_black_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUserFullName"
+                style="@style/Widget.ScreenBindger.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPersonName"
+                android:text="@={viewModel.user.fullName}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUserEmail"
+            style="@style/Widget.ScreenBindger.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="@{viewModel.isEditMode}"
+            android:hint="@string/email_required_placeholder"
+            app:layout_constraintBottom_toTopOf="@+id/tilUserPassword"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilUserFullName"
+            app:startIconDrawable="@drawable/ic_email_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUserEmail"
+                style="@style/Widget.ScreenBindger.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textEmailAddress"
+                android:text="@={viewModel.user.email}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUserPassword"
+            style="@style/Widget.ScreenBindger.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="@{viewModel.isEditMode}"
+            android:hint="@string/password_required_placeholder"
+            app:layout_constraintBottom_toTopOf="@+id/tilUserDateOfBirth"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilUserEmail"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@drawable/ic_lock_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUserPassword"
+                style="@style/Widget.ScreenBindger.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPassword"
+                android:text="@={viewModel.user.password}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUserDateOfBirth"
+            style="@style/Widget.ScreenBindger.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="@{viewModel.isEditMode}"
+            android:hint="@string/date_of_birth_placeholder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilUserPassword"
+            app:startIconDrawable="@drawable/ic_calendar_24">
+
+            <com.example.screenbindger.view.custom.edittext.DatePickerEditText
+                android:id="@+id/etUserDateOfBirth"
+                style="@style/Widget.ScreenBindger.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="date"
+                android:text="@={viewModel.user.dateOfBirth}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/normal_100"
+            android:layout_marginBottom="@dimen/normal_100"
+            android:backgroundTint="@{viewModel.isEditMode ? @color/blue : @color/orange}"
+            android:onClick="@{() -> viewModel.changeFieldEnablability()}"
+            android:src="@{viewModel.isEditMode() ? @drawable/ic_save_outlined_black_24 : @drawable/ic_pencil_black_24}"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

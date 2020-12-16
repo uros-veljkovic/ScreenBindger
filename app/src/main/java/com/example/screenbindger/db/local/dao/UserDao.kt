@@ -1,9 +1,6 @@
 package com.example.screenbindger.db.local.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.screenbindger.db.local.entity.user.UserEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -19,6 +16,12 @@ interface UserDao {
     @Query("SELECT * FROM userentity WHERE email = :email AND password = :password")
     suspend fun find(email: String, password: String): UserEntity?
 
+    @Update
+    suspend fun update(userEntity: UserEntity)
+
     @Query("UPDATE userentity SET is_logged_in = 1 WHERE _id = :id")
-    suspend fun login(id: Int)
+    suspend fun login(id: Int?)
+
+    @Query("SELECT * FROM userentity WHERE is_logged_in = 1")
+    suspend fun findLoggedInUser(): UserEntity
 }

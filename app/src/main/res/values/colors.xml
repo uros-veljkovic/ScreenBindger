@@ -14,4 +14,10 @@
     <color name="defaultButtonColor">#3c3c3c</color>
     <color name="defaultCircularImageViewBackground">#797979</color>
     <color name="text_input_layout_box_stroke_color">#8a8a8a</color>
+
+    <color name="orange">#F4B400</color>
+    <color name="blue">#4285F4</color>
+    <color name="green">#228b22</color>
+
+
 </resources>

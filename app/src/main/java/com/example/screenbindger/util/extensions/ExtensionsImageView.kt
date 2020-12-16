@@ -18,3 +18,12 @@ fun ImageView.setLoadFrom(url: String?, size: String) {
 
     refreshDrawableState()
 }
+@BindingAdapter("app:uri")
+fun ImageView.setUri(uri: String?) {
+    Glide.with(context)
+        .load(uri)
+        .placeholder(R.drawable.ic_profile_outlined_black_24)
+        .into(this)
+
+    refreshDrawableState()
+}
