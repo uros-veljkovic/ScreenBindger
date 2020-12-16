@@ -25,7 +25,7 @@
             android:layout_marginTop="@dimen/normal_100"
             android:layout_marginEnd="@dimen/normal_100"
             android:drawableEnd="@drawable/ic_logout_24"
-            android:text="Logout"
+            android:text="@string/logout"
             android:textAllCaps="false"
             android:textColor="@color/logout_red"
             app:layout_constraintEnd_toEndOf="parent"

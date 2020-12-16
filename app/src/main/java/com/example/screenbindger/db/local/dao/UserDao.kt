@@ -22,6 +22,9 @@ interface UserDao {
     @Query("UPDATE userentity SET is_logged_in = 1 WHERE _id = :id")
     suspend fun login(id: Int?)
 
+    @Query("UPDATE userentity SET is_logged_in = 0 WHERE _id = :id")
+    suspend fun logout(id: Int?)
+
     @Query("SELECT * FROM userentity WHERE is_logged_in = 1")
     suspend fun findLoggedInUser(): UserEntity
 }

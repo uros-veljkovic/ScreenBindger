@@ -51,4 +51,12 @@ class ProfileViewModel
             }
         }
     }
+
+    fun logout() {
+        CoroutineScope(IO).launch {
+            if (user != null) {
+                db.logout(user!!.toEntity())
+            }
+        }
+    }
 }

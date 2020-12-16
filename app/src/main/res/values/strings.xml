@@ -30,4 +30,9 @@
     <string name="movie_name_placeholder">Movie name</string>
     <string name="show_more">" Show more"</string>
     <string name="show_less">" Show less"</string>
+    <string name="message_updated_profile">Updated! Now go bindging ! :)</string>
+    <string name="logout">Logout</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Yes</string>
+    <string name="message_logout">Logout? Really? I would rather keep bindging...</string>
 </resources>

@@ -36,4 +36,8 @@ abstract class ScreenBindgerLocalDatabase : RoomDatabase() {
         return userDao().findLoggedInUser()
     }
 
+    suspend fun logout(userEntity: UserEntity) {
+        userDao().logout(userEntity._id)
+    }
+
 }
