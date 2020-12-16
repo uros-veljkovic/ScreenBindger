@@ -1,10 +1,10 @@
-package com.example.screenbindger.view.fragment.trending
+package com.example.screenbindger.view.fragment.upcoming
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDatabase
-import com.example.screenbindger.db.remote.response.TrendingMoviesResponse
+import com.example.screenbindger.db.remote.response.UpcomingMoviesResponse
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.model.global.Genres
 import kotlinx.coroutines.CoroutineScope
@@ -12,12 +12,12 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class TrendingViewModel
+class UpcomingViewModel
 @ViewModelInject constructor(
     val db: ScreenBindgerRemoteDatabase
 ) : ViewModel() {
 
-    var response: MutableLiveData<Response<TrendingMoviesResponse>?> = MutableLiveData(null)
+    val response: MutableLiveData<Response<UpcomingMoviesResponse>?> = MutableLiveData(null)
     val list: List<MovieEntity>? get() = response.value?.body()?.list
 
     init {
@@ -26,7 +26,7 @@ class TrendingViewModel
 
     private fun fetchData() {
         CoroutineScope(IO).launch {
-            val result = db.getTrending()
+            val result = db.getUpcoming()
 
             result.body()?.list?.forEach {entity ->
                 generateStringGenresFor(entity)
@@ -46,5 +46,4 @@ class TrendingViewModel
         }
         entity.genresString = entity.genresString.dropLast(2)
     }
-
 }
