@@ -17,20 +17,34 @@
         android:layout_height="match_parent"
         tools:context=".view.fragment.profile.ProfileFragment">
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/normal_100"
+            android:layout_marginEnd="@dimen/normal_100"
+            android:drawableEnd="@drawable/ic_logout_24"
+            android:text="Logout"
+            android:textAllCaps="false"
+            android:textColor="@color/logout_red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivUserImage"
-            android:scaleType="centerCrop"
             android:layout_width="150dp"
-            app:uri="@{viewModel.user.imageUri}"
             android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="@dimen/normal_100"
             android:src="@drawable/ic_profile_outlined_black_24"
             app:layout_constraintBottom_toTopOf="@+id/tilUserFullName"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            app:shapeAppearance="@style/Widget.ScreenBindger.ImageView.Circle" />
+            app:shapeAppearance="@style/Widget.ScreenBindger.ImageView.Circle"
+            app:uri="@{viewModel.user.imageUri}" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnAddPicture"
@@ -38,9 +52,9 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/orange"
             android:enabled="@{viewModel.isEditMode}"
-            android:visibility="@{viewModel.isEditMode() ? View.VISIBLE : View.GONE}"
-            android:tint="@{viewModel.isEditMode() ? @color/green : @android:color/white}"
             android:src="@drawable/ic_image_plus_black_24"
+            android:tint="@{viewModel.isEditMode() ? @color/green : @android:color/white}"
+            android:visibility="@{viewModel.isEditMode() ? View.VISIBLE : View.GONE}"
             app:borderWidth="0dp"
             app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="@id/ivUserImage"
@@ -54,10 +68,9 @@
             android:enabled="@{viewModel.isEditMode}"
             android:hint="@string/full_name_required_placeholder"
             app:layout_constraintBottom_toTopOf="@+id/tilUserEmail"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivUserImage"
             app:layout_constraintVertical_chainStyle="packed"
             app:startIconDrawable="@drawable/ic_profile_filled_black_24">
 
@@ -78,7 +91,6 @@
             android:enabled="@{viewModel.isEditMode}"
             android:hint="@string/email_required_placeholder"
             app:layout_constraintBottom_toTopOf="@+id/tilUserPassword"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilUserFullName"
@@ -101,7 +113,6 @@
             android:enabled="@{viewModel.isEditMode}"
             android:hint="@string/password_required_placeholder"
             app:layout_constraintBottom_toTopOf="@+id/tilUserDateOfBirth"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilUserEmail"
@@ -125,7 +136,6 @@
             android:enabled="@{viewModel.isEditMode}"
             android:hint="@string/date_of_birth_placeholder"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilUserPassword"

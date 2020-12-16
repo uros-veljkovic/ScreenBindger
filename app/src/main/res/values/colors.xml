@@ -18,6 +18,7 @@
     <color name="orange">#F4B400</color>
     <color name="blue">#4285F4</color>
     <color name="green">#228b22</color>
+    <color name="logout_red">#6b1d1d</color>
 
 
 </resources>
