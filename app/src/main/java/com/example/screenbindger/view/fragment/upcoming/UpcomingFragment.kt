@@ -1,21 +1,18 @@
 package com.example.screenbindger.view.fragment.upcoming
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.R
-import com.example.screenbindger.databinding.FragmentTrendingBinding
 import com.example.screenbindger.databinding.FragmentUpcomingBinding
 import com.example.screenbindger.util.adapter.recyclerview.ItemMoviewRecyclerViewAdapter
 import com.example.screenbindger.util.decorator.ItemMovieRecyclerViewDecorator
-import com.example.screenbindger.view.fragment.trending.TrendingFragmentDirections
-import com.example.screenbindger.view.fragment.trending.TrendingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -53,15 +50,20 @@ class UpcomingFragment : Fragment(), ItemMoviewRecyclerViewAdapter.OnMovieItemCl
 
     private fun observeViewModel() {
         viewModel.response.observe(viewLifecycleOwner, Observer { response ->
-            val list = viewModel.list ?: mutableListOf()
-            binding.rvUpcoming.adapter = ItemMoviewRecyclerViewAdapter(this, list.toMutableList())
+            if (response != null && response.isSuccessful) {
+                val list = response.body()?.list?.toMutableList() ?: mutableListOf()
+                binding.rvUpcoming.adapter =
+                    ItemMoviewRecyclerViewAdapter(this, list)
+            }
         })
     }
 
     override fun onMovieCardItemClick(position: Int) {
         val movieId = viewModel.list?.get(position)?.id
-        if(movieId != null && movieId != -1){
-            val action = UpcomingFragmentDirections.actionUpcomingFragmentToMovieDetailsFragment(movieId)
+
+        if (movieId != null) {
+            val action =
+                UpcomingFragmentDirections.actionUpcomingFragmentToMovieDetailsFragment(movieId)
             findNavController().navigate(action)
         }
     }

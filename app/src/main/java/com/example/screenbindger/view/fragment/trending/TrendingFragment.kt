@@ -49,14 +49,18 @@ class TrendingFragment : Fragment(), ItemMoviewRecyclerViewAdapter.OnMovieItemCl
 
     private fun observeViewModel() {
         viewModel.response.observe(viewLifecycleOwner, Observer { response ->
-            val list = viewModel.list ?: mutableListOf()
-            binding.rvTrending.adapter = ItemMoviewRecyclerViewAdapter(this, list.toMutableList())
+            if (response != null && response.isSuccessful) {
+                val list = response.body()?.list?.toMutableList() ?: mutableListOf()
+                binding.rvTrending.adapter =
+                    ItemMoviewRecyclerViewAdapter(this, list)
+            }
         })
     }
 
     override fun onMovieCardItemClick(position: Int) {
         val movieId = viewModel.list?.get(position)?.id
-        if(movieId != null && movieId != -1){
+
+        if(movieId != null){
             val action = TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(movieId)
             findNavController().navigate(action)
         }
