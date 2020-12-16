@@ -70,13 +70,4 @@
     <action
         android:id="@+id/action_global_profileFragment"
         app:destination="@id/profileFragment" />
-    <action
-        android:id="@+id/action_global_trendingFragment2"
-        app:destination="@id/trendingFragment" />
-    <action
-        android:id="@+id/action_global_upcomingFragment2"
-        app:destination="@id/upcomingFragment" />
-    <action
-        android:id="@+id/action_global_genresFragment2"
-        app:destination="@id/genresFragment" />
 </navigation>

@@ -1,7 +1,6 @@
 package com.example.screenbindger.view.fragment.movie_details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.screenbindger.databinding.FragmentMovieDetailsBinding
 import com.example.screenbindger.util.adapter.recyclerview.MovieDetailsRecyclerViewAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_movie_details.view.*
 
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
