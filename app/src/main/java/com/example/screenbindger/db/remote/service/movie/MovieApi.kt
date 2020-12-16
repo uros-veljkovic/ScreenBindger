@@ -3,6 +3,7 @@ package com.example.screenbindger.db.remote.service.movie
 import com.example.screenbindger.db.remote.response.MovieDetailsCastResponse
 import com.example.screenbindger.db.remote.response.MovieDetailsResponse
 import com.example.screenbindger.db.remote.response.TrendingMoviesResponse
+import com.example.screenbindger.db.remote.response.UpcomingMoviesResponse
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.util.constants.API_KEY
 import retrofit2.Response
@@ -14,6 +15,9 @@ interface MovieApi {
 
     @GET("trending/movie/week?api_key=$API_KEY")
     suspend fun getTrending(): Response<TrendingMoviesResponse>
+
+    @GET("movie/upcoming?api_key=$API_KEY")
+    suspend fun getUpcoming(): Response<UpcomingMoviesResponse>
 
     @GET
     suspend fun getSmallPoster(@Url url: String)
