@@ -33,7 +33,7 @@ class ScreenBindgerRemoteDatabase
         return movieService.getMovieCasts(movieId)
     }
 
-    suspend fun getMoviesByGenre(id: Int): Response<GenreMoviesResponse> {
+    suspend fun getMoviesByGenre(id: String): Response<GenreMoviesResponse> {
         return genreService.getMoviesByGenre(id)
     }
 

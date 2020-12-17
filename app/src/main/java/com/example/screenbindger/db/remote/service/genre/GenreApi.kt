@@ -7,12 +7,13 @@ import com.example.screenbindger.util.constants.API_KEY
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface GenreApi {
 
     @GET("genre/movie/list?api_key=$API_KEY")
     suspend fun getAll():Response<GenresResponse>
-
-    @GET("discover/movie?api_key=$API_KEY")
-    suspend fun getMoviesByGenre(@Path("with_genre")id: Int): Response<GenreMoviesResponse>
+//https://api.themoviedb.org/3/discover/movie?api_key=
+    @GET("discover/movie?api_key=${API_KEY}")
+    suspend fun getMoviesByGenre(@Query("with_genres")id: String): Response<GenreMoviesResponse>
 }

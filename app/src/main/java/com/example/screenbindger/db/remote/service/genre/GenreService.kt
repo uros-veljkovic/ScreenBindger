@@ -17,7 +17,7 @@ constructor(
         return genreApi.getAll()
     }
 
-    suspend fun getMoviesByGenre(id: Int): Response<GenreMoviesResponse>{
+    suspend fun getMoviesByGenre(id: String): Response<GenreMoviesResponse>{
         return  genreApi.getMoviesByGenre(id)
     }
 
