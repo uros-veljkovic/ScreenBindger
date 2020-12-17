@@ -2,18 +2,13 @@ package com.example.screenbindger.util.adapter.recyclerview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.example.screenbindger.R
+import com.example.screenbindger.app.ScreenBindger
 import com.example.screenbindger.databinding.ItemGenreBinding
-import com.example.screenbindger.databinding.ItemMovieBinding
 import com.example.screenbindger.model.domain.GenreEntity
-import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
-import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
-import com.example.screenbindger.util.constants.API_KEY
-import com.example.screenbindger.util.constants.POSTER_SIZE_SMALL
-import kotlinx.android.synthetic.main.item_movie.view.*
 
 class ItemGenreRecyclerViewAdapter(
     val listener: OnCardItemClickListener,
@@ -31,20 +26,31 @@ class ItemGenreRecyclerViewAdapter(
         val genre = list[position]
 
         holder.bind(genre)
+        setGenreImage(genre, holder)
 
         holder.itemView.setOnClickListener { listener.onCardItemClick(position) }
     }
 
-    private fun bindPoster(imageView: ImageView, smallPosterUrl: String?) {
-        val field = "$API_IMAGE_BASE_URL/t/p/$POSTER_SIZE_SMALL${smallPosterUrl}?api_key=$API_KEY"
+    private fun setGenreImage(genre: GenreEntity, holder: ItemGenreViewHolder) {
+        val context = ScreenBindger.context()
+        val resources = context.resources
 
-        Glide.with(imageView.context)
-            .load(field)
-            .centerCrop()
-            .placeholder(null)
-            .into(imageView)
+        val resourceId: Int = resources.getIdentifier(
+            "ic_genre_${genre.id}",
+            "drawable",
+            context.packageName
+        )
 
-        imageView.refreshDrawableState()
+        val drawable = try {
+            ContextCompat.getDrawable(context, resourceId)
+        } catch (e: Exception) {
+            ContextCompat.getDrawable(context, R.drawable.ic_image_frame_black_24)!!
+        }
+
+        holder.binding.ivGenreImage.let {
+            it.setImageDrawable(drawable)
+            it.refreshDrawableState()
+        }
     }
 
     override fun getItemCount(): Int {

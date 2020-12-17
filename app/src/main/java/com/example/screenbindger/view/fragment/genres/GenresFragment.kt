@@ -12,19 +12,20 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.databinding.FragmentGenresBinding
 import com.example.screenbindger.util.adapter.recyclerview.ItemGenreRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
+import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentDirections
 import com.example.screenbindger.view.fragment.trending.TrendingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class GenresFragment : Fragment(), ItemGenreRecyclerViewAdapter.OnCardItemClickListener {
+class GenresFragment : Fragment(), OnCardItemClickListener {
 
 
     private var _binding: FragmentGenresBinding? = null
     private val binding get() = _binding!!
 
-    val viewModel: TrendingViewModel by viewModels()
+    val viewModel: GenresViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,11 +62,10 @@ class GenresFragment : Fragment(), ItemGenreRecyclerViewAdapter.OnCardItemClickL
     }
 
     override fun onCardItemClick(position: Int) {
-        val movieId = viewModel.list?.get(position)?.id
+        val genreId = viewModel.list?.get(position)?.id
 
-        if(movieId != null){
-            val action = TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(movieId)
-            findNavController().navigate(action)
+        if(genreId != null){
+            //TODO: Go to GenreMoviesFragment.class
         }
     }
 

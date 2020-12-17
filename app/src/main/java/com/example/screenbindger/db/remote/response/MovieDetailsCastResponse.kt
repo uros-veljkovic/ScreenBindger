@@ -6,5 +6,4 @@ import com.google.gson.annotations.SerializedName
 class MovieDetailsCastResponse (
     @SerializedName("cast")
     val casts: List<CastEntity>
-){
-}
+)
