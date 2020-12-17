@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.databinding.FragmentGenresBinding
+import com.example.screenbindger.util.adapter.recyclerview.ItemGenreRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentDirections
@@ -17,7 +18,7 @@ import com.example.screenbindger.view.fragment.trending.TrendingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class GenresFragment : Fragment(), ItemMovieRecyclerViewAdapter.OnCardItemClickListener {
+class GenresFragment : Fragment(), ItemGenreRecyclerViewAdapter.OnCardItemClickListener {
 
 
     private var _binding: FragmentGenresBinding? = null
@@ -45,7 +46,7 @@ class GenresFragment : Fragment(), ItemMovieRecyclerViewAdapter.OnCardItemClickL
         binding.rvGenres.also {
             it.layoutManager = GridLayoutManager(requireContext(), 2)
             it.addItemDecoration(GridLayoutRecyclerViewDecorator(2, 16, true))
-            it.adapter = ItemMovieRecyclerViewAdapter(this)
+            it.adapter = ItemGenreRecyclerViewAdapter(this)
         }
     }
 
@@ -54,7 +55,7 @@ class GenresFragment : Fragment(), ItemMovieRecyclerViewAdapter.OnCardItemClickL
             if (response != null && response.isSuccessful) {
                 val list = response.body()?.list?.toMutableList() ?: mutableListOf()
                 binding.rvGenres.adapter =
-                    ItemMovieRecyclerViewAdapter(this, list)
+                    ItemGenreRecyclerViewAdapter(this, list)
             }
         })
     }

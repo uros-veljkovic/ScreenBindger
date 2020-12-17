@@ -11,12 +11,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.databinding.FragmentTrendingBinding
 import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
+import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class TrendingFragment : Fragment(), ItemMovieRecyclerViewAdapter.OnCardItemClickListener {
+class TrendingFragment : Fragment(),
+    OnCardItemClickListener {
 
     private var _binding: FragmentTrendingBinding? = null
     private val binding get() = _binding!!
