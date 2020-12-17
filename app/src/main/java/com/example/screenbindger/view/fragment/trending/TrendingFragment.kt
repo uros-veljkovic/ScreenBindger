@@ -10,13 +10,13 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.databinding.FragmentTrendingBinding
-import com.example.screenbindger.util.adapter.recyclerview.ItemMoviewRecyclerViewAdapter
-import com.example.screenbindger.util.decorator.ItemMovieRecyclerViewDecorator
+import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
+import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class TrendingFragment : Fragment(), ItemMoviewRecyclerViewAdapter.OnMovieItemClickListener {
+class TrendingFragment : Fragment(), ItemMovieRecyclerViewAdapter.OnCardItemClickListener {
 
     private var _binding: FragmentTrendingBinding? = null
     private val binding get() = _binding!!
@@ -42,8 +42,8 @@ class TrendingFragment : Fragment(), ItemMoviewRecyclerViewAdapter.OnMovieItemCl
     private fun initRecyclerView() {
         binding.rvTrending.also {
             it.layoutManager = GridLayoutManager(requireContext(), 2)
-            it.addItemDecoration(ItemMovieRecyclerViewDecorator(2, 16, true))
-            it.adapter = ItemMoviewRecyclerViewAdapter(this)
+            it.addItemDecoration(GridLayoutRecyclerViewDecorator(2, 16, true))
+            it.adapter = ItemMovieRecyclerViewAdapter(this)
         }
     }
 
@@ -52,12 +52,12 @@ class TrendingFragment : Fragment(), ItemMoviewRecyclerViewAdapter.OnMovieItemCl
             if (response != null && response.isSuccessful) {
                 val list = response.body()?.list?.toMutableList() ?: mutableListOf()
                 binding.rvTrending.adapter =
-                    ItemMoviewRecyclerViewAdapter(this, list)
+                    ItemMovieRecyclerViewAdapter(this, list)
             }
         })
     }
 
-    override fun onMovieCardItemClick(position: Int) {
+    override fun onCardItemClick(position: Int) {
         val movieId = viewModel.list?.get(position)?.id
 
         if(movieId != null){

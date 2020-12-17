@@ -9,15 +9,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentUpcomingBinding
-import com.example.screenbindger.util.adapter.recyclerview.ItemMoviewRecyclerViewAdapter
-import com.example.screenbindger.util.decorator.ItemMovieRecyclerViewDecorator
+import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
+import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class UpcomingFragment : Fragment(), ItemMoviewRecyclerViewAdapter.OnMovieItemClickListener {
+class UpcomingFragment : Fragment(), ItemMovieRecyclerViewAdapter.OnCardItemClickListener {
 
     var _binding: FragmentUpcomingBinding? = null
     val binding get() = _binding!!
@@ -43,8 +42,8 @@ class UpcomingFragment : Fragment(), ItemMoviewRecyclerViewAdapter.OnMovieItemCl
     private fun initRecyclerView() {
         binding.rvUpcoming.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
-            addItemDecoration(ItemMovieRecyclerViewDecorator(2, 16, true))
-            adapter = ItemMoviewRecyclerViewAdapter(this@UpcomingFragment)
+            addItemDecoration(GridLayoutRecyclerViewDecorator(2, 16, true))
+            adapter = ItemMovieRecyclerViewAdapter(this@UpcomingFragment)
         }
     }
 
@@ -53,12 +52,12 @@ class UpcomingFragment : Fragment(), ItemMoviewRecyclerViewAdapter.OnMovieItemCl
             if (response != null && response.isSuccessful) {
                 val list = response.body()?.list?.toMutableList() ?: mutableListOf()
                 binding.rvUpcoming.adapter =
-                    ItemMoviewRecyclerViewAdapter(this, list)
+                    ItemMovieRecyclerViewAdapter(this, list)
             }
         })
     }
 
-    override fun onMovieCardItemClick(position: Int) {
+    override fun onCardItemClick(position: Int) {
         val movieId = viewModel.list?.get(position)?.id
 
         if (movieId != null) {
