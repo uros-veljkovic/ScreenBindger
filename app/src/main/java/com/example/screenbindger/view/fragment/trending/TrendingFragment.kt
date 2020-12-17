@@ -55,6 +55,7 @@ class TrendingFragment : Fragment(),
                 val list = response.body()?.list?.toMutableList() ?: mutableListOf()
                 binding.rvTrending.adapter =
                     ItemMovieRecyclerViewAdapter(this, list)
+                binding.rvTrending.startLayoutAnimation()
             }
         })
     }

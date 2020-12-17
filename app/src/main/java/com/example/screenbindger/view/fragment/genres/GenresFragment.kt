@@ -17,6 +17,7 @@ import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentDirections
 import com.example.screenbindger.view.fragment.trending.TrendingViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.ref.WeakReference
 
 @AndroidEntryPoint
 class GenresFragment : Fragment(), OnCardItemClickListener {
@@ -47,7 +48,6 @@ class GenresFragment : Fragment(), OnCardItemClickListener {
         binding.rvGenres.also {
             it.layoutManager = GridLayoutManager(requireContext(), 2)
             it.addItemDecoration(GridLayoutRecyclerViewDecorator(2, 16, true))
-            it.adapter = ItemGenreRecyclerViewAdapter(this)
         }
     }
 
@@ -56,16 +56,20 @@ class GenresFragment : Fragment(), OnCardItemClickListener {
             if (response != null && response.isSuccessful) {
                 val list = response.body()?.list?.toMutableList() ?: mutableListOf()
                 binding.rvGenres.adapter =
-                    ItemGenreRecyclerViewAdapter(this, list)
+                    ItemGenreRecyclerViewAdapter(WeakReference(requireContext()), this, list)
+                binding.rvGenres.startLayoutAnimation()
             }
         })
     }
 
     override fun onCardItemClick(position: Int) {
-        val genreId = viewModel.list?.get(position)?.id
+        val genre = viewModel.list?.get(position)
+        val genreId = genre?.id
+        val genreName = genre?.name
 
         if(genreId != null){
-            //TODO: Go to GenreMoviesFragment.class
+            val action = GenresFragmentDirections.actionGenresFragmentToGenreMoviesFragment(genreName, genreId)
+            findNavController().navigate(action)
         }
     }
 

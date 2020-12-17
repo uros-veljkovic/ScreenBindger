@@ -55,6 +55,7 @@ class UpcomingFragment : Fragment(),
                 val list = response.body()?.list?.toMutableList() ?: mutableListOf()
                 binding.rvUpcoming.adapter =
                     ItemMovieRecyclerViewAdapter(this, list)
+                binding.rvUpcoming.startLayoutAnimation()
             }
         })
     }

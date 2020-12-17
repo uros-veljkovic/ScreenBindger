@@ -1,5 +1,6 @@
 package com.example.screenbindger.util.adapter.recyclerview
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -9,8 +10,10 @@ import com.example.screenbindger.app.ScreenBindger
 import com.example.screenbindger.databinding.ItemGenreBinding
 import com.example.screenbindger.model.domain.GenreEntity
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
+import java.lang.ref.WeakReference
 
 class ItemGenreRecyclerViewAdapter(
+    val context: WeakReference<Context>,
     val listener: OnCardItemClickListener,
     private var list: MutableList<GenreEntity> = mutableListOf()
 ) :
@@ -32,19 +35,18 @@ class ItemGenreRecyclerViewAdapter(
     }
 
     private fun setGenreImage(genre: GenreEntity, holder: ItemGenreViewHolder) {
-        val context = ScreenBindger.context()
-        val resources = context.resources
+        val resources = context.get()?.resources
 
-        val resourceId: Int = resources.getIdentifier(
+        val resourceId: Int = resources!!.getIdentifier(
             "ic_genre_${genre.id}",
             "drawable",
-            context.packageName
+            context.get()?.packageName
         )
 
         val drawable = try {
-            ContextCompat.getDrawable(context, resourceId)
+            ContextCompat.getDrawable(context.get()!!, resourceId)
         } catch (e: Exception) {
-            ContextCompat.getDrawable(context, R.drawable.ic_image_frame_black_24)!!
+            ContextCompat.getDrawable(context.get()!!, R.drawable.ic_image_frame_black_24)!!
         }
 
         holder.binding.ivGenreImage.let {

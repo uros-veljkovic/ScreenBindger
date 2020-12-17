@@ -12,7 +12,10 @@
         tools:layout="@layout/fragment_genres">
         <action
             android:id="@+id/action_genresFragment_to_genreMoviesFragment"
-            app:destination="@id/genreMoviesFragment" />
+            app:destination="@id/genreMoviesFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popExitAnim="@android:anim/fade_out" />
         <argument
             android:name="movieId"
             app:argType="integer" />
@@ -66,6 +69,13 @@
         <action
             android:id="@+id/action_genreMoviesFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
+        <argument
+            android:name="genreName"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="genreId"
+            app:argType="integer" />
     </fragment>
     <action
         android:id="@+id/action_global_profileFragment"
