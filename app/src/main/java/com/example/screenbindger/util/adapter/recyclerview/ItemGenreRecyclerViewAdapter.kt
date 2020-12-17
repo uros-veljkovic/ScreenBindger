@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.screenbindger.R
 import com.example.screenbindger.databinding.ItemMovieBinding
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
@@ -13,11 +12,11 @@ import com.example.screenbindger.util.constants.API_KEY
 import com.example.screenbindger.util.constants.POSTER_SIZE_SMALL
 import kotlinx.android.synthetic.main.item_movie.view.*
 
-class ItemMoviewRecyclerViewAdapter(
-    val listener: OnMovieItemClickListener,
+class ItemGenreRecyclerViewAdapter(
+    val listener: OnCardItemClickListener,
     private var list: MutableList<MovieEntity> = mutableListOf()
 ) :
-    RecyclerView.Adapter<ItemMoviewRecyclerViewAdapter.ItemMovieViewHolder>() {
+    RecyclerView.Adapter<ItemGenreRecyclerViewAdapter.ItemMovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemMovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -32,7 +31,7 @@ class ItemMoviewRecyclerViewAdapter(
         holder.bind(movie)
         bindPoster(poster, movie.smallPosterUrl)
 
-        holder.itemView.setOnClickListener { listener.onMovieCardItemClick(position) }
+        holder.itemView.setOnClickListener { listener.onCardItemClick(position) }
     }
 
     private fun bindPoster(imageView: ImageView, smallPosterUrl: String?) {
@@ -69,7 +68,7 @@ class ItemMoviewRecyclerViewAdapter(
         }
     }
 
-    interface OnMovieItemClickListener {
-        fun onMovieCardItemClick(position: Int)
+    interface OnCardItemClickListener {
+        fun onCardItemClick(position: Int)
     }
 }
