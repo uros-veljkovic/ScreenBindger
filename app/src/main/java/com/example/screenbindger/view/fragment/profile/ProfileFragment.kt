@@ -34,9 +34,14 @@ class ProfileFragment : Fragment() {
     ): View? {
 
         val view = bind(inflater, container)
+        fetchData()
         initOnClickListeners()
         observeUpdates()
         return view
+    }
+
+    private fun fetchData(){
+        viewModel.fetchData()
     }
 
     private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
@@ -107,11 +112,10 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.updated.removeObservers(viewLifecycleOwner)
         _binding = null
     }
-
 
 }

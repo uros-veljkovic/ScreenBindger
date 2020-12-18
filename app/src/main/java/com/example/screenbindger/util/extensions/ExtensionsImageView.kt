@@ -26,4 +26,5 @@ fun ImageView.setUri(uri: String?) {
         .into(this)
 
     refreshDrawableState()
+    invalidate()
 }

@@ -20,11 +20,7 @@ class ProfileViewModel
     var isEditMode = ObservableField(false)
     var updated = MutableLiveData(false)
 
-    init {
-        fetchData()
-    }
-
-    private fun fetchData(){
+    fun fetchData(){
         CoroutineScope(IO).launch {
             user = db.findLoggedInUser().toObservable()
         }

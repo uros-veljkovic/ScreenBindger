@@ -33,10 +33,10 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivUserImage"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:layout_marginBottom="@dimen/normal_100"
+            android:layout_marginBottom="@dimen/large_100"
             android:src="@drawable/ic_profile_outlined_black_24"
             app:layout_constraintBottom_toTopOf="@+id/tilUserFullName"
             app:layout_constraintLeft_toLeftOf="parent"
