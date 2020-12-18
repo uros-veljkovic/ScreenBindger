@@ -88,7 +88,7 @@ class ProfileFragment : Fragment() {
     private fun observeUpdateTrigger() {
         viewModel.updated.observe(viewLifecycleOwner, Observer { updated ->
             if (updated) {
-                val snackbarColor = ResourcesCompat.getColor(resources, R.color.secondaryDarkColor, null)
+                val snackbarColor = ResourcesCompat.getColor(resources, R.color.green, null)
                 Snackbar.make(
                     requireView(),
                     getString(R.string.message_updated_profile),

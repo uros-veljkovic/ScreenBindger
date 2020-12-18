@@ -7,7 +7,10 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -19,6 +22,7 @@ import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.validator.FieldValidator
 import com.example.screenbindger.view.activity.main.MainActivity
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -75,42 +79,55 @@ class LoginFragment : Fragment() {
         viewModel.loginTrigger.observe(viewLifecycleOwner, Observer { isLoggedIn ->
             isLoggedIn?.let {
                 if (isLoggedIn == true) {
-                    showSuccessMessage()
+                    showSnackbar(R.string.hello_binger, R.color.green)
                     gotoMainActivity()
                 } else {
-                    showFailMessage()
+                    showSnackbar(R.string.login_fail_message, R.color.secondaryDarkColor)
                 }
             }
         })
     }
 
-
-    private fun showFailMessage() {
-        Toast.makeText(
-            requireActivity(),
-            getString(R.string.login_fail_message),
-            Toast.LENGTH_SHORT
-        )
+    fun showSnackbar(stringResourceId: Int, colorResourceId: Int){
+        val snackbarColor = ResourcesCompat.getColor(resources, colorResourceId, null)
+        Snackbar.make(
+            requireView(),
+            getString(stringResourceId),
+            Snackbar.LENGTH_LONG
+        ).setBackgroundTint(snackbarColor)
             .show()
+
     }
 
-    private fun showSuccessMessage() {
-        Toast.makeText(
-            requireActivity(),
-            getString(R.string.login_success_message),
-            Toast.LENGTH_SHORT
-        )
-            .show()
-    }
-
-    private fun gotoMainActivity() {
+    fun gotoMainActivity() {
         binding.progressBar.show()
+        animateButton()
         Handler(Looper.myLooper()!!).postDelayed({
             binding.progressBar.hide()
 
             startActivity(Intent(requireActivity(), MainActivity::class.java))
             requireActivity().finish()
         }, 1500)
+    }
+
+    private fun animateButton(){
+        binding.btnLogin.also {
+            val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fadeout)
+            it.startAnimation(animation)
+            it.animation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {
+                    // TODO Auto-generated method stub
+                }
+
+                override fun onAnimationRepeat(animation: Animation) {
+                    // TODO Auto-generated method stub
+                }
+
+                override fun onAnimationEnd(animation: Animation) {
+                    it.visibility = View.INVISIBLE
+                }
+            })
+        }
     }
 
     override fun onDestroyView() {

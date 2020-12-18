@@ -35,4 +35,5 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Yes</string>
     <string name="message_logout">Logout? Really? I would rather keep bindging...</string>
+    <string name="hello_binger">Hello bindger! :)</string>
 </resources>
