@@ -33,6 +33,8 @@
             app:elevation="2dp"
             app:itemBackground="@android:color/white"
             app:itemIconSize="24dp"
+            app:itemIconTint="@drawable/bottom_navigation_item_tint"
+            app:itemTextColor="@drawable/bottom_navigation_item_tint"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
