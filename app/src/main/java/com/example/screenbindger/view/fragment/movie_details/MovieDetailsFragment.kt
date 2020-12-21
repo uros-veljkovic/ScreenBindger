@@ -69,16 +69,21 @@ class MovieDetailsFragment : Fragment() {
         viewModel.responseMovieDetailsCast.observe(viewLifecycleOwner, Observer { response ->
             if (response != null && response.isSuccessful) {
                 val items = response.body()?.casts
-                (binding.rvMovieDetails.adapter as MovieDetailsRecyclerViewAdapter).addItems(items!!)
+                if (!items.isNullOrEmpty())
+                    (binding.rvMovieDetails.adapter as MovieDetailsRecyclerViewAdapter).addItems(
+                        items
+                    )
             }
             binding.invalidateAll()
         })
+
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
 
         _binding = null
+        viewModel.reset()
     }
 
 }

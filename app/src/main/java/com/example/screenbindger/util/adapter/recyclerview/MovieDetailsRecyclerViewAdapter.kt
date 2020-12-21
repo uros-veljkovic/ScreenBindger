@@ -9,6 +9,7 @@ import com.example.screenbindger.model.domain.CastEntity
 import com.example.screenbindger.model.domain.Item
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.model.enums.ItemType
+import kotlinx.android.synthetic.main.fragment_genre_movies.view.*
 
 
 class MovieDetailsRecyclerViewAdapter(
@@ -55,22 +56,19 @@ class MovieDetailsRecyclerViewAdapter(
     }
 
     fun addItems(items: List<Item>) {
-        if(items.isNotEmpty()) {
-            val itemType = items[0].getItemType()
-            when (itemType) {
-                ItemType.MOVIE_DETAILS -> {
-                    val movies = items as List<MovieEntity>
-                    movies.forEach { movie ->
-                        movie.generateGenreString()
-                    }
-                    list.addAll(0, movies)
-                }
-                ItemType.CAST -> {
-                    list.addAll(items)
-                }
+        val itemType = items[0].getItemType()
+        when (itemType) {
+            ItemType.MOVIE_DETAILS -> {
+                val movie = items[0] as MovieEntity
+                movie.generateGenreString()
+                list.add(0, movie)
             }
-            notifyDataSetChanged()
+            ItemType.CAST -> {
+                list.addAll(items)
+            }
         }
+        notifyDataSetChanged()
+
     }
 
     inner class MovieDetailsViewHolder constructor(val binding: ItemMovieDetailsBinding) :

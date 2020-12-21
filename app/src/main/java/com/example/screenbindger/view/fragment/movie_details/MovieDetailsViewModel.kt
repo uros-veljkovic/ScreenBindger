@@ -37,4 +37,9 @@ class MovieDetailsViewModel
 
     }
 
+    fun reset(){
+        responseMovieDetailsCast.value = null
+        responseMovieDetails.value = null
+    }
+
 }
