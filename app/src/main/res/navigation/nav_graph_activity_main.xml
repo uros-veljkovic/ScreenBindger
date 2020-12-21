@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/genresFragment"
         android:name="com.example.screenbindger.view.fragment.genres.GenresFragment"
-        android:label="fragment_genres"
+        android:label="Genre"
         tools:layout="@layout/fragment_genres">
         <action
             android:id="@+id/action_genresFragment_to_genreMoviesFragment"
@@ -23,7 +23,7 @@
     <fragment
         android:id="@+id/movieDetailsFragment"
         android:name="com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragment"
-        android:label="fragment_movie_details"
+        android:label="Movie details"
         tools:layout="@layout/fragment_movie_details">
         <argument
             android:name="movieId"
@@ -32,12 +32,12 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.screenbindger.view.fragment.profile.ProfileFragment"
-        android:label="fragment_profile"
+        android:label="@string/profile_placeholder"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/trendingFragment"
         android:name="com.example.screenbindger.view.fragment.trending.TrendingFragment"
-        android:label="fragment_trending"
+        android:label="Trending"
         tools:layout="@layout/fragment_trending">
         <action
             android:id="@+id/action_trendingFragment_to_movieDetailsFragment"
@@ -46,7 +46,7 @@
     <fragment
         android:id="@+id/upcomingFragment"
         android:name="com.example.screenbindger.view.fragment.upcoming.UpcomingFragment"
-        android:label="fragment_upcoming"
+        android:label="@string/upcoming_placeholder"
         tools:layout="@layout/fragment_upcoming">
         <action
             android:id="@+id/action_upcomingFragment_to_movieDetailsFragment"
@@ -64,7 +64,7 @@
     <fragment
         android:id="@+id/genreMoviesFragment"
         android:name="com.example.screenbindger.view.fragment.genre_movies.GenreMoviesFragment"
-        android:label="fragment_genre_movies"
+        android:label="Movies by genre"
         tools:layout="@layout/fragment_genre_movies">
         <action
             android:id="@+id/action_genreMoviesFragment_to_movieDetailsFragment"

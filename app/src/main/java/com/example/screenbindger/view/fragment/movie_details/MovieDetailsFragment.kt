@@ -59,7 +59,7 @@ class MovieDetailsFragment : Fragment() {
     private fun setupToolbar(){
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+        binding.toolbarTransparent.setupWithNavController(navController, appBarConfiguration)
     }
 
     private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {

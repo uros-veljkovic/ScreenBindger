@@ -38,6 +38,7 @@ class TrendingFragment : Fragment(),
 
     private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
         _binding = FragmentTrendingBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
