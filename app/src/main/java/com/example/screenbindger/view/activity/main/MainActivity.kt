@@ -5,8 +5,10 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -44,12 +46,14 @@ class MainActivity : AppCompatActivity() {
         setupBottomNavBar()
     }
 
-    private fun setupToolbar() {
+    fun setupToolbar() {
         navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         navController = navHostFragment.findNavController()
 
         setSupportActionBar(binding.toolbar)
+        binding.toolbar.refreshDrawableState()
+        supportActionBar?.show()
     }
 
     private fun setupBottomNavBar() {
@@ -86,7 +90,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.profileFragment -> {
-                findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.action_global_profileFragment)
+                navController.navigate(R.id.action_global_profileFragment)
             }
         }
         return true

@@ -6,19 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentMovieDetailsBinding
 import com.example.screenbindger.util.adapter.recyclerview.MovieDetailsRecyclerViewAdapter
+import com.example.screenbindger.view.activity.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
@@ -27,14 +25,13 @@ class MovieDetailsFragment : Fragment() {
     private var _binding: FragmentMovieDetailsBinding? = null
     val binding get() = _binding!!
 
+    lateinit var navController: NavController
     val navArgs: MovieDetailsFragmentArgs by navArgs()
     val movieId: Int by lazy { navArgs.movieId }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideActionBar()
-        setHasOptionsMenu(true)
-
     }
 
 
@@ -56,10 +53,11 @@ class MovieDetailsFragment : Fragment() {
     }
 
 
-    private fun setupToolbar(){
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-        binding.toolbarTransparent.setupWithNavController(navController, appBarConfiguration)
+    private fun setupToolbar() {
+        navController = findNavController()
+//        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbarTransparent)
+        binding.toolbarTransparent.setupWithNavController(navController)
+
     }
 
     private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
@@ -109,21 +107,23 @@ class MovieDetailsFragment : Fragment() {
         _binding = null
     }
 
-    private fun showActionBar(){
+    private fun showActionBar() {
         (requireActivity() as AppCompatActivity).supportActionBar?.show()
+/*        val activity = (requireActivity() as MainActivity)
+        activity.setupToolbar()*/
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-            inflater.inflate(R.menu.toolbar_menu, menu)
+/*    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.toolbar_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.profileFragment -> {
-                findNavController().navigate(R.id.action_global_profileFragment)
+                navController.navigate(R.id.action_global_profileFragment)
             }
         }
         return true
-    }
+    }*/
 
 }
