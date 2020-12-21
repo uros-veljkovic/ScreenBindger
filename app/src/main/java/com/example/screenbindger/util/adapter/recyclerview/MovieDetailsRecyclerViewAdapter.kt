@@ -55,20 +55,22 @@ class MovieDetailsRecyclerViewAdapter(
     }
 
     fun addItems(items: List<Item>) {
-        val itemType = items[0].getItemType()
-        when (itemType) {
-            ItemType.MOVIE_DETAILS -> {
-                val movies = items as List<MovieEntity>
-                movies.forEach { movie ->
-                    movie.generateGenreString()
+        if(items.isNotEmpty()) {
+            val itemType = items[0].getItemType()
+            when (itemType) {
+                ItemType.MOVIE_DETAILS -> {
+                    val movies = items as List<MovieEntity>
+                    movies.forEach { movie ->
+                        movie.generateGenreString()
+                    }
+                    list.addAll(0, movies)
                 }
-                list.addAll(0, movies)
+                ItemType.CAST -> {
+                    list.addAll(items)
+                }
             }
-            ItemType.CAST -> {
-                list.addAll(items)
-            }
+            notifyDataSetChanged()
         }
-        notifyDataSetChanged()
     }
 
     inner class MovieDetailsViewHolder constructor(val binding: ItemMovieDetailsBinding) :
