@@ -1,22 +1,24 @@
 package com.example.screenbindger.view.fragment.movie_details
 
 import android.os.Bundle
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentMovieDetailsBinding
 import com.example.screenbindger.util.adapter.recyclerview.MovieDetailsRecyclerViewAdapter
 import com.example.screenbindger.view.activity.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
@@ -29,34 +31,43 @@ class MovieDetailsFragment : Fragment() {
     val navArgs: MovieDetailsFragmentArgs by navArgs()
     val movieId: Int by lazy { navArgs.movieId }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        hideActionBar()
-    }
-
-
-    private fun hideActionBar() {
-        (requireActivity() as AppCompatActivity).supportActionBar?.hide()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = bind(inflater, container)
 
-        setupToolbar()
+        setHasOptionsMenu(true)
+
+        modifyToolbarForFragment()
         initRecyclerView()
         fetchData()
         observeServerResponse()
         return view
     }
 
+    private fun modifyToolbarForFragment() {
 
-    private fun setupToolbar() {
-        navController = findNavController()
-//        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbarTransparent)
-        binding.toolbarTransparent.setupWithNavController(navController)
+        val activity = (requireActivity() as MainActivity)
+        val transparentBackground =
+            ContextCompat.getDrawable(requireContext(), R.drawable.background_toolbar)
+        activity.toolbar.background = (transparentBackground)
+
+        val constraintLayout = activity.container
+
+        ConstraintSet().also {
+
+            it.clone(constraintLayout)
+
+            it.connect(
+                activity.nav_host_fragment_activity_main.id,
+                ConstraintSet.TOP,
+                activity.toolbar.id,
+                ConstraintSet.TOP,
+                0
+            )
+            it.applyTo(constraintLayout)
+        }
 
     }
 
@@ -107,28 +118,36 @@ class MovieDetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        showActionBar()
         _binding = null
         viewModel.reset()
+        modifyToolbarForActivity()
     }
 
-    private fun showActionBar() {
-        (requireActivity() as AppCompatActivity).supportActionBar?.show()
-/*        val activity = (requireActivity() as MainActivity)
-        activity.setupToolbar()*/
-    }
+    private fun modifyToolbarForActivity() {
 
-/*    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_menu, menu)
-    }
+        val activity = (requireActivity() as MainActivity)
+        val transparentBackground =
+            ContextCompat.getColor(requireContext(), R.color.defaultBackground)
+        activity.toolbar.setBackgroundColor(transparentBackground)
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.profileFragment -> {
-                navController.navigate(R.id.action_global_profileFragment)
-            }
+        val constraintLayout = activity.container
+
+        ConstraintSet().also {
+
+            it.clone(constraintLayout)
+
+            it.connect(
+                activity.nav_host_fragment_activity_main.id,
+                ConstraintSet.TOP,
+                activity.toolbar.id,
+                ConstraintSet.BOTTOM,
+                0
+            )
+            it.applyTo(constraintLayout)
         }
-        return true
-    }*/
+
+
+    }
+
 
 }

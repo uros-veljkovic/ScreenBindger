@@ -63,9 +63,8 @@ dependencies {
     def version_easy_permissions = "3.0.0"
     def version_glide = "4.11.0"
     def version_leak_canary = "2.5"
-    def version_room = "2.2.5"
+    def version_room = "2.2.6"
     def version_coroutines = "1.4.2"
-    def version_blitz_form_validator = "0.0.1"
     def version_sdp = "1.0.6"
     def version_ssp = "1.0.6"
     def version_readmore_textview = "2.1.0"
@@ -99,9 +98,6 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$version_nav"
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$version_nav"
 
-    //  KenBurnsView
-    implementation 'com.flaviofaria:kenburnsview:1.0.7'
-
     //  Retrofit
     implementation "com.squareup.retrofit2:retrofit:$version_retrofit"
     implementation "com.google.code.gson:gson:2.8.6"
@@ -131,7 +127,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version_coroutines"
 
     //  Blitz form validator
-    implementation "bloder.com:blitz:$version_blitz_form_validator"
+    implementation "bloder.com:blitz:$version_blitz_validator"
 
     implementation "com.intuit.sdp:sdp-android:$version_sdp"
     implementation "com.intuit.ssp:ssp-android:$version_ssp"

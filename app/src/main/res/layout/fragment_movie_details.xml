@@ -9,17 +9,10 @@
     </data>
 
     <FrameLayout
+        android:clickable="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.fragment.movie_details.MovieDetailsFragment">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarTransparent"
-            app:title="@string/app_name"
-            app:menu="@menu/toolbar_menu"
-            android:elevation="1dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMovieDetails"

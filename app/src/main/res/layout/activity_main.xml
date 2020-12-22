@@ -9,6 +9,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.activity.main.MainActivity">
@@ -17,18 +18,19 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/toolbar_menu"
-            app:layout_constraintTop_toTopOf="parent"
+            android:elevation="@dimen/normal_100"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/toolbar_menu" />
 
         <fragment
             android:id="@+id/nav_host_fragment_activity_main"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:elevation="0dp"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@id/bottomNav"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -39,11 +41,11 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNav"
             android:layout_width="match_parent"
-            android:layout_height="58dp"
+            android:layout_height="?attr/actionBarSize"
             android:layout_alignParentBottom="true"
-            app:elevation="2dp"
+            app:elevation="@dimen/normal_100"
             app:itemBackground="@android:color/white"
-            app:itemIconSize="24dp"
+            app:itemIconSize="@dimen/normal_150"
             app:itemIconTint="@drawable/bottom_navigation_item_tint"
             app:itemTextColor="@drawable/bottom_navigation_item_tint"
             app:layout_constraintBottom_toBottomOf="parent"

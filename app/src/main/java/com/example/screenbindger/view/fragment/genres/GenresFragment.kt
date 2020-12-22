@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.lang.ref.WeakReference
 
 @AndroidEntryPoint
-class GenresFragment : Fragment(), OnCardItemClickListener {
+class  GenresFragment : Fragment(), OnCardItemClickListener {
 
 
     private var _binding: FragmentGenresBinding? = null

@@ -20,5 +20,7 @@
         <dimen name="large_150">48dp</dimen>
         <dimen name="large_175">56dp</dimen>
         <dimen name="large_200">64dp</dimen>
-    
+
+        <dimen name="small_img_person">120dp</dimen>
+
 </resources>
