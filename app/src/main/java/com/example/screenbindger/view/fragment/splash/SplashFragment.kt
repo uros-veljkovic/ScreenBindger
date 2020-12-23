@@ -98,4 +98,10 @@ class SplashFragment : Fragment() {
         startActivity(Intent(requireActivity(), MainActivity::class.java))
         requireActivity().finish()
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
+    }
 }

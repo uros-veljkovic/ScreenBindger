@@ -4,10 +4,10 @@
     <color name="primaryColor">#dadada</color>
     <color name="primaryLightColor">#ffffff</color>
     <color name="primaryDarkColor">#a8a8a8</color>
+    <color name="primaryTextColor">#000000</color>
     <color name="secondaryColor">#e50913</color>
     <color name="secondaryLightColor">#ff573f</color>
     <color name="secondaryDarkColor">#aa0000</color>
-    <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#ffffff</color>
 
     <color name="defaultBackground">#e5e5e5</color>
