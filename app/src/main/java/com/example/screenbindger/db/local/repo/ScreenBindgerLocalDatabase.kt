@@ -15,24 +15,27 @@ abstract class ScreenBindgerLocalDatabase : RoomDatabase() {
         return userDao().isLoggedIn()
     }
 
-    suspend fun register(userEntity: UserEntity){
+    suspend fun register(userEntity: UserEntity) {
         userDao().register(userEntity)
     }
 
-    suspend fun update(userEntity: UserEntity){
+    suspend fun update(userEntity: UserEntity) {
         userDao().update(userEntity)
     }
 
-    suspend fun find(userEntity: UserEntity): UserEntity?{
-        val user = userDao().find(userEntity.email, userEntity.password)
-        return user
+    suspend fun find(userEntity: UserEntity): UserEntity? {
+        return userDao().find(userEntity.email)
     }
 
-    suspend fun login(userEntity: UserEntity){
+    suspend fun authorize(userEntity: UserEntity): UserEntity? {
+        return userDao().authorize(userEntity.email, userEntity.password)
+    }
+
+    suspend fun login(userEntity: UserEntity) {
         userDao().login(userEntity._id)
     }
 
-    suspend fun findLoggedInUser() : UserEntity{
+    suspend fun findLoggedInUser(): UserEntity {
         return userDao().findLoggedInUser()
     }
 

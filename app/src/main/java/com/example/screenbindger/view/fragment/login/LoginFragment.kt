@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -55,7 +54,6 @@ class LoginFragment : Fragment() {
             btnLogin.enableWhenUsing(FieldValidator()) {
                 etUserEmail.isNotEmpty()
                 etUserPassword.isNotEmpty()
-
             }
         }
     }
@@ -66,7 +64,6 @@ class LoginFragment : Fragment() {
                 findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             }
         }
-
     }
 
     override fun onResume() {
@@ -76,13 +73,27 @@ class LoginFragment : Fragment() {
     }
 
     fun observeLogin() {
-        viewModel.loginTrigger.observe(viewLifecycleOwner, Observer { isLoggedIn ->
-            isLoggedIn?.let {
-                if (isLoggedIn == true) {
-                    showSnackbar(R.string.hello_binger, R.color.green)
+        observeUserFound()
+        observeUserAuthorized()
+    }
+
+    private fun observeUserAuthorized() {
+        viewModel.userAuthorized.observe(viewLifecycleOwner, Observer { isAuthorized ->
+            isAuthorized?.let {
+                if (isAuthorized) {
                     gotoMainActivity()
                 } else {
-                    showSnackbar(R.string.login_fail_message, R.color.secondaryDarkColor)
+                    showSnackbar(R.string.incorrect_password, R.color.logout_red)
+                }
+            }
+        })
+    }
+
+    private fun observeUserFound() {
+        viewModel.userFound.observe(viewLifecycleOwner, Observer { isFound ->
+            isFound?.let {
+                if (isFound == false) {
+                    showSnackbar(R.string.no_user_found, R.color.logout_red)
                 }
             }
         })
