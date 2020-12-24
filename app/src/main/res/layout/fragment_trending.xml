@@ -16,7 +16,7 @@
             android:id="@+id/rvTrending"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layoutAnimation="@anim/recyclerview_animation"
+            android:layoutAnimation="@anim/layout_anim_falldown"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

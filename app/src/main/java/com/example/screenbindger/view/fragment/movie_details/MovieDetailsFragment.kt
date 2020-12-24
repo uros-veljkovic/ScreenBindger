@@ -97,8 +97,9 @@ class MovieDetailsFragment : Fragment() {
                             movieEntity
                         )
                     )
+                    binding.rvMovieDetails.startLayoutAnimation()
                 }
-                binding.invalidateAll()
+//                binding.invalidateAll()
             }
         })
 

@@ -16,6 +16,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMovieDetails"
+            android:layoutAnimation="@anim/layout_anim_appear"
             android:elevation="0dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
