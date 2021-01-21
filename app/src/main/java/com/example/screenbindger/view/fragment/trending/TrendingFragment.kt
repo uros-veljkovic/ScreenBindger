@@ -13,17 +13,18 @@ import com.example.screenbindger.databinding.FragmentTrendingBinding
 import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-
-@AndroidEntryPoint
-class TrendingFragment : Fragment(),
+class TrendingFragment : DaggerFragment(),
     OnCardItemClickListener {
+
+    @Inject
+    lateinit var viewModel: TrendingViewModel
 
     private var _binding: FragmentTrendingBinding? = null
     private val binding get() = _binding!!
 
-    val viewModel: TrendingViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,18 +37,18 @@ class TrendingFragment : Fragment(),
         return view
     }
 
-    private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
-        _binding = FragmentTrendingBinding.inflate(inflater, container, false)
-        setHasOptionsMenu(true)
-        return binding.root
-    }
-
     private fun initRecyclerView() {
         binding.rvTrending.also {
             it.layoutManager = GridLayoutManager(requireContext(), 2)
             it.addItemDecoration(GridLayoutRecyclerViewDecorator(2, 16, true))
             it.adapter = ItemMovieRecyclerViewAdapter(this)
         }
+    }
+
+    private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
+        _binding = FragmentTrendingBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
+        return binding.root
     }
 
     private fun observeViewModel() {

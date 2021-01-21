@@ -2,7 +2,6 @@ package com.example.screenbindger.view.fragment.profile
 
 import android.net.Uri
 import androidx.databinding.ObservableField
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.local.entity.user.observable.UserObservable
@@ -10,9 +9,10 @@ import com.example.screenbindger.db.local.repo.ScreenBindgerLocalDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class ProfileViewModel
-@ViewModelInject constructor(
+@Inject constructor(
     val db: ScreenBindgerLocalDatabase
 ): ViewModel(){
 

@@ -1,6 +1,5 @@
 package com.example.screenbindger.view.fragment.genres
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDatabase
@@ -11,9 +10,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
 class GenresViewModel
-@ViewModelInject constructor(
+@Inject constructor(
     val db: ScreenBindgerRemoteDatabase
 ) : ViewModel() {
 

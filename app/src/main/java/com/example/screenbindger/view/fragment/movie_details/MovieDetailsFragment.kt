@@ -16,20 +16,20 @@ import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentMovieDetailsBinding
 import com.example.screenbindger.util.adapter.recyclerview.MovieDetailsRecyclerViewAdapter
 import com.example.screenbindger.view.activity.main.MainActivity
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
+class MovieDetailsFragment : DaggerFragment() {
 
-@AndroidEntryPoint
-class MovieDetailsFragment : Fragment() {
+    @Inject
+    lateinit var viewModel: MovieDetailsViewModel
 
-    val viewModel: MovieDetailsViewModel by viewModels()
+    private val navArgs: MovieDetailsFragmentArgs by navArgs()
+    private val movieId: Int by lazy { navArgs.movieId }
+
     private var _binding: FragmentMovieDetailsBinding? = null
-    val binding get() = _binding!!
-
-    lateinit var navController: NavController
-    val navArgs: MovieDetailsFragmentArgs by navArgs()
-    val movieId: Int by lazy { navArgs.movieId }
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,7 +99,6 @@ class MovieDetailsFragment : Fragment() {
                     )
                     binding.rvMovieDetails.startLayoutAnimation()
                 }
-//                binding.invalidateAll()
             }
         })
 

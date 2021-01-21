@@ -1,22 +1,33 @@
-package com.example.screenbindger.di.hilt.module.db.remote
+package com.example.screenbindger.di.dagger
 
+import android.app.Application
+import androidx.room.Room.databaseBuilder
+import com.example.screenbindger.db.local.repo.ScreenBindgerLocalDatabase
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDatabase
 import com.example.screenbindger.db.remote.service.genre.GenreApi
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieApi
 import com.example.screenbindger.db.remote.service.movie.MovieService
 import com.example.screenbindger.util.constants.API_BASE_URL
+import com.example.screenbindger.util.constants.LOCAL_DATABASE_NAME
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
-class ScreenBindgerRemoteDatabaseModule {
+class AppModule {
+
+    @Singleton
+    @Provides
+    fun provideScreenBindgerDatabase(application: Application): ScreenBindgerLocalDatabase {
+        return databaseBuilder(
+            application.applicationContext,
+            ScreenBindgerLocalDatabase::class.java,
+            LOCAL_DATABASE_NAME
+        ).fallbackToDestructiveMigration().build()
+    }
 
     @Singleton
     @Provides
@@ -32,35 +43,23 @@ class ScreenBindgerRemoteDatabaseModule {
 
     @Singleton
     @Provides
-    fun provideMovieService(
-        movieApi: MovieApi
-    ): MovieService {
-        return MovieService(movieApi)
-    }
+    fun provideMovieService(movieApi: MovieApi) = MovieService(movieApi)
+
 
     @Singleton
     @Provides
-    fun provideMovieApi(
-        retrofit: Retrofit
-    ): MovieApi {
-        return retrofit.create(MovieApi::class.java)
-    }
+    fun provideMovieApi(retrofit: Retrofit): MovieApi = retrofit.create(MovieApi::class.java)
+
 
     @Singleton
     @Provides
-    fun provideGenreService(
-        genreApi: GenreApi
-    ): GenreService {
-        return GenreService(genreApi)
-    }
+    fun provideGenreService(api: GenreApi) = GenreService(api)
+
 
     @Singleton
     @Provides
-    fun provideGenreApi(
-        retrofit: Retrofit
-    ): GenreApi {
-        return retrofit.create(GenreApi::class.java)
-    }
+    fun provideGenreApi(retrofit: Retrofit): GenreApi = retrofit.create(GenreApi::class.java)
+
 
     @Singleton
     @Provides

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.screenbindger.R
-import com.example.screenbindger.app.ScreenBindger
 import com.example.screenbindger.databinding.ItemGenreBinding
 import com.example.screenbindger.model.domain.GenreEntity
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener

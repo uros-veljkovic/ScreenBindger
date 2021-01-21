@@ -14,19 +14,17 @@ import com.example.screenbindger.util.adapter.recyclerview.ItemGenreRecyclerView
 import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
-import com.example.screenbindger.view.fragment.trending.TrendingFragmentDirections
-import com.example.screenbindger.view.fragment.trending.TrendingViewModel
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference
+import javax.inject.Inject
 
-@AndroidEntryPoint
-class  GenresFragment : Fragment(), OnCardItemClickListener {
+class GenresFragment : DaggerFragment(), OnCardItemClickListener {
 
+    @Inject
+    lateinit var viewModel: GenresViewModel
 
     private var _binding: FragmentGenresBinding? = null
     private val binding get() = _binding!!
-
-    val viewModel: GenresViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,8 +65,11 @@ class  GenresFragment : Fragment(), OnCardItemClickListener {
         val genreId = genre?.id
         val genreName = genre?.name
 
-        if(genreId != null){
-            val action = GenresFragmentDirections.actionGenresFragmentToGenreMoviesFragment(genreName, genreId)
+        if (genreId != null) {
+            val action = GenresFragmentDirections.actionGenresFragmentToGenreMoviesFragment(
+                genreName,
+                genreId
+            )
             findNavController().navigate(action)
         }
     }

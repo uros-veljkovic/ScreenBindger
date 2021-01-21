@@ -22,13 +22,14 @@ import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.validator.FieldValidator
 import com.example.screenbindger.view.activity.main.MainActivity
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
+class LoginFragment : DaggerFragment() {
 
-@AndroidEntryPoint
-class LoginFragment : Fragment() {
+    @Inject
+    lateinit var viewModel: LoginViewModel
 
-    val viewModel: LoginViewModel by viewModels()
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
@@ -99,7 +100,7 @@ class LoginFragment : Fragment() {
         })
     }
 
-    fun showSnackbar(stringResourceId: Int, colorResourceId: Int){
+    fun showSnackbar(stringResourceId: Int, colorResourceId: Int) {
         val snackbarColor = ResourcesCompat.getColor(resources, colorResourceId, null)
         Snackbar.make(
             requireView(),
@@ -121,7 +122,7 @@ class LoginFragment : Fragment() {
         }, 1500)
     }
 
-    private fun animateButton(){
+    private fun animateButton() {
         binding.btnLogin.also {
             val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fadeout)
             it.startAnimation(animation)

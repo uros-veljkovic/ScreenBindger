@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,17 +12,18 @@ import com.example.screenbindger.databinding.FragmentUpcomingBinding
 import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 
-@AndroidEntryPoint
-class UpcomingFragment : Fragment(),
+class UpcomingFragment : DaggerFragment(),
     OnCardItemClickListener {
 
     var _binding: FragmentUpcomingBinding? = null
     val binding get() = _binding!!
 
-    val viewModel: UpcomingViewModel by viewModels()
+    @Inject
+    lateinit var viewModel: UpcomingViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

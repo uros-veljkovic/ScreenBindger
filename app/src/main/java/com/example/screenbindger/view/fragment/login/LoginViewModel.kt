@@ -1,6 +1,5 @@
 package com.example.screenbindger.view.fragment.login
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.local.entity.user.UserEntity
@@ -11,10 +10,11 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
 
 class LoginViewModel
-@ViewModelInject constructor(
+@Inject constructor(
     val user: UserObservable,
     val db: ScreenBindgerLocalDatabase
 ) : ViewModel() {
@@ -30,18 +30,18 @@ class LoginViewModel
 
     private suspend fun findUser() {
         val user = db.find(user.toEntity())
-        if(user == null){
+        if (user == null) {
             userFound.postValue(false)
-        }else{
+        } else {
             authorizeUser()
         }
     }
 
     private suspend fun authorizeUser() {
         val user = db.authorize(user.toEntity())
-        if(user == null){
+        if (user == null) {
             userAuthorized.postValue(false)
-        }else{
+        } else {
             userAuthorized.postValue(true)
             db.login(user)
         }

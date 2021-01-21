@@ -17,15 +17,17 @@ import com.example.screenbindger.view.activity.main.MainActivity
 import com.example.screenbindger.view.activity.onboarding.OnboardingActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-@AndroidEntryPoint
-class ProfileFragment : Fragment() {
+
+class ProfileFragment : DaggerFragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
-    val viewModel: ProfileViewModel by viewModels()
+    @Inject
+    lateinit var viewModel: ProfileViewModel
 
 
     override fun onCreateView(

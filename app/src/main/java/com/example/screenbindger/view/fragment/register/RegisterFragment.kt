@@ -17,16 +17,17 @@ import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.validator.FieldValidator
 import com.example.screenbindger.view.activity.main.MainActivity
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_register.*
+import javax.inject.Inject
 
+class RegisterFragment : DaggerFragment() {
 
-@AndroidEntryPoint
-class RegisterFragment : Fragment() {
+    @Inject
+    lateinit var viewModel: RegisterViewModel
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: RegisterViewModel by viewModels()
 
 
     override fun onCreateView(

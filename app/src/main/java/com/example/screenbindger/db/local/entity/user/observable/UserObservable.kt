@@ -4,13 +4,15 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import com.example.screenbindger.BR
 import com.example.screenbindger.db.local.entity.user.UserEntity
+import javax.inject.Inject
 
 /**
  * The purpose of this class is make ease of observing
  * fields change and consequentially modifying entity value
  * from fragment
  */
-class UserObservable : BaseObservable() {
+class UserObservable
+@Inject constructor() : BaseObservable() {
 
     var id: Int? = null
 

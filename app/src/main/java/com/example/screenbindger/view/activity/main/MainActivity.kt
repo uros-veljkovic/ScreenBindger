@@ -3,9 +3,7 @@ package com.example.screenbindger.view.activity.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -15,18 +13,20 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.ActivityMainBinding
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
+class MainActivity : DaggerAppCompatActivity() {
 
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var viewModel: MainViewModel
 
-    private val viewModel: MainViewModel by viewModels()
+    private lateinit var navController: NavController
+    private lateinit var navHostFragment: NavHostFragment
+
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var navController: NavController
-    lateinit var navHostFragment: NavHostFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         setupBottomNavBar()
     }
 
-    fun setupToolbar() {
+    private fun setupToolbar() {
         navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         navController = navHostFragment.findNavController()
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                     R.id.trendingFragment
                 )
             )
-        ) {
+        ){
             setupActionBarWithNavController(navController, this)
         }
 

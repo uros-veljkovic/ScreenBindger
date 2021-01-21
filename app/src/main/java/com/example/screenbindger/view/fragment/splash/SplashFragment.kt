@@ -19,20 +19,21 @@ import androidx.navigation.fragment.findNavController
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentSplashBinding
 import com.example.screenbindger.view.activity.main.MainActivity
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+class SplashFragment : DaggerFragment() {
 
-@InternalCoroutinesApi
-@AndroidEntryPoint
-class SplashFragment : Fragment() {
+    @Inject
+    lateinit var viewModel: SplashViewModel
 
     private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: SplashViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,13 +46,14 @@ class SplashFragment : Fragment() {
         return binding.root
     }
 
-    private fun animateView(){
+    private fun animateView() {
         val animImageAlpha = ObjectAnimator.ofFloat(binding.ivScreenBindger, "alpha", 1f).also {
             it.repeatCount = 1
             it.repeatMode = ValueAnimator.REVERSE
         }
 
-        val animImageFall = ObjectAnimator.ofFloat(binding.ivScreenBindger, "translationY", -300f, 0f)
+        val animImageFall =
+            ObjectAnimator.ofFloat(binding.ivScreenBindger, "translationY", -300f, 0f)
 
         val animTitle = ObjectAnimator.ofFloat(binding.tvScreenBindgerText, "alpha", 1f).also {
             it.repeatCount = 1

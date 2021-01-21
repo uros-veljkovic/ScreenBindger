@@ -1,22 +1,11 @@
 package com.example.screenbindger.app
 
-import android.app.Application
-import android.content.Context
-import dagger.hilt.android.HiltAndroidApp
+import com.example.screenbindger.di.dagger.DaggerAppComponent
+import dagger.android.DaggerApplication
 
-@HiltAndroidApp
-class ScreenBindger : Application() {
-    companion object {
-        var application: ScreenBindger? = null
-
-        fun context(): Context {
-            return application!!.applicationContext
-        }
-
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        application = this
-    }
+class ScreenBindger : DaggerApplication() {
+    override fun applicationInjector() =
+        DaggerAppComponent.builder()
+            .application(this)
+            .build()
 }

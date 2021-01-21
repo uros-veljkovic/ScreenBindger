@@ -3,7 +3,6 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
-    id 'dagger.hilt.android.plugin'
     id "androidx.navigation.safeargs.kotlin"
 }
 
@@ -54,8 +53,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     def version_material_design = "1.2.0"
-    def version_hilt = "2.28-alpha"
-    def version_hilt_viewmodel = "1.0.0-alpha02"
+    def version_dagger = "2.31"
     def version_lifecycle = "2.2.0"
     def version_nav = "2.3.1"
     def version_retrofit = "2.9.0"
@@ -76,13 +74,12 @@ dependencies {
     //RecyclerView
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
-    //Hilt
-    implementation "com.google.dagger:hilt-android:$version_hilt"
-    kapt "com.google.dagger:hilt-android-compiler:$version_hilt"
-
-    //Hilt with ViewModel
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$version_hilt_viewmodel"
-    kapt "androidx.hilt:hilt-compiler:$version_hilt_viewmodel"
+    // Dagger 2
+    implementation "com.google.dagger:dagger:$version_dagger"
+    implementation "com.google.dagger:dagger-android:$version_dagger"
+    implementation "com.google.dagger:dagger-android-support:$version_dagger"
+    kapt "com.google.dagger:dagger-compiler:$version_dagger"
+    kapt "com.google.dagger:dagger-android-processor:$version_dagger"
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$version_lifecycle"

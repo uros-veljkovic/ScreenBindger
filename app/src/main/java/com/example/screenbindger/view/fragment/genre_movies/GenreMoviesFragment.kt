@@ -19,20 +19,21 @@ import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentArgs
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentDirections
 import com.example.screenbindger.view.fragment.trending.TrendingViewModel
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-@AndroidEntryPoint
-class GenreMoviesFragment  : Fragment(),
+class GenreMoviesFragment : DaggerFragment(),
     OnCardItemClickListener {
+
+    @Inject
+    lateinit var viewModel: GenreMoviesViewModel
+
+    private val navArgs: GenreMoviesFragmentArgs by navArgs()
+    private val genreId: Int by lazy { navArgs.genreId }
+    private val genreName: String? by lazy { navArgs.genreName }
 
     private var _binding: FragmentGenreMoviesBinding? = null
     private val binding get() = _binding!!
-
-    private val navArgs: GenreMoviesFragmentArgs by navArgs()
-    private val genreId: Int by lazy { navArgs.genreId}
-    private val genreName: String? by lazy { navArgs.genreName}
-
-    val viewModel: GenreMoviesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,13 +48,13 @@ class GenreMoviesFragment  : Fragment(),
         return view
     }
 
-    fun configureToolbarTitle(){
+    fun configureToolbarTitle() {
         genreName?.let {
             activity?.title = genreName
         }
     }
 
-    fun fetchData(){
+    fun fetchData() {
         viewModel.fetchData(genreId)
     }
 
@@ -84,8 +85,11 @@ class GenreMoviesFragment  : Fragment(),
     override fun onCardItemClick(position: Int) {
         val movieId = viewModel.list?.get(position)?.id
 
-        if(movieId != null){
-            val action = GenreMoviesFragmentDirections.actionGenreMoviesFragmentToMovieDetailsFragment(movieId)
+        if (movieId != null) {
+            val action =
+                GenreMoviesFragmentDirections.actionGenreMoviesFragmentToMovieDetailsFragment(
+                    movieId
+                )
             findNavController().navigate(action)
         }
     }
