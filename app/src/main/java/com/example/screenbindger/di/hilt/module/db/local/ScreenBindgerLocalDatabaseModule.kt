@@ -1,4 +1,4 @@
-package com.example.screenbindger.di.module.db.local
+package com.example.screenbindger.di.hilt.module.db.local
 
 import androidx.room.Room.databaseBuilder
 import com.example.screenbindger.app.ScreenBindger

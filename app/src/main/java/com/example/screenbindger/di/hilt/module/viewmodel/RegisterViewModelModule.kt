@@ -1,4 +1,4 @@
-package com.example.screenbindger.di.module.viewmodel
+package com.example.screenbindger.di.hilt.module.viewmodel
 
 import com.example.screenbindger.db.local.entity.user.observable.UserObservable
 import dagger.Module

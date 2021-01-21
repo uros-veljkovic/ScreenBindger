@@ -1,4 +1,4 @@
-package com.example.screenbindger.di.module.db.remote
+package com.example.screenbindger.di.hilt.module.db.remote
 
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDatabase
 import com.example.screenbindger.db.remote.service.genre.GenreApi
