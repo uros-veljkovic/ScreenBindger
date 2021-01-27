@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "439161342353",
+    "project_id": "screenbindger",
+    "storage_bucket": "screenbindger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439161342353:android:9a05a852a51accd13eb230",
+        "android_client_info": {
+          "package_name": "com.example.screenbindger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439161342353-qbpk7qf3bfk1eq2fr8br0vguh3ipak8a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhjL8u09MmRBO6aowGPzqcXwLuZiaZtQI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439161342353-qbpk7qf3bfk1eq2fr8br0vguh3ipak8a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

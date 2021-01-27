@@ -4,6 +4,8 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
     id "androidx.navigation.safeargs.kotlin"
+    id 'com.google.gms.google-services'  // Google Services plugin
+
 }
 
 android {
@@ -66,6 +68,8 @@ dependencies {
     def version_sdp = "1.0.6"
     def version_ssp = "1.0.6"
     def version_readmore_textview = "2.1.0"
+    def version_firebase_bom = "26.3.0"
+    def version_firebase_auth = "20.0.2"
 
 
     //Material design
@@ -131,5 +135,14 @@ dependencies {
 
     // ExpandableTextView
     implementation "com.borjabravo:readmoretextview:${version_readmore_textview}"
+
+    // Firebase BoM
+    implementation platform("com.google.firebase:firebase-bom:$version_firebase_bom")
+    implementation 'com.google.firebase:firebase-analytics'
+
+    // Firebase Auth
+    implementation 'com.google.firebase:firebase-auth'
+    implementation "com.google.firebase:firebase-auth:$version_firebase_auth"
+
 
 }
