@@ -4,6 +4,7 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import com.example.screenbindger.BR
 import com.example.screenbindger.db.local.entity.user.UserEntity
+import com.google.firebase.firestore.Exclude
 import javax.inject.Inject
 
 /**
@@ -14,7 +15,9 @@ import javax.inject.Inject
 class UserObservable
 @Inject constructor() : BaseObservable() {
 
-    var id: Int? = null
+    @set: Exclude
+    @get:Exclude
+    var id: String? = null
 
     @get: Bindable
     var imageUri: String? = null
@@ -37,6 +40,8 @@ class UserObservable
             notifyPropertyChanged(BR.email)
         }
 
+    @set: Exclude
+    @get:Exclude
     @get: Bindable
     var password: String = ""
         set(value) {
@@ -51,6 +56,8 @@ class UserObservable
             notifyPropertyChanged(BR.dateOfBirth)
         }
 
+    @set: Exclude
+    @get:Exclude
     @get: Bindable
     var isLoggedIn: Boolean = true
         set(value) {
@@ -60,7 +67,7 @@ class UserObservable
 
     fun toEntity(): UserEntity {
         return UserEntity(
-            id,
+            -1,
             imageUri,
             fullName,
             email,
