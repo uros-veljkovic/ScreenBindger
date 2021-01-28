@@ -73,27 +73,13 @@ class SplashFragment : DaggerFragment() {
     override fun onResume() {
         super.onResume()
 
-        observeIfUserLoggedIn()
-    }
-
-    /**
-     * This method navigates to LoginFragment.class if there is no logged in user
-     * in local database, or to MainFragment.class if there is.
-     */
-    private fun observeIfUserLoggedIn() {
-        viewModel.isLoggedIn().observe(viewLifecycleOwner, Observer { isLoggedIn ->
-            Handler(Looper.getMainLooper()).postDelayed({
-                if (isLoggedIn == null) {
-                    gotoLoginFragment()
-                } else {
-                    gotoMainActivity()
-                }
-            }, 2000)
-        })
+        gotoLoginFragment()
     }
 
     private fun gotoLoginFragment() {
-        findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+        Handler(Looper.getMainLooper()).postDelayed({
+            findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+        }, 1500)
     }
 
     private fun gotoMainActivity() {
