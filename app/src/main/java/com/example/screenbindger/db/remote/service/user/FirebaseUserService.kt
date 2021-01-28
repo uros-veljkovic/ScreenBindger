@@ -17,8 +17,8 @@ class FirebaseUserService @Inject constructor(
         user: UserObservable,
         userActionStateObservable: UserActionStateObservable
     ) {
-        database.collection(USER_COLLECTION)
-            .add(user)
+        database.collection(USER_COLLECTION).document()
+            .set(user)
             .addOnSuccessListener {
                 userActionStateObservable.setValue(UserActionState.Created)
             }.addOnFailureListener {
@@ -32,16 +32,13 @@ class FirebaseUserService @Inject constructor(
         user: UserObservable,
         userActionStateObservable: UserActionStateObservable
     ) {
+
         database
             .collection(USER_COLLECTION)
             .document(user.email)
             .get()
             .addOnSuccessListener { document ->
-                if (document != null) {
-                    val user = document.toObject<UserObservable>()
-                } else {
 
-                }
             }
             .addOnFailureListener { exception ->
 

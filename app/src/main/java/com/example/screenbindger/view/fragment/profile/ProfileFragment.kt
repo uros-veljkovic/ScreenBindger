@@ -29,22 +29,21 @@ class ProfileFragment : DaggerFragment() {
     @Inject
     lateinit var viewModel: ProfileViewModel
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
         val view = bind(inflater, container)
-        fetchData()
+//        fetchData()
         initOnClickListeners()
         observeUpdates()
         return view
     }
 
-    private fun fetchData(){
+/*    private fun fetchData(){
         viewModel.fetchData()
-    }
+    }*/
 
     private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
@@ -67,7 +66,7 @@ class ProfileFragment : DaggerFragment() {
 
                     }
                     .setPositiveButton(resources.getString(R.string.logout)) { dialog, itemSelectedIndex ->
-                        viewModel?.logout()
+//                        viewModel?.logout()
                         gotoOnboardingActivity()
                     }
                     .show()
@@ -110,7 +109,7 @@ class ProfileFragment : DaggerFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == INTENT_REQUEST_CODE_IMAGE) {
             val imageUri = data?.data
-            viewModel.setUserImage(imageUri)
+//            viewModel.setUserImage(imageUri)
         }
     }
 

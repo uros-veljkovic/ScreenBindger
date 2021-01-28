@@ -20,22 +20,22 @@ class ProfileViewModel
     var isEditMode = ObservableField(false)
     var updated = MutableLiveData(false)
 
-    fun fetchData(){
+/*    fun fetchData(){
         CoroutineScope(IO).launch {
             user = db.findLoggedInUser().toObservable()
         }
-    }
+    }*/
 
     fun changeFieldEnablability(){
         isEditMode.set(isEditMode.get()!!.xor(true))
         isEditMode.notifyChange()
 
         if(!isEditMode.get()!!){
-            persistUser()
+//            persistUser()
         }
     }
 
-    fun setUserImage(imageUri: Uri?) {
+    /*fun setUserImage(imageUri: Uri?) {
         user?.imageUri = imageUri.toString()
     }
 
@@ -54,5 +54,5 @@ class ProfileViewModel
                 db.logout(user!!.toEntity())
             }
         }
-    }
+    }*/
 }
