@@ -10,8 +10,6 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import bloder.com.blitzcore.enableWhenUsing
@@ -19,6 +17,7 @@ import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentLoginBinding
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
+import com.example.screenbindger.util.state.State
 import com.example.screenbindger.util.validator.FieldValidator
 import com.example.screenbindger.view.activity.main.MainActivity
 import com.google.android.material.snackbar.Snackbar
@@ -50,7 +49,7 @@ class LoginFragment : DaggerFragment() {
         return binding.root
     }
 
-    fun observeFieldValidation() {
+    private fun observeFieldValidation() {
         binding.apply {
             btnLogin.enableWhenUsing(FieldValidator()) {
                 etUserEmail.isNotEmpty()
@@ -59,7 +58,7 @@ class LoginFragment : DaggerFragment() {
         }
     }
 
-    fun initOnClickListeners() {
+    private fun initOnClickListeners() {
         binding.apply {
             tvHere.setOnClickListener {
                 findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
@@ -70,41 +69,38 @@ class LoginFragment : DaggerFragment() {
     override fun onResume() {
         super.onResume()
 
-        observeLogin()
-    }
-
-    fun observeLogin() {
-        observeUserFound()
         observeUserAuthorized()
     }
 
     private fun observeUserAuthorized() {
-        viewModel.userAuthorized.observe(viewLifecycleOwner, Observer { isAuthorized ->
-            isAuthorized?.let {
-                if (isAuthorized) {
+        viewModel.stateObservable.value.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is State.Success -> {
+                    binding.progressBar.hide()
                     gotoMainActivity()
-                } else {
-                    showSnackbar(R.string.incorrect_password, R.color.logout_red)
+                }
+                is State.Error -> {
+                    val message = state.exception.message ?: "Unknown error"
+                    showError(message)
+
+                    binding.progressBar.hide()
+                }
+                is State.Loading -> {
+                    binding.progressBar.show()
+                }
+                is State.Unrequested -> {
+
                 }
             }
         })
     }
 
-    private fun observeUserFound() {
-        viewModel.userFound.observe(viewLifecycleOwner, Observer { isFound ->
-            isFound?.let {
-                if (isFound == false) {
-                    showSnackbar(R.string.no_user_found, R.color.logout_red)
-                }
-            }
-        })
-    }
-
-    fun showSnackbar(stringResourceId: Int, colorResourceId: Int) {
-        val snackbarColor = ResourcesCompat.getColor(resources, colorResourceId, null)
+    private fun showError(message: String) {
+        val snackbarColor =
+            ResourcesCompat.getColor(resources, R.color.design_default_color_error, null)
         Snackbar.make(
             requireView(),
-            getString(stringResourceId),
+            message,
             Snackbar.LENGTH_LONG
         ).setBackgroundTint(snackbarColor)
             .show()
@@ -112,7 +108,6 @@ class LoginFragment : DaggerFragment() {
     }
 
     fun gotoMainActivity() {
-        binding.progressBar.show()
         animateButton()
         Handler(Looper.myLooper()!!).postDelayed({
             binding.progressBar.hide()

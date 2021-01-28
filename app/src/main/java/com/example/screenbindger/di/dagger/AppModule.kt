@@ -4,12 +4,22 @@ import android.app.Application
 import androidx.room.Room.databaseBuilder
 import com.example.screenbindger.db.local.repo.ScreenBindgerLocalDatabase
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDatabase
+import com.example.screenbindger.db.remote.service.auth.FirebaseAuthService
 import com.example.screenbindger.db.remote.service.genre.GenreApi
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieApi
 import com.example.screenbindger.db.remote.service.movie.MovieService
+import com.example.screenbindger.db.remote.service.user.FirebaseUserService
+import com.example.screenbindger.db.remote.service.user.UserService
 import com.example.screenbindger.util.constants.API_BASE_URL
 import com.example.screenbindger.util.constants.LOCAL_DATABASE_NAME
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -33,11 +43,15 @@ class AppModule {
     @Provides
     fun provideRemoteRepository(
         movieService: MovieService,
-        genreService: GenreService
+        genreService: GenreService,
+        authService: FirebaseAuthService,
+        userService: FirebaseUserService
     ): ScreenBindgerRemoteDatabase {
         return ScreenBindgerRemoteDatabase(
             movieService,
-            genreService
+            genreService,
+            authService,
+            userService
         )
     }
 
@@ -68,5 +82,29 @@ class AppModule {
             .baseUrl(API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseAuth(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseUserService(database: FirebaseFirestore): FirebaseUserService {
+        return FirebaseUserService(database)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDatabaseReference(): FirebaseFirestore {
+        return Firebase.firestore
+    }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseCurrentUser(auth: FirebaseAuth): FirebaseUser? {
+        return auth.currentUser
     }
 }

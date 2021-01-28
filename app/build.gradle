@@ -50,6 +50,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.firebase:firebase-database:16.0.4'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -143,6 +144,9 @@ dependencies {
     // Firebase Auth
     implementation 'com.google.firebase:firebase-auth'
     implementation "com.google.firebase:firebase-auth:$version_firebase_auth"
+
+    //Firebase Firestore
+    implementation 'com.google.firebase:firebase-firestore-ktx'
 
 
 }

@@ -91,4 +91,9 @@ class MainActivity : DaggerAppCompatActivity() {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+    }
+
 }

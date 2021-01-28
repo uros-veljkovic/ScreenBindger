@@ -7,18 +7,20 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import bloder.com.blitzcore.enableWhenUsing
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentRegisterBinding
+import com.example.screenbindger.db.remote.service.user.UserActionState
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
+import com.example.screenbindger.util.state.State
 import com.example.screenbindger.util.validator.FieldValidator
 import com.example.screenbindger.view.activity.main.MainActivity
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_register.*
 import javax.inject.Inject
 
 class RegisterFragment : DaggerFragment() {
@@ -66,12 +68,6 @@ class RegisterFragment : DaggerFragment() {
     }
 
     private fun initOnClickListeners() {
-        binding.btnRegister.setOnClickListener {
-            progressBar.show()
-            viewModel.register()
-            gotoMainActivity()
-        }
-
         binding.tvHere.setOnClickListener {
             gotoLoginFragment()
         }
@@ -88,6 +84,60 @@ class RegisterFragment : DaggerFragment() {
 
     private fun gotoLoginFragment() {
         findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        observeRegistration()
+        observeUserPersistence()
+    }
+
+    private fun observeRegistration() {
+        viewModel.authStateObservable.value.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is State.Success -> {
+                    binding.progressBar.hide()
+                    gotoMainActivity()
+                }
+                is State.Error -> {
+                    binding.progressBar.hide()
+
+                    val message = state.exception.message ?: "Unknown error"
+                    showError(message)
+                }
+                is State.Loading -> {
+                    binding.progressBar.show()
+                }
+                is State.Unrequested -> {
+
+                }
+            }
+        }
+    }
+
+    private fun observeUserPersistence() {
+        viewModel.userActionStateObservable.value.observe(viewLifecycleOwner) {
+            when (it) {
+                is UserActionState.Failed -> {
+                    showError(it.exception.message ?: "Unknown error occurred.")
+                }
+                else -> {
+                }
+            }
+        }
+    }
+
+    private fun showError(message: String) {
+        val snackbarColor =
+            ResourcesCompat.getColor(resources, R.color.design_default_color_error, null)
+        Snackbar.make(
+            requireView(),
+            message,
+            Snackbar.LENGTH_LONG
+        ).setBackgroundTint(snackbarColor)
+            .show()
+
     }
 
     override fun onDestroyView() {

@@ -39,4 +39,5 @@
     <string name="genres_placeholder">Genres</string>
     <string name="no_user_found">No account with entered email.</string>
     <string name="incorrect_password">Incorrect password.</string>
+    <string name="register_fail_message">Failed to register !</string>
 </resources>

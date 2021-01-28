@@ -1,25 +1,31 @@
 package com.example.screenbindger.view.fragment.login
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.screenbindger.db.local.entity.user.UserEntity
 import com.example.screenbindger.db.local.entity.user.observable.UserObservable
-import com.example.screenbindger.db.local.repo.ScreenBindgerLocalDatabase
+import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDatabase
+import com.example.screenbindger.db.remote.service.auth.AuthStateObservable
+import com.example.screenbindger.util.state.State
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 
 class LoginViewModel
 @Inject constructor(
     val user: UserObservable,
-    val db: ScreenBindgerLocalDatabase
+    val remoteDb: ScreenBindgerRemoteDatabase,
+    val stateObservable: AuthStateObservable
 ) : ViewModel() {
 
-    var userFound: MutableLiveData<Boolean?> = MutableLiveData(null)
+
+    fun login() {
+        CoroutineScope(Dispatchers.IO).launch {
+            stateObservable.setValue(State.Loading)
+            remoteDb.login(user, stateObservable)
+        }
+    }
+    /*var userFound: MutableLiveData<Boolean?> = MutableLiveData(null)
     var userAuthorized: MutableLiveData<Boolean?> = MutableLiveData(null)
 
     fun login() {
@@ -45,6 +51,6 @@ class LoginViewModel
             userAuthorized.postValue(true)
             db.login(user)
         }
-    }
+    }*/
 
 }

@@ -146,11 +146,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/large_100"
+            android:onClick="@{() -> viewModel.register()}"
             android:text="@string/register_placeholder"
-            app:layout_constraintTop_toBottomOf="@id/tilUserDateOfBirth"
+            app:layout_constraintBottom_toTopOf="@id/tvAlreadyHaveAccount"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tvAlreadyHaveAccount" />
+            app:layout_constraintTop_toBottomOf="@id/tilUserDateOfBirth" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvAlreadyHaveAccount"
