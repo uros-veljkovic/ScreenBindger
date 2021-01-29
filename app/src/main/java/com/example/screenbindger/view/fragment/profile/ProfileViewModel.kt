@@ -16,7 +16,7 @@ class ProfileViewModel
     val fragmentStateObservable: FragmentStateObservable
 ) : ViewModel() {
 
-    private fun fetchUser() {
+    fun fetchUser() {
         CoroutineScope(Dispatchers.IO).launch {
             remoteDb.fetchUser(userStateObservable)
         }
@@ -26,6 +26,9 @@ class ProfileViewModel
         when (fragmentStateObservable.state.value) {
             FragmentState.Editable -> {
                 fragmentStateObservable.setState(FragmentState.NotEditable)
+                CoroutineScope(Dispatchers.IO).launch {
+                    remoteDb.updateUser(userStateObservable)
+                }
             }
             FragmentState.NotEditable -> {
                 fragmentStateObservable.setState(FragmentState.Editable)

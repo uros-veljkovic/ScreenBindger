@@ -13,7 +13,6 @@ import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentProfileBinding
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.constants.INTENT_REQUEST_CODE_IMAGE
-import com.example.screenbindger.util.state.State
 import com.example.screenbindger.view.activity.onboarding.OnboardingActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -35,6 +34,7 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
     ): View? {
 
         val view = bind(inflater, container)
+        fetchUser()
         initOnClickListeners()
         return view
     }
@@ -45,23 +45,35 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
         return binding.root
     }
 
+    private fun fetchUser(){
+        viewModel.fetchUser()
+    }
+
     private fun initOnClickListeners() {
         binding.apply {
             fabAddPicture.setOnClickListener {
-                val intent = Intent(Intent.ACTION_PICK)
-                intent.type = "image/*"
-                startActivityForResult(intent, INTENT_REQUEST_CODE_IMAGE)
+                showGallery()
             }
             btnLogout.setOnClickListener {
                 showLogoutDialog()
 
             }
             btnChangePassword.setOnClickListener {
-                val dialog = PasswordDialogFragment()
-                dialog.setTargetFragment(this@ProfileFragment, 1)
-                dialog.show(this@ProfileFragment.parentFragmentManager, "Change password dialog")
+                showPasswordUpdateDialog()
             }
         }
+    }
+
+    private fun showGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, INTENT_REQUEST_CODE_IMAGE)
+    }
+
+    private fun showPasswordUpdateDialog() {
+        val dialog = PasswordDialogFragment()
+        dialog.setTargetFragment(this@ProfileFragment, 1)
+        dialog.show(this@ProfileFragment.parentFragmentManager, "Change password dialog")
     }
 
     private fun showLogoutDialog() {
@@ -124,10 +136,10 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
         viewModel.userStateObservable.value.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is ObjectState.Updated -> {
-                    showMessage(R.string.message_update_password_success, R.color.green)
+                    showMessage(R.string.message_update_success, R.color.green)
                 }
                 is ObjectState.Error -> {
-                    showMessage(R.string.message_update_password_fail, R.color.green)
+                    showMessage(R.string.message_update_fail, R.color.green)
                 }
                 else -> {
                 }

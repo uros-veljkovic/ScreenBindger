@@ -9,16 +9,12 @@ import com.example.screenbindger.db.local.entity.user.observable.UserObservable
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
 
-@Entity
 data class UserEntity(
-    @PrimaryKey(autoGenerate = false)
     @DocumentId
     var id: String? = null,
     var imageUri: String? = null,
     var fullName: String = "",
     var email: String = "",
-    @set: Exclude
-    @get:Exclude
     var password: String = "",
     var dateOfBirth: String? = null
 ) {

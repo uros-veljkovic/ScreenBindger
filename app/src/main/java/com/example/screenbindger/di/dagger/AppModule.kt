@@ -81,9 +81,10 @@ class AppModule {
     @Provides
     fun provideFirebaseUserService(
         database: FirebaseFirestore,
+        auth: FirebaseAuth,
         currentUser: FirebaseUser?
     ): FirebaseUserService {
-        return FirebaseUserService(database, currentUser)
+        return FirebaseUserService(database, auth, currentUser)
     }
 
     @Singleton

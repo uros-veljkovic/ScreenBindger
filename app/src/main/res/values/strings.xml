@@ -48,6 +48,6 @@
     <string name="message_old_new_password_same">Old password can not be the same as new password.</string>
     <string name="message_passwords_not_match">New password not properly confirmed</string>
     <string name="message_new_password_empty">New password can not be empty</string>
-    <string name="message_update_password_success">Successfuly updated password ! :)</string>
-    <string name="message_update_password_fail">Failed updating password...</string>
+    <string name="message_update_success">Successful update ! :)</string>
+    <string name="message_update_fail">Failed to update...</string>
 </resources>

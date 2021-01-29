@@ -74,5 +74,9 @@ class ScreenBindgerRemoteDatabase
         userService.read(userStateObservable)
     }
 
+    suspend fun updateUser(userStateObservable: UserStateObservable) {
+        userService.update(userStateObservable)
+    }
+
 
 }
