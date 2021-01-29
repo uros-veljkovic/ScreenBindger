@@ -18,39 +18,11 @@ class LoginViewModel
     val stateObservable: AuthStateObservable
 ) : ViewModel() {
 
-
     fun login() {
         CoroutineScope(Dispatchers.IO).launch {
             stateObservable.setValue(State.Loading)
             remoteDb.login(user, stateObservable)
         }
     }
-    /*var userFound: MutableLiveData<Boolean?> = MutableLiveData(null)
-    var userAuthorized: MutableLiveData<Boolean?> = MutableLiveData(null)
-
-    fun login() {
-        runBlocking {
-            launch { findUser() }
-        }
-    }
-
-    private suspend fun findUser() {
-        val user = db.find(user.toEntity())
-        if (user == null) {
-            userFound.postValue(false)
-        } else {
-            authorizeUser()
-        }
-    }
-
-    private suspend fun authorizeUser() {
-        val user = db.authorize(user.toEntity())
-        if (user == null) {
-            userAuthorized.postValue(false)
-        } else {
-            userAuthorized.postValue(true)
-            db.login(user)
-        }
-    }*/
 
 }

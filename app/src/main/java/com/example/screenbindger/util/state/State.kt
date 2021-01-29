@@ -2,7 +2,7 @@ package com.example.screenbindger.util.state
 
 sealed class State<out R> {
 
-    data class Success<out T>(val data: T) : State<T>()
+    data class Success<out T>(val data: T? = null) : State<T>()
     data class Error(val exception: Exception) : State<Nothing>()
     object Loading : State<Nothing>()
     object Unrequested : State<Nothing>()

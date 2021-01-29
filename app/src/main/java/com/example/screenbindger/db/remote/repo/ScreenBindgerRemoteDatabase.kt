@@ -6,7 +6,7 @@ import com.example.screenbindger.db.remote.service.auth.AuthStateObservable
 import com.example.screenbindger.db.remote.service.auth.AuthService
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieService
-import com.example.screenbindger.db.remote.service.user.UserActionStateObservable
+import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.service.user.UserService
 import com.example.screenbindger.model.domain.MovieEntity
 import retrofit2.Response
@@ -59,8 +59,19 @@ class ScreenBindgerRemoteDatabase
         return genreService.getMoviesByGenre(id)
     }
 
-    suspend fun create(user: UserObservable, userActionStateObservable: UserActionStateObservable) {
-        userService.create(user, userActionStateObservable)
+    suspend fun create(userStateObservable: UserStateObservable) {
+        userService.create(userStateObservable)
+    }
+
+    suspend fun changePassword(
+        newPassword: String,
+        userStateObservable: UserStateObservable
+    ) {
+        authService.changePassword(newPassword, userStateObservable)
+    }
+
+    suspend fun fetchUser(userStateObservable: UserStateObservable) {
+        userService.read(userStateObservable)
     }
 
 

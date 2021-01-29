@@ -2,6 +2,8 @@ package com.example.screenbindger.db.remote.service.auth
 
 
 import android.util.Log
+import com.example.screenbindger.db.remote.service.user.UserStateObservable
+import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.state.State
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -28,6 +30,7 @@ class FirebaseAuthService
                     stateObservable.setValue(State.Error(Exception("Failed to login !")))
                 }
             }
+        currentUser = auth.currentUser
     }
 
     override suspend fun signUp(
@@ -43,6 +46,7 @@ class FirebaseAuthService
                     stateObservable.setValue(State.Error(Exception("Failed to register !")))
                 }
             }
+        currentUser = auth.currentUser
     }
 
     private fun setCurrentUserAndPostResult(stateObservable: AuthStateObservable) {
@@ -53,6 +57,18 @@ class FirebaseAuthService
 
     override suspend fun signOut() {
         auth.signOut()
+    }
+
+    override suspend fun changePassword(
+        newPassword: String,
+        userStateObservable: UserStateObservable
+    ) {
+        currentUser?.updatePassword(newPassword)
+            ?.addOnSuccessListener {
+                userStateObservable.setState(ObjectState.Updated())
+            }?.addOnFailureListener {
+                userStateObservable.setState(ObjectState.Error(Exception()))
+            }
     }
 
 }

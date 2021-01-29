@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import bloder.com.blitzcore.enableWhenUsing
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentRegisterBinding
-import com.example.screenbindger.db.remote.service.user.UserActionState
+import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.state.State
@@ -117,9 +117,9 @@ class RegisterFragment : DaggerFragment() {
     }
 
     private fun observeUserPersistence() {
-        viewModel.userActionStateObservable.value.observe(viewLifecycleOwner) {
+        viewModel.userStateObservable.value.observe(viewLifecycleOwner) {
             when (it) {
-                is UserActionState.Failed -> {
+                is ObjectState.Error -> {
                     showError(it.exception.message ?: "Unknown error occurred.")
                 }
                 else -> {

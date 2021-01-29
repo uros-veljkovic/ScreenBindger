@@ -1,58 +1,43 @@
 package com.example.screenbindger.view.fragment.profile
 
-import android.net.Uri
-import androidx.databinding.ObservableField
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.local.entity.user.observable.UserObservable
-import com.example.screenbindger.db.local.repo.ScreenBindgerLocalDatabase
+import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDatabase
+import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ProfileViewModel
 @Inject constructor(
-    val db: ScreenBindgerLocalDatabase
-): ViewModel(){
+    val remoteDb: ScreenBindgerRemoteDatabase,
+    var userStateObservable: UserStateObservable,
+    val fragmentStateObservable: FragmentStateObservable
+) : ViewModel() {
 
-    var user: UserObservable? = null
-    var isEditMode = ObservableField(false)
-    var updated = MutableLiveData(false)
-
-/*    fun fetchData(){
-        CoroutineScope(IO).launch {
-            user = db.findLoggedInUser().toObservable()
-        }
-    }*/
-
-    fun changeFieldEnablability(){
-        isEditMode.set(isEditMode.get()!!.xor(true))
-        isEditMode.notifyChange()
-
-        if(!isEditMode.get()!!){
-//            persistUser()
+    private fun fetchUser() {
+        CoroutineScope(Dispatchers.IO).launch {
+            remoteDb.fetchUser(userStateObservable)
         }
     }
 
-    /*fun setUserImage(imageUri: Uri?) {
-        user?.imageUri = imageUri.toString()
-    }
-
-    fun persistUser(){
-        CoroutineScope(IO).launch {
-            if (user != null) {
-                db.update(user!!.toEntity())
-                updated.postValue(true)
+    fun enableEdit() {
+        when (fragmentStateObservable.state.value) {
+            FragmentState.Editable -> {
+                fragmentStateObservable.setState(FragmentState.NotEditable)
+            }
+            FragmentState.NotEditable -> {
+                fragmentStateObservable.setState(FragmentState.Editable)
+            }
+            else -> {
             }
         }
     }
 
-    fun logout() {
-        CoroutineScope(IO).launch {
-            if (user != null) {
-                db.logout(user!!.toEntity())
-            }
+    fun changePassword(newPassword: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            remoteDb.changePassword(newPassword, userStateObservable)
         }
-    }*/
+    }
 }

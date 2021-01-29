@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
@@ -35,129 +35,114 @@
             android:id="@+id/ivUserImage"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:scaleType="centerCrop"
             android:layout_marginBottom="@dimen/large_100"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_profile_outlined_black_24"
-            app:layout_constraintBottom_toTopOf="@+id/tilUserFullName"
+            app:layout_constraintBottom_toTopOf="@+id/fieldContainer"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             app:shapeAppearance="@style/Widget.ScreenBindger.ImageView.Circle"
-            app:uri="@{viewModel.user.imageUri}" />
+            app:uri="@{viewModel.userStateObservable.user.imageUri}" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnAddPicture"
+            android:id="@+id/fabAddPicture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/orange"
-            android:enabled="@{viewModel.isEditMode}"
             android:src="@drawable/ic_image_plus_black_24"
-            android:tint="@{viewModel.isEditMode() ? @color/green : @android:color/white}"
-            android:visibility="@{viewModel.isEditMode() ? View.VISIBLE : View.GONE}"
+            android:tint="@color/orange"
             app:borderWidth="0dp"
             app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="@id/ivUserImage"
             app:layout_constraintEnd_toEndOf="@id/ivUserImage" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilUserFullName"
-            style="@style/Widget.ScreenBindger.TextInputLayout"
+        <LinearLayout
+            android:id="@+id/fieldContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:enabled="@{viewModel.isEditMode}"
-            android:hint="@string/full_name_required_placeholder"
-            app:layout_constraintBottom_toTopOf="@+id/tilUserEmail"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivUserImage"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:startIconDrawable="@drawable/ic_profile_filled_black_24">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etUserFullName"
-                style="@style/Widget.ScreenBindger.TextInputEditText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="textPersonName"
-                android:text="@={viewModel.user.fullName}" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilUserEmail"
-            style="@style/Widget.ScreenBindger.TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="@{viewModel.isEditMode}"
-            android:hint="@string/email_required_placeholder"
-            app:layout_constraintBottom_toTopOf="@+id/tilUserPassword"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilUserFullName"
-            app:startIconDrawable="@drawable/ic_email_24">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etUserEmail"
-                style="@style/Widget.ScreenBindger.TextInputEditText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="textEmailAddress"
-                android:text="@={viewModel.user.email}" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilUserPassword"
-            style="@style/Widget.ScreenBindger.TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="@{viewModel.isEditMode}"
-            android:hint="@string/password_required_placeholder"
-            app:layout_constraintBottom_toTopOf="@+id/tilUserDateOfBirth"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilUserEmail"
-            app:passwordToggleEnabled="true"
-            app:startIconDrawable="@drawable/ic_lock_24">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etUserPassword"
-                style="@style/Widget.ScreenBindger.TextInputEditText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="textPassword"
-                android:text="@={viewModel.user.password}" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilUserDateOfBirth"
-            style="@style/Widget.ScreenBindger.TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="@{viewModel.isEditMode}"
-            android:hint="@string/date_of_birth_placeholder"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilUserPassword"
-            app:startIconDrawable="@drawable/ic_calendar_24">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivUserImage">
 
-            <com.example.screenbindger.view.custom.edittext.DatePickerEditText
-                android:id="@+id/etUserDateOfBirth"
-                style="@style/Widget.ScreenBindger.TextInputEditText"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilUserFullName"
+                style="@style/Widget.ScreenBindger.TextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="date"
-                android:text="@={viewModel.user.dateOfBirth}" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:hint="@string/full_name_required_placeholder"
+                app:startIconDrawable="@drawable/ic_profile_filled_black_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etUserFullName"
+                    style="@style/Widget.ScreenBindger.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPersonName"
+                    android:text="@={viewModel.userStateObservable.user.fullName}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilUserEmail"
+                style="@style/Widget.ScreenBindger.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="@string/email_required_placeholder"
+                app:startIconDrawable="@drawable/ic_email_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etUserEmail"
+                    style="@style/Widget.ScreenBindger.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textEmailAddress"
+                    android:text="@={viewModel.userStateObservable.user.email}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilUserDateOfBirth"
+                style="@style/Widget.ScreenBindger.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/date_of_birth_placeholder"
+                app:startIconDrawable="@drawable/ic_calendar_24">
+
+                <com.example.screenbindger.view.custom.edittext.DatePickerEditText
+                    android:id="@+id/etUserDateOfBirth"
+                    style="@style/Widget.ScreenBindger.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="date"
+                    android:text="@={viewModel.userStateObservable.user.dateOfBirth}" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnChangePassword"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/change_password"
+            android:textColor="@color/blue"
+            android:visibility="gone"
+            app:icon="@drawable/ic_lock_24"
+            app:iconTint="@color/blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/fieldContainer"
+            app:layout_constraintTop_toBottomOf="@id/fieldContainer" />
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabUpdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/normal_100"
             android:layout_marginBottom="@dimen/normal_100"
-            android:backgroundTint="@{viewModel.isEditMode ? @color/blue : @color/orange}"
-            android:onClick="@{() -> viewModel.changeFieldEnablability()}"
-            android:src="@{viewModel.isEditMode() ? @drawable/ic_save_outlined_black_24 : @drawable/ic_pencil_black_24}"
+            android:onClick="@{() -> viewModel.enableEdit()}"
             app:borderWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
