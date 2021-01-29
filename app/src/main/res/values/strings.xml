@@ -30,14 +30,24 @@
     <string name="movie_name_placeholder">Movie name</string>
     <string name="show_more">" Show more"</string>
     <string name="show_less">" Show less"</string>
-    <string name="message_updated_profile">Updated! Now go bindging ! :)</string>
+    <string name="message_updated_profile_success">Updated! Now go bindging ! :)</string>
     <string name="logout">Logout</string>
     <string name="cancel">Cancel</string>
-    <string name="confirm">Yes</string>
+    <string name="confirm">Confirm</string>
     <string name="message_logout">Logout? Really? I would rather keep bindging...</string>
     <string name="hello_binger">Hello bindger! :)</string>
     <string name="genres_placeholder">Genres</string>
     <string name="no_user_found">No account with entered email.</string>
     <string name="incorrect_password">Incorrect password.</string>
     <string name="register_fail_message">Failed to register !</string>
+    <string name="message_updated_profile_fail">Failed to update profile...</string>
+    <string name="change_password">Change password</string>
+    <string name="old_password">Old password</string>
+    <string name="new_password">New password</string>
+    <string name="new_password_confirm">Confirm new password</string>
+    <string name="message_old_new_password_same">Old password can not be the same as new password.</string>
+    <string name="message_passwords_not_match">New password not properly confirmed</string>
+    <string name="message_new_password_empty">New password can not be empty</string>
+    <string name="message_update_password_success">Successfuly updated password ! :)</string>
+    <string name="message_update_password_fail">Failed updating password...</string>
 </resources>

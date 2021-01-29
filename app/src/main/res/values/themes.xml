@@ -22,6 +22,7 @@
         <item name="textInputStyle">@style/Widget.ScreenBindger.TextInputLayout</item>
         <item name="fontFamily">@font/cardo</item>
         <item name="android:fontFamily">@font/cardo</item>
+
     </style>
 
     <!-- AppTheme NoActionbar-->
@@ -76,5 +77,18 @@
     <style name="Widget.ScreenBindger.ImageView.Circle" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="Widget.ScreenBindger.MaterialAlertDialog" parent="">
+        <item name="buttonBarPositiveButtonStyle">
+            @style/Widget.ScreenBindger.Dialog.Button.Positive
+        </item>
+        <item name="android:buttonBarPositiveButtonStyle">
+            @style/Widget.ScreenBindger.Dialog.Button.Positive
+        </item>
+    </style>
+
+    <style name="Widget.ScreenBindger.Dialog.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/blue</item>
     </style>
 </resources>
