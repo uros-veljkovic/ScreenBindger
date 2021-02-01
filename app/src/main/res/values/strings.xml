@@ -50,4 +50,6 @@
     <string name="message_new_password_empty">New password can not be empty</string>
     <string name="message_update_success">Successful update ! :)</string>
     <string name="message_update_fail">Failed to update...</string>
+    <string name="message_upload_image_fail">Failed to update the image</string>
+    <string name="message_download_image_error">Failed to download profile image</string>
 </resources>
