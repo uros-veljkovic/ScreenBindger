@@ -13,6 +13,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.ActivityMainBinding
+import com.example.screenbindger.view.fragment.profile.ProfileViewModel
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -20,6 +21,9 @@ class MainActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var viewModel: MainViewModel
+
+    @Inject
+    lateinit var profileViewModel: ProfileViewModel
 
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
@@ -59,7 +63,7 @@ class MainActivity : DaggerAppCompatActivity() {
                     R.id.trendingFragment
                 )
             )
-        ){
+        ) {
             setupActionBarWithNavController(navController, this)
         }
 

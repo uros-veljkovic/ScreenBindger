@@ -26,7 +26,7 @@ object OnboardingModule {
     @Provides
     fun provideUserStateObservable(user: UserObservable): UserStateObservable {
         return UserStateObservable(
-            MutableLiveData(ObjectState.InitialState<UserObservable>()),
+            MutableLiveData(ObjectState.InitialState(user)),
             user
         )
     }

@@ -8,6 +8,7 @@ import com.example.screenbindger.db.remote.service.genre.GenreApi
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieApi
 import com.example.screenbindger.db.remote.service.movie.MovieService
+import com.example.screenbindger.db.remote.service.storage.FirebaseStorageService
 import com.example.screenbindger.db.remote.service.user.FirebaseUserService
 import com.example.screenbindger.util.constants.API_BASE_URL
 import com.example.screenbindger.util.constants.LOCAL_DATABASE_NAME
@@ -16,6 +17,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -32,13 +36,15 @@ class AppModule {
         movieService: MovieService,
         genreService: GenreService,
         authService: FirebaseAuthService,
-        userService: FirebaseUserService
+        userService: FirebaseUserService,
+        storageService: FirebaseStorageService
     ): ScreenBindgerRemoteDatabase {
         return ScreenBindgerRemoteDatabase(
             movieService,
             genreService,
             authService,
-            userService
+            userService,
+            storageService
         )
     }
 
@@ -82,10 +88,17 @@ class AppModule {
     fun provideFirebaseUserService(
         database: FirebaseFirestore,
         auth: FirebaseAuth,
-        currentUser: FirebaseUser?
+        storageReference: StorageReference
     ): FirebaseUserService {
-        return FirebaseUserService(database, auth, currentUser)
+        return FirebaseUserService(database, auth, storageReference)
     }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseStorageService(): FirebaseStorageService {
+        return FirebaseStorageService()
+    }
+
 
     @Singleton
     @Provides
@@ -97,5 +110,11 @@ class AppModule {
     @Provides
     fun provideFirebaseCurrentUser(auth: FirebaseAuth): FirebaseUser? {
         return auth.currentUser
+    }
+
+    @Singleton
+    @Provides
+    fun provideStorageReference(): StorageReference {
+        return FirebaseStorage.getInstance().reference
     }
 }

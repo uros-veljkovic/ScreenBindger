@@ -37,14 +37,12 @@
             android:layout_height="200dp"
             android:layout_marginBottom="@dimen/large_100"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_profile_outlined_black_24"
             app:layout_constraintBottom_toTopOf="@+id/fieldContainer"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            app:shapeAppearance="@style/Widget.ScreenBindger.ImageView.Circle"
-            app:uri="@{viewModel.userStateObservable.user.imageUri}" />
+            app:shapeAppearance="@style/Widget.ScreenBindger.ImageView.Circle" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabAddPicture"
@@ -142,7 +140,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/normal_100"
             android:layout_marginBottom="@dimen/normal_100"
-            android:onClick="@{() -> viewModel.enableEdit()}"
+            android:onClick="@{() -> viewModel.changeUiMode()}"
             app:borderWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

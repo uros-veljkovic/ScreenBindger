@@ -23,15 +23,15 @@ class MainModule {
 
     @MainScope
     @Provides
-    fun provideUserState(): ObjectState<UserObservable> {
-        return ObjectState.InitialState<UserObservable>()
+    fun provideUserState(userObservable: UserObservable): ObjectState<UserObservable> {
+        return ObjectState.InitialState(userObservable)
     }
 
     @MainScope
     @Provides
     fun provideUserStateObservable(
-        userObservable: UserObservable,
-        userState: ObjectState<UserObservable>
+        userState: ObjectState<UserObservable>,
+        userObservable: UserObservable
     ): UserStateObservable {
         return UserStateObservable(MutableLiveData(userState), userObservable)
     }

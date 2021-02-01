@@ -1,11 +1,13 @@
 package com.example.screenbindger.db.remote.repo
 
+import android.net.Uri
 import com.example.screenbindger.db.local.entity.user.observable.UserObservable
 import com.example.screenbindger.db.remote.response.*
 import com.example.screenbindger.db.remote.service.auth.AuthStateObservable
 import com.example.screenbindger.db.remote.service.auth.AuthService
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieService
+import com.example.screenbindger.db.remote.service.storage.StorageService
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.service.user.UserService
 import com.example.screenbindger.model.domain.MovieEntity
@@ -17,7 +19,9 @@ class ScreenBindgerRemoteDatabase
     val movieService: MovieService,
     val genreService: GenreService,
     val authService: AuthService,
-    val userService: UserService
+    val userService: UserService,
+    val storageService: StorageService
+
 ) {
 
     suspend fun login(
@@ -76,6 +80,14 @@ class ScreenBindgerRemoteDatabase
 
     suspend fun updateUser(userStateObservable: UserStateObservable) {
         userService.update(userStateObservable)
+    }
+
+    suspend fun uploadImage(uri: Uri, userStateObservable: UserStateObservable) {
+        storageService.uploadImage(uri, userStateObservable)
+    }
+
+    suspend fun downloadImage(userStateObservable: UserStateObservable) {
+        storageService.downloadImage(userStateObservable)
     }
 
 

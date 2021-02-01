@@ -1,14 +1,12 @@
 package com.example.screenbindger.db.remote.service.user
 
 import android.util.Log
-import com.example.screenbindger.db.local.entity.user.UserEntity
 import com.example.screenbindger.db.local.entity.user.observable.UserObservable
 import com.example.screenbindger.model.state.ObjectState
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.StorageReference
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -17,7 +15,7 @@ const val USER_COLLECTION = "users"
 class FirebaseUserService @Inject constructor(
     private val database: FirebaseFirestore,
     private val auth: FirebaseAuth,
-    private var currentUser: FirebaseUser?
+    private val storage: StorageReference
 ) : UserService {
 
     private val TAG = "FirebaseUserService"
@@ -27,7 +25,13 @@ class FirebaseUserService @Inject constructor(
     ) {
         database.collection(USER_COLLECTION)
             .add(userStateObservable.user)
-            .addOnSuccessListener {
+            .addOnSuccessListener { docRef ->
+                docRef.get().addOnSuccessListener { docSnapshot ->
+                    val user = docSnapshot.toObject(UserObservable::class.java)!!
+                    userStateObservable.user = user
+                }.addOnFailureListener {
+                    userStateObservable.setState(ObjectState.Error(Exception("Failed to load user data !")))
+                }
                 userStateObservable.setState(ObjectState.Created())
             }.addOnFailureListener {
                 userStateObservable.setState(
@@ -49,8 +53,10 @@ class FirebaseUserService @Inject constructor(
                     for (doc in documents) {
                         user = doc.toObject(UserObservable::class.java)
                     }
-                    userStateObservable.setObject(user ?: UserObservable())
-                    userStateObservable.setState(ObjectState.Read(user))
+                    if (user != null) {
+                        userStateObservable.user = user
+                        getProfilePicture(userStateObservable)
+                    }
                 }
                 .addOnFailureListener { exception ->
                     Log.d(TAG, "read: ${exception.message}")
@@ -61,10 +67,24 @@ class FirebaseUserService @Inject constructor(
 
     }
 
+    private fun getProfilePicture(userStateObservable: UserStateObservable) {
+        val imagePath = "profile_images/${userStateObservable.user.id}"
+        storage
+            .child(imagePath)
+            .downloadUrl
+            .addOnSuccessListener {
+                userStateObservable.user.imageUri = it.toString()
+                userStateObservable.setState(ObjectState.Read(userStateObservable.user))
+            }
+            .addOnFailureListener {
+//                userStateObservable.setState(ObjectState.Read())
+            }
+    }
+
     override suspend fun delete(
         userStateObservable: UserStateObservable
     ) {
-        database.collection(USER_COLLECTION).document(currentUser!!.email!!)
+        database.collection(USER_COLLECTION).document(auth.currentUser!!.email!!)
             .delete()
             .addOnSuccessListener { }
             .addOnFailureListener { }

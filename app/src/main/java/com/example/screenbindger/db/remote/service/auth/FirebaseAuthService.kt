@@ -13,8 +13,7 @@ import javax.inject.Inject
 
 class FirebaseAuthService
 @Inject constructor(
-    private val auth: FirebaseAuth,
-    private var currentUser: FirebaseUser?
+    private val auth: FirebaseAuth
 ) : AuthService {
 
     override suspend fun signIn(
@@ -30,7 +29,6 @@ class FirebaseAuthService
                     stateObservable.setValue(State.Error(Exception("Failed to login !")))
                 }
             }
-        currentUser = auth.currentUser
     }
 
     override suspend fun signUp(
@@ -46,13 +44,10 @@ class FirebaseAuthService
                     stateObservable.setValue(State.Error(Exception("Failed to register !")))
                 }
             }
-        currentUser = auth.currentUser
     }
 
     private fun setCurrentUserAndPostResult(stateObservable: AuthStateObservable) {
-        currentUser = auth.currentUser
-        Log.d("TAG", "setCurrentUserAndPostResult: ${auth.currentUser}")
-        stateObservable.setValue(State.Success(currentUser!!))
+        stateObservable.setValue(State.Success(auth.currentUser!!))
     }
 
     override suspend fun signOut() {
@@ -63,11 +58,11 @@ class FirebaseAuthService
         newPassword: String,
         userStateObservable: UserStateObservable
     ) {
-        currentUser?.updatePassword(newPassword)
+        auth.currentUser?.updatePassword(newPassword)
             ?.addOnSuccessListener {
                 userStateObservable.setState(ObjectState.Updated())
             }?.addOnFailureListener {
-                userStateObservable.setState(ObjectState.Error(Exception()))
+                userStateObservable.setState(ObjectState.Error(Exception("Failed to update user !")))
             }
     }
 

@@ -3,20 +3,25 @@ package com.example.screenbindger.view.fragment.profile
 import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import com.example.screenbindger.BR
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentProfileBinding
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.constants.INTENT_REQUEST_CODE_IMAGE
+import com.example.screenbindger.util.extensions.setUri
 import com.example.screenbindger.view.activity.onboarding.OnboardingActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import java.net.URI
 import javax.inject.Inject
 
 
@@ -34,7 +39,6 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
     ): View? {
 
         val view = bind(inflater, container)
-        fetchUser()
         initOnClickListeners()
         return view
     }
@@ -43,10 +47,6 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         return binding.root
-    }
-
-    private fun fetchUser(){
-        viewModel.fetchUser()
     }
 
     private fun initOnClickListeners() {
@@ -65,8 +65,7 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
     }
 
     private fun showGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         startActivityForResult(intent, INTENT_REQUEST_CODE_IMAGE)
     }
 
@@ -124,12 +123,6 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
                 is FragmentState.NotEditable -> {
                     setUiNotEditable()
                 }
-                is FragmentState.UpdateSuccess -> {
-                    showMessage(R.string.message_updated_profile_success, R.color.green)
-                }
-                is FragmentState.UpdateFail -> {
-                    showMessage(R.string.message_updated_profile_fail, R.color.logout_red)
-                }
             }
         })
 
@@ -141,11 +134,22 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
                 is ObjectState.Error -> {
                     showMessage(R.string.message_update_fail, R.color.green)
                 }
-                else -> {
+                is ObjectState.Created -> {
+                    binding.invalidateAll()
+                }
+                is ObjectState.Read -> {
+                    it.data?.imageUri?.let { uri ->
+                        setProfileImage(uri)
+                    } ?: showMessage(R.string.message_download_image_error, R.color.logout_red)
+                }
+                is ObjectState.Deleted -> {
+                }
+                is ObjectState.InitialState -> {
                 }
             }
         })
     }
+
 
     fun prepareFabForSaving() {
         with(binding.fabAddPicture) {
@@ -199,13 +203,24 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == INTENT_REQUEST_CODE_IMAGE) {
-            val imageUri = data?.data
-//            viewModel.setUserImage(imageUri)
+            val imageUri: Uri? = data?.data
+
+//            setProfileImage(imageUri.toString())
+
+            viewModel.uploadImage(imageUri!!)
         }
+    }
+
+    private fun setProfileImage(uri: String) {
+        binding.ivUserImage.setUri(null)
+        binding.ivUserImage.setUri(uri)
+        binding.invalidateAll()
+        binding.executePendingBindings()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        setUiNotEditable()
         _binding = null
     }
 
