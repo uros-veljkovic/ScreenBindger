@@ -49,13 +49,6 @@ class FirebaseStorageService : StorageService {
                     userStateObservable.setState(ObjectState.Error(Exception("Unable to upload a picture")))
                 }
             }
-
-/*            .addOnSuccessListener {
-                userStateObservable.user.imageUri = storage.child("profile_images").downloadUrl.toString()
-                userStateObservable.setState(ObjectState.Read(userStateObservable.user))
-            }.addOnFailureListener {
-                userStateObservable.setState(ObjectState.Error(Exception("Unable to upload a picture")))
-            }*/
     }
 
     override suspend fun deleteImage() {
