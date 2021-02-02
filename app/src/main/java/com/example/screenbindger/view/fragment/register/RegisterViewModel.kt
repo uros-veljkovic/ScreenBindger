@@ -1,7 +1,6 @@
 package com.example.screenbindger.view.fragment.register
 
 import androidx.lifecycle.ViewModel
-import com.example.screenbindger.db.local.entity.user.observable.UserObservable
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDatabase
 import com.example.screenbindger.db.remote.service.auth.AuthStateObservable
 import com.example.screenbindger.db.remote.service.user.UserStateObservable

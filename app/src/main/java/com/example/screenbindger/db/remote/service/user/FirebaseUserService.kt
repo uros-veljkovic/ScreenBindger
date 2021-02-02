@@ -1,7 +1,7 @@
 package com.example.screenbindger.db.remote.service.user
 
 import android.util.Log
-import com.example.screenbindger.db.local.entity.user.observable.UserObservable
+import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.model.state.ObjectState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -27,7 +27,7 @@ class FirebaseUserService @Inject constructor(
             .add(userStateObservable.user)
             .addOnSuccessListener { docRef ->
                 docRef.get().addOnSuccessListener { docSnapshot ->
-                    val user = docSnapshot.toObject(UserObservable::class.java)!!
+                    val user = docSnapshot.toObject(UserEntity::class.java)!!
                     userStateObservable.user = user
                 }.addOnFailureListener {
                     userStateObservable.setState(ObjectState.Error(Exception("Failed to load user data !")))
@@ -49,9 +49,9 @@ class FirebaseUserService @Inject constructor(
                 .whereEqualTo("email", currUser.email)
                 .get()
                 .addOnSuccessListener { documents ->
-                    var user: UserObservable? = null
+                    var user: UserEntity? = null
                     for (doc in documents) {
-                        user = doc.toObject(UserObservable::class.java)
+                        user = doc.toObject(UserEntity::class.java)
                     }
                     if (user != null) {
                         userStateObservable.user = user

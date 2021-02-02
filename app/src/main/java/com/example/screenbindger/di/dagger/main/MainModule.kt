@@ -1,7 +1,7 @@
 package com.example.screenbindger.di.dagger.main
 
 import androidx.lifecycle.MutableLiveData
-import com.example.screenbindger.db.local.entity.user.observable.UserObservable
+import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.view.fragment.profile.FragmentStateObservable
@@ -13,7 +13,7 @@ class MainModule {
 
     @MainScope
     @Provides
-    fun provideUser(): UserObservable = UserObservable()
+    fun provideUser(): UserEntity = UserEntity()
 
     @MainScope
     @Provides
@@ -23,17 +23,17 @@ class MainModule {
 
     @MainScope
     @Provides
-    fun provideUserState(userObservable: UserObservable): ObjectState<UserObservable> {
-        return ObjectState.InitialState(userObservable)
+    fun provideUserState(userEntity: UserEntity): ObjectState<UserEntity> {
+        return ObjectState.InitialState(userEntity)
     }
 
     @MainScope
     @Provides
     fun provideUserStateObservable(
-        userState: ObjectState<UserObservable>,
-        userObservable: UserObservable
+        userState: ObjectState<UserEntity>,
+        userEntity: UserEntity
     ): UserStateObservable {
-        return UserStateObservable(MutableLiveData(userState), userObservable)
+        return UserStateObservable(MutableLiveData(userState), userEntity)
     }
 
 

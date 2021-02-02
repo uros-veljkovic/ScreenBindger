@@ -1,7 +1,7 @@
 package com.example.screenbindger.di.dagger.onboarding
 
 import androidx.lifecycle.MutableLiveData
-import com.example.screenbindger.db.local.entity.user.observable.UserObservable
+import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.service.auth.AuthStateObservable
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.model.state.ObjectState
@@ -14,7 +14,7 @@ object OnboardingModule {
 
     @OnboardingScope
     @Provides
-    fun provideUser(): UserObservable = UserObservable()
+    fun provideUser(): UserEntity = UserEntity()
 
     @OnboardingScope
     @Provides
@@ -24,7 +24,7 @@ object OnboardingModule {
 
     @OnboardingScope
     @Provides
-    fun provideUserStateObservable(user: UserObservable): UserStateObservable {
+    fun provideUserStateObservable(user: UserEntity): UserStateObservable {
         return UserStateObservable(
             MutableLiveData(ObjectState.InitialState(user)),
             user

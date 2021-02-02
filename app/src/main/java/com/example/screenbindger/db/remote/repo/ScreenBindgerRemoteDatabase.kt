@@ -1,7 +1,7 @@
 package com.example.screenbindger.db.remote.repo
 
 import android.net.Uri
-import com.example.screenbindger.db.local.entity.user.observable.UserObservable
+import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.response.*
 import com.example.screenbindger.db.remote.service.auth.AuthStateObservable
 import com.example.screenbindger.db.remote.service.auth.AuthService
@@ -25,14 +25,14 @@ class ScreenBindgerRemoteDatabase
 ) {
 
     suspend fun login(
-        user: UserObservable,
+        user: UserEntity,
         stateObservable: AuthStateObservable
     ) {
         authService.signIn(user.email, user.password, stateObservable)
     }
 
     suspend fun register(
-        user: UserObservable,
+        user: UserEntity,
         stateObservable: AuthStateObservable
     ) {
         authService.signUp(user.email, user.password, stateObservable)

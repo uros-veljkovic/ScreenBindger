@@ -1,7 +1,7 @@
 package com.example.screenbindger.view.fragment.login
 
 import androidx.lifecycle.ViewModel
-import com.example.screenbindger.db.local.entity.user.observable.UserObservable
+import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDatabase
 import com.example.screenbindger.db.remote.service.auth.AuthStateObservable
 import com.example.screenbindger.util.state.State
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class LoginViewModel
 @Inject constructor(
-    val user: UserObservable,
+    val user: UserEntity,
     val remoteDb: ScreenBindgerRemoteDatabase,
     val stateObservable: AuthStateObservable
 ) : ViewModel() {

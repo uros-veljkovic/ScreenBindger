@@ -1,7 +1,7 @@
 package com.example.screenbindger.view.activity.main
 
 import androidx.lifecycle.ViewModel
-import com.example.screenbindger.db.local.entity.user.observable.UserObservable
+import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDatabase
 import com.example.screenbindger.model.global.Genres
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +12,7 @@ import javax.inject.Inject
 class MainViewModel
 @Inject constructor(
     val db: ScreenBindgerRemoteDatabase,
-    val user: UserObservable
+    val user: UserEntity
 ) : ViewModel() {
 
     fun fetchGenres() {
