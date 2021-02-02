@@ -1,5 +1,6 @@
 package com.example.screenbindger.di.dagger.onboarding
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.service.auth.AuthStateObservable
@@ -24,9 +25,20 @@ object OnboardingModule {
 
     @OnboardingScope
     @Provides
-    fun provideUserStateObservable(user: UserEntity): UserStateObservable {
+    fun provideProfilePictureUriObservable(): MutableLiveData<Uri?> {
+        return MutableLiveData(null)
+    }
+
+    @OnboardingScope
+    @Provides
+    fun provideUserStateObservable(
+        user: UserEntity,
+        profilePictureUriObservable: MutableLiveData<Uri?>
+    ): UserStateObservable {
+
         return UserStateObservable(
             MutableLiveData(ObjectState.InitialState(user)),
+            profilePictureUriObservable,
             user
         )
     }

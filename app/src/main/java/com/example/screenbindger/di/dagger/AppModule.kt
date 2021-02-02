@@ -95,10 +95,11 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideFirebaseStorageService(): FirebaseStorageService {
-        return FirebaseStorageService()
+    fun provideFirebaseStorageService(
+        auth: FirebaseAuth
+    ): FirebaseStorageService {
+        return FirebaseStorageService(auth)
     }
-
 
     @Singleton
     @Provides

@@ -40,6 +40,7 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
 
         val view = bind(inflater, container)
         initOnClickListeners()
+        observeProfilePicture()
         return view
     }
 
@@ -62,6 +63,16 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
                 showPasswordUpdateDialog()
             }
         }
+    }
+
+    fun observeProfilePicture() {
+        viewModel.userStateObservable.profilePictureObservable.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let { uri ->
+                    setProfileImage(uri)
+                }
+            })
     }
 
     private fun showGallery() {
@@ -138,9 +149,7 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
                     binding.invalidateAll()
                 }
                 is ObjectState.Read -> {
-                    it.data?.imageUri?.let { uri ->
-                        setProfileImage(uri)
-                    } ?: showMessage(R.string.message_download_image_error, R.color.logout_red)
+
                 }
                 is ObjectState.Deleted -> {
                 }
@@ -205,14 +214,13 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
         if (resultCode == Activity.RESULT_OK && requestCode == INTENT_REQUEST_CODE_IMAGE) {
             val imageUri: Uri? = data?.data
 
-//            setProfileImage(imageUri.toString())
-
             viewModel.uploadImage(imageUri!!)
         }
     }
 
-    private fun setProfileImage(uri: String) {
-        binding.ivUserImage.setUri(null)
+    private fun setProfileImage(uri: Uri) {
+        binding.ivUserImage.setImageDrawable(null)
+//        binding.ivUserImage.setUri(null)
         binding.ivUserImage.setUri(uri)
         binding.invalidateAll()
         binding.executePendingBindings()

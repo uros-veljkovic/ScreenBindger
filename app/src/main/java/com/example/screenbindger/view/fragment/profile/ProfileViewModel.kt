@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class ProfileViewModel
 @Inject constructor(
-    val remoteDb: ScreenBindgerRemoteDatabase,
+    private val remoteDb: ScreenBindgerRemoteDatabase,
     var userStateObservable: UserStateObservable,
     val fragmentStateObservable: FragmentStateObservable
 ) : ViewModel() {
@@ -24,8 +24,8 @@ class ProfileViewModel
         loadInfo()
     }
 
-
     private fun loadInfo() = CoroutineScope(IO).launch {
+        remoteDb.fetchProfilePicture(userStateObservable)
         remoteDb.fetchUser(userStateObservable)
     }
 
@@ -33,15 +33,19 @@ class ProfileViewModel
         when (fragmentStateObservable.state.value) {
             FragmentState.Editable -> {
                 fragmentStateObservable.setState(FragmentState.NotEditable)
-                CoroutineScope(IO).launch {
-                    remoteDb.updateUser(userStateObservable)
-                }
+                updateUser()
             }
             FragmentState.NotEditable -> {
                 fragmentStateObservable.setState(FragmentState.Editable)
             }
             else -> {
             }
+        }
+    }
+
+    private fun updateUser() {
+        CoroutineScope(IO).launch {
+            remoteDb.updateUser(userStateObservable)
         }
     }
 
@@ -52,6 +56,7 @@ class ProfileViewModel
     }
 
     fun uploadImage(uri: Uri) {
+        userStateObservable.setProfilePictureUri(uri)
         CoroutineScope(IO).launch {
             remoteDb.uploadImage(uri, userStateObservable)
         }

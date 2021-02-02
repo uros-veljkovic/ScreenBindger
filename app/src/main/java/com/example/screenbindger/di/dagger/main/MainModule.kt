@@ -1,5 +1,6 @@
 package com.example.screenbindger.di.dagger.main
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
@@ -29,11 +30,18 @@ class MainModule {
 
     @MainScope
     @Provides
+    fun provideProfilePictureUri(): MutableLiveData<Uri?> {
+        return MutableLiveData(null)
+    }
+
+    @MainScope
+    @Provides
     fun provideUserStateObservable(
         userState: ObjectState<UserEntity>,
+        profilePictureUri: MutableLiveData<Uri?>,
         userEntity: UserEntity
     ): UserStateObservable {
-        return UserStateObservable(MutableLiveData(userState), userEntity)
+        return UserStateObservable(MutableLiveData(userState), profilePictureUri, userEntity)
     }
 
 

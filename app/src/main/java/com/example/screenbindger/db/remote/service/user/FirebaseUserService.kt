@@ -73,7 +73,6 @@ class FirebaseUserService @Inject constructor(
             .child(imagePath)
             .downloadUrl
             .addOnSuccessListener {
-                userStateObservable.user.imageUri = it.toString()
                 userStateObservable.setState(ObjectState.Read(userStateObservable.user))
             }
             .addOnFailureListener {
