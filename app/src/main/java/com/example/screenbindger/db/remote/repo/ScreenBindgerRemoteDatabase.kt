@@ -86,7 +86,7 @@ class ScreenBindgerRemoteDatabase
         storageService.uploadImage(uri, userStateObservable)
     }
 
-    suspend fun downloadImage(userStateObservable: UserStateObservable) {
+    suspend fun fetchProfilePicture(userStateObservable: UserStateObservable) {
         storageService.downloadImage(userStateObservable)
     }
 
