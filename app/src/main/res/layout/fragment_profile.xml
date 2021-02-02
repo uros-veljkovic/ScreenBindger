@@ -17,6 +17,15 @@
         android:layout_height="match_parent"
         tools:context=".view.fragment.profile.ProfileFragment">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/ivUserImage"
+            app:layout_constraintEnd_toEndOf="@id/ivUserImage"
+            app:layout_constraintStart_toStartOf="@id/ivUserImage"
+            app:layout_constraintTop_toTopOf="@id/ivUserImage" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogout"
             style="@style/Widget.MaterialComponents.Button.TextButton"

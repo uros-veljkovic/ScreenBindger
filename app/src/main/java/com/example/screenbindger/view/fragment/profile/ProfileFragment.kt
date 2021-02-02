@@ -16,6 +16,7 @@ import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentProfileBinding
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.constants.INTENT_REQUEST_CODE_IMAGE
+import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.setUri
 import com.example.screenbindger.util.extensions.setIconAndColor
 import com.example.screenbindger.util.extensions.snack
@@ -70,6 +71,7 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
             viewLifecycleOwner,
             Observer { uri ->
                 uri?.let { it ->
+                    binding.progressBar.hide()
                     setProfileImage(it)
                 }
             })

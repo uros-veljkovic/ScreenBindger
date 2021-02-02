@@ -4,6 +4,7 @@ import android.view.View
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.core.content.res.ResourcesCompat
+import com.example.screenbindger.R
 import com.google.android.material.snackbar.Snackbar
 
 fun View.snack(
@@ -16,12 +17,15 @@ fun View.snack(
 
 fun View.snack(
     message: String,
-    backgroundColorRes: Int,
+    backgroundColorRes: Int = R.color.design_default_color_background,
     length: Int = Snackbar.LENGTH_LONG
 ) {
+
+    val snack = Snackbar.make(this, message, length)
+
     val color =
         ResourcesCompat.getColor(resources, backgroundColorRes, null)
+    snack.setBackgroundTint(color)
 
-    val snack = Snackbar.make(this, message, length).setBackgroundTint(color)
     snack.show()
 }
