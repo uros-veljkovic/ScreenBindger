@@ -16,11 +16,11 @@ import javax.inject.Inject
 
 class ScreenBindgerRemoteDatabase
 @Inject constructor(
-    val movieService: MovieService,
-    val genreService: GenreService,
-    val authService: AuthService,
-    val userService: UserService,
-    val storageService: StorageService
+    private val movieService: MovieService,
+    private val genreService: GenreService,
+    private val authService: AuthService,
+    private val userService: UserService,
+    private val storageService: StorageService
 
 ) {
 
