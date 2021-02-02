@@ -12,7 +12,6 @@ import com.google.firebase.firestore.Exclude
 data class UserEntity(
     @DocumentId
     var id: String? = null,
-    var imageUri: String? = null,
     var fullName: String = "",
     var email: String = "",
     var password: String = "",
@@ -21,7 +20,6 @@ data class UserEntity(
     fun toObservable(): UserObservable {
         return UserObservable().also {
             it.id = id
-            it.imageUri = imageUri
             it.fullName = fullName
             it.email = email
             it.dateOfBirth = dateOfBirth

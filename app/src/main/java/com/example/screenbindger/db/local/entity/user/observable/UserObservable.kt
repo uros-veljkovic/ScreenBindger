@@ -23,14 +23,6 @@ class UserObservable
     @set: PropertyName("id")
     var id: String? = null
 
-    @get: Bindable
-    @get: PropertyName("imageUri")
-    @set: PropertyName("imageUri")
-    var imageUri: String? = null
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.imageUri)
-        }
 
     @get: Bindable
     @get: PropertyName("fullName")
@@ -73,7 +65,6 @@ class UserObservable
     fun toEntity(): UserEntity {
         return UserEntity().apply {
             this.id = this@UserObservable.id
-            this.imageUri = this@UserObservable.imageUri
             this.fullName = this@UserObservable.fullName
             this.email = this@UserObservable.email
             this.password = this@UserObservable.password
