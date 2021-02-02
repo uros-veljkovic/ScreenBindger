@@ -17,6 +17,7 @@ import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentLoginBinding
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
+import com.example.screenbindger.util.extensions.snack
 import com.example.screenbindger.util.state.State
 import com.example.screenbindger.util.validator.FieldValidator
 import com.example.screenbindger.view.activity.main.MainActivity
@@ -36,10 +37,11 @@ class LoginFragment : DaggerFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = bind(inflater, container)
+
         observeFieldValidation()
         initOnClickListeners()
+
         return view
     }
 
@@ -96,15 +98,7 @@ class LoginFragment : DaggerFragment() {
     }
 
     private fun showError(message: String) {
-        val snackbarColor =
-            ResourcesCompat.getColor(resources, R.color.design_default_color_error, null)
-        Snackbar.make(
-            requireView(),
-            message,
-            Snackbar.LENGTH_LONG
-        ).setBackgroundTint(snackbarColor)
-            .show()
-
+        requireView().snack(message, R.color.logout_red)
     }
 
     fun gotoMainActivity() {
@@ -122,14 +116,8 @@ class LoginFragment : DaggerFragment() {
             val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fadeout)
             it.startAnimation(animation)
             it.animation.setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation) {
-                    // TODO Auto-generated method stub
-                }
-
-                override fun onAnimationRepeat(animation: Animation) {
-                    // TODO Auto-generated method stub
-                }
-
+                override fun onAnimationStart(animation: Animation) {}
+                override fun onAnimationRepeat(animation: Animation) {}
                 override fun onAnimationEnd(animation: Animation) {
                     it.visibility = View.INVISIBLE
                 }

@@ -10,18 +10,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
-import com.example.screenbindger.BR
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentProfileBinding
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.constants.INTENT_REQUEST_CODE_IMAGE
 import com.example.screenbindger.util.extensions.setUri
+import com.example.screenbindger.util.extensions.setIconAndColor
+import com.example.screenbindger.util.extensions.snack
 import com.example.screenbindger.view.activity.onboarding.OnboardingActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
-import java.net.URI
 import javax.inject.Inject
 
 
@@ -57,7 +58,6 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
             }
             btnLogout.setOnClickListener {
                 showLogoutDialog()
-
             }
             btnChangePassword.setOnClickListener {
                 showPasswordUpdateDialog()
@@ -68,9 +68,9 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
     fun observeProfilePicture() {
         viewModel.userStateObservable.profilePictureObservable.observe(
             viewLifecycleOwner,
-            Observer {
-                it?.let { uri ->
-                    setProfileImage(uri)
+            Observer { uri ->
+                uri?.let { it ->
+                    setProfileImage(it)
                 }
             })
     }
@@ -161,15 +161,27 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
 
 
     fun prepareFabForSaving() {
-        with(binding.fabAddPicture) {
-            isEnabled = true
-            visibility = View.VISIBLE
-            val color = ContextCompat.getColor(context, R.color.green)
-            setBackgroundColor(color)
+        with(binding) {
+            fabAddPicture.apply {
+                isEnabled = true
+                visibility = View.VISIBLE
+            }
+            fabUpdate.apply {
+                setIconAndColor(R.drawable.ic_save_outlined_black_24, R.color.blue)
+            }
         }
-        with(binding.fabUpdate) {
-            val color = ContextCompat.getColor(context, R.color.blue)
-            backgroundTintList = ColorStateList.valueOf(color)
+    }
+
+    fun prepareFabForUpdate() {
+        with(binding) {
+            fabAddPicture.apply {
+                isEnabled = false
+                visibility = View.GONE
+            }
+            fabUpdate.setIconAndColor(
+                R.drawable.ic_pencil_black_24,
+                R.color.orange
+            )
         }
     }
 
@@ -185,17 +197,6 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
         prepareFabForUpdate()
     }
 
-    fun prepareFabForUpdate() {
-        with(binding.fabAddPicture) {
-            isEnabled = false
-            visibility = View.GONE
-        }
-        with(binding.fabUpdate) {
-            setImageResource(R.drawable.ic_pencil_black_24)
-            val color = ContextCompat.getColor(context, R.color.orange)
-            backgroundTintList = ColorStateList.valueOf(color)
-        }
-    }
 
     fun viewsEnabled(b: Boolean) {
         with(binding) {
@@ -204,23 +205,21 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
         }
     }
 
-    fun showMessage(stringResId: Int, colorResId: Int) {
-        Snackbar.make(requireView(), stringResId, Snackbar.LENGTH_LONG)
-            .setActionTextColor(colorResId).show()
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == INTENT_REQUEST_CODE_IMAGE) {
-            val imageUri: Uri? = data?.data
-
-            viewModel.uploadImage(imageUri!!)
+            data?.data?.let { uri ->
+                viewModel.uploadImage(uri)
+            } ?: showMessage(R.string.message_load_image_from_gallery_error, R.color.logout_red)
         }
+    }
+
+    fun showMessage(stringResId: Int, colorResId: Int) {
+        requireView().snack(stringResId, colorResId)
     }
 
     private fun setProfileImage(uri: Uri) {
         binding.ivUserImage.setImageDrawable(null)
-//        binding.ivUserImage.setUri(null)
         binding.ivUserImage.setUri(uri)
         binding.invalidateAll()
         binding.executePendingBindings()
