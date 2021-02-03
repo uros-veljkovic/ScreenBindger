@@ -1,7 +1,7 @@
 package com.example.screenbindger.di.dagger
 
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
-import com.example.screenbindger.db.remote.service.auth.FirebaseAuthService
+import com.example.screenbindger.db.remote.service.auth.firebase.FirebaseAuthService
 import com.example.screenbindger.db.remote.service.genre.GenreApi
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieApi

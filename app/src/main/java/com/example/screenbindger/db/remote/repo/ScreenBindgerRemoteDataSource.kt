@@ -4,8 +4,8 @@ import android.net.Uri
 import com.example.screenbindger.db.remote.request.FavoriteMovieRequestBody
 import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.response.*
-import com.example.screenbindger.db.remote.service.auth.AuthStateObservable
-import com.example.screenbindger.db.remote.service.auth.AuthService
+import com.example.screenbindger.db.remote.service.auth.firebase.AuthStateObservable
+import com.example.screenbindger.db.remote.service.auth.firebase.AuthService
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieService
 import com.example.screenbindger.db.remote.service.storage.StorageService

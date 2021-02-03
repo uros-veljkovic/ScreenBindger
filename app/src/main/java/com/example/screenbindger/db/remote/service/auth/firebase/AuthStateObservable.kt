@@ -1,4 +1,4 @@
-package com.example.screenbindger.db.remote.service.auth
+package com.example.screenbindger.db.remote.service.auth.firebase
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

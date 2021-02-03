@@ -3,7 +3,7 @@ package com.example.screenbindger.di.dagger.onboarding
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.model.domain.UserEntity
-import com.example.screenbindger.db.remote.service.auth.AuthStateObservable
+import com.example.screenbindger.db.remote.service.auth.firebase.AuthStateObservable
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.state.State

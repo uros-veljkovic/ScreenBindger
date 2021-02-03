@@ -2,7 +2,7 @@ package com.example.screenbindger.view.fragment.register
 
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
-import com.example.screenbindger.db.remote.service.auth.AuthStateObservable
+import com.example.screenbindger.db.remote.service.auth.firebase.AuthStateObservable
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.util.state.State
 import kotlinx.coroutines.CoroutineScope
