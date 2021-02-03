@@ -1,6 +1,7 @@
 package com.example.screenbindger.db.remote.repo
 
 import android.net.Uri
+import com.example.screenbindger.db.remote.request.FavoriteMovieRequestBody
 import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.response.*
 import com.example.screenbindger.db.remote.service.auth.AuthStateObservable
@@ -61,6 +62,16 @@ class ScreenBindgerRemoteDatabase
 
     suspend fun getMoviesByGenre(id: String): Response<GenreMoviesResponse> {
         return genreService.getMoviesByGenre(id)
+    }
+
+    suspend fun postMovieAsFavorite(
+        sessionId: String,
+        favoriteMovieRequestBody: FavoriteMovieRequestBody
+    ): Response<FavoriteMovieResponse> {
+        return movieService.postMovieAsFavorite(
+            sessionId = sessionId,
+            favoriteMovieRequestBody = favoriteMovieRequestBody
+        )
     }
 
     suspend fun create(userStateObservable: UserStateObservable) {
