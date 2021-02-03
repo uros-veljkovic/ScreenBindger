@@ -16,7 +16,7 @@ import com.example.screenbindger.model.domain.MovieEntity
 import retrofit2.Response
 import javax.inject.Inject
 
-class ScreenBindgerRemoteDatabase
+class ScreenBindgerRemoteDataSource
 @Inject constructor(
     private val session: Session,
     private val movieService: MovieService,

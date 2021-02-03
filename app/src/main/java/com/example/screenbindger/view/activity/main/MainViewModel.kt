@@ -2,7 +2,7 @@ package com.example.screenbindger.view.activity.main
 
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.model.domain.UserEntity
-import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDatabase
+import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.model.global.Genres
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class MainViewModel
 @Inject constructor(
-    val db: ScreenBindgerRemoteDatabase,
+    val db: ScreenBindgerRemoteDataSource,
     val user: UserEntity
 ) : ViewModel() {
 

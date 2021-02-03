@@ -1,8 +1,6 @@
 package com.example.screenbindger.di.dagger
 
-import android.app.Application
-import androidx.room.Room.databaseBuilder
-import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDatabase
+import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.service.auth.FirebaseAuthService
 import com.example.screenbindger.db.remote.service.genre.GenreApi
 import com.example.screenbindger.db.remote.service.genre.GenreService
@@ -12,7 +10,6 @@ import com.example.screenbindger.db.remote.service.storage.FirebaseStorageServic
 import com.example.screenbindger.db.remote.service.user.FirebaseUserService
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.util.constants.API_BASE_URL
-import com.example.screenbindger.util.constants.LOCAL_DATABASE_NAME
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,7 +17,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -33,15 +29,15 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideRemoteRepository(
+    fun provideRemoteDataSource(
         session: Session,
         movieService: MovieService,
         genreService: GenreService,
         authService: FirebaseAuthService,
         userService: FirebaseUserService,
         storageService: FirebaseStorageService
-    ): ScreenBindgerRemoteDatabase {
-        return ScreenBindgerRemoteDatabase(
+    ): ScreenBindgerRemoteDataSource {
+        return ScreenBindgerRemoteDataSource(
             session,
             movieService,
             genreService,

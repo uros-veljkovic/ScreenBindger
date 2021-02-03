@@ -2,7 +2,7 @@ package com.example.screenbindger.view.fragment.trending
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDatabase
+import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.response.TrendingMoviesResponse
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.model.global.Genres
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 class TrendingViewModel
 @Inject constructor(
-    val db: ScreenBindgerRemoteDatabase
+    val remoteDataSource: ScreenBindgerRemoteDataSource
 ) : ViewModel() {
 
     var response: MutableLiveData<Response<TrendingMoviesResponse>?> = MutableLiveData(null)
@@ -26,7 +26,7 @@ class TrendingViewModel
 
     private fun fetchData() {
         CoroutineScope(IO).launch {
-            val result = db.getTrending()
+            val result = remoteDataSource.getTrending()
 
             result.body()?.list?.forEach {entity ->
                 generateStringGenresFor(entity)
