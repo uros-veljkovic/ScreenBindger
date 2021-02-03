@@ -1,15 +1,14 @@
 package com.example.screenbindger.view.fragment.login
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.core.content.res.ResourcesCompat
+import android.webkit.WebViewClient
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import bloder.com.blitzcore.enableWhenUsing
@@ -21,7 +20,6 @@ import com.example.screenbindger.util.extensions.snack
 import com.example.screenbindger.util.state.State
 import com.example.screenbindger.util.validator.FieldValidator
 import com.example.screenbindger.view.activity.main.MainActivity
-import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -40,6 +38,7 @@ class LoginFragment : DaggerFragment() {
         val view = bind(inflater, container)
 
         observeFieldValidation()
+        configWebView()
         initOnClickListeners()
 
         return view
@@ -60,13 +59,52 @@ class LoginFragment : DaggerFragment() {
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
+    fun configWebView() {
+        binding.wvCreateSession.apply {
+            webViewClient = WebViewClient()
+
+            settings.setSupportZoom(false)
+            settings.javaScriptEnabled = true
+
+            setOnKeyListener { _, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_BACK
+                    && event.action == MotionEvent.ACTION_UP
+                    && canGoBack()
+                ) {
+                    goBack()
+                    return@setOnKeyListener true
+                } else {
+                    elevation = 0f
+                    return@setOnKeyListener false
+                }
+            }
+        }
+    }
+
     private fun initOnClickListeners() {
         binding.apply {
             tvHere.setOnClickListener {
                 findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             }
+            /*
+            TODO:
+               Change logic for opening a webView.
+               WebView should open when an Event such as Action.TokenGenerated is initialized
+               */
+            ivScreenBindger.setOnClickListener {
+                showWebView()
+            }
         }
     }
+
+    private fun showWebView() {
+        binding.wvCreateSession.apply {
+            elevation = resources.getDimension(R.dimen.normal_100)
+            loadUrl("https://www.google.com/")
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -75,7 +113,7 @@ class LoginFragment : DaggerFragment() {
     }
 
     private fun observeUserAuthorized() {
-        viewModel.stateObservable.value.observe(viewLifecycleOwner, Observer { state ->
+        viewModel.authStateObservable.value.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is State.Success -> {
                     binding.progressBar.hide()

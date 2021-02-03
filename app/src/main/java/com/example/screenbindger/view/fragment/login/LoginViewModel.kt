@@ -15,13 +15,13 @@ class LoginViewModel
 @Inject constructor(
     val user: UserEntity,
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val stateObservable: AuthStateObservable
+    val authStateObservable: AuthStateObservable
 ) : ViewModel() {
 
     fun login() {
         CoroutineScope(Dispatchers.IO).launch {
-            stateObservable.setValue(State.Loading)
-            remoteDataSource.login(user, stateObservable)
+            authStateObservable.setValue(State.Loading)
+            remoteDataSource.login(user, authStateObservable)
         }
     }
 
