@@ -29,7 +29,7 @@ class FirebaseStorageService
                     userStateObservable.setState(ObjectState.Read())
                 }
                 .addOnFailureListener {
-                    userStateObservable.setState(ObjectState.Error(Exception()))
+                    userStateObservable.setState(ObjectState.Error(Exception("No profile image found.")))
                 }
         }
 
@@ -41,12 +41,12 @@ class FirebaseStorageService
 
             val uploadTask = storageFolderReference.putFile(uri)
                 .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    userStateObservable.setState(ObjectState.Read(userStateObservable.user))
-                } else {
-                    userStateObservable.setState(ObjectState.Error(Exception("Unable to upload a picture")))
+                    if (task.isSuccessful) {
+                        userStateObservable.setState(ObjectState.Read(userStateObservable.user))
+                    } else {
+                        userStateObservable.setState(ObjectState.Error(Exception("Failed to upload a picture")))
+                    }
                 }
-            }
         }
     }
 

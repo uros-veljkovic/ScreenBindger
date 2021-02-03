@@ -14,10 +14,11 @@ import androidx.navigation.fragment.findNavController
 import bloder.com.blitzcore.enableWhenUsing
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentLoginBinding
+import com.example.screenbindger.model.state.LoginState
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snack
-import com.example.screenbindger.util.state.State
+import com.example.screenbindger.util.extensions.startActivityWithDelay
 import com.example.screenbindger.util.validator.FieldValidator
 import com.example.screenbindger.view.activity.main.MainActivity
 import dagger.android.support.DaggerFragment
@@ -87,14 +88,6 @@ class LoginFragment : DaggerFragment() {
             tvHere.setOnClickListener {
                 findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             }
-            /*
-            TODO:
-               Change logic for opening a webView.
-               WebView should open when an Event such as Action.TokenGenerated is initialized
-               */
-            ivScreenBindger.setOnClickListener {
-                showWebView()
-            }
         }
     }
 
@@ -113,22 +106,25 @@ class LoginFragment : DaggerFragment() {
     }
 
     private fun observeUserAuthorized() {
-        viewModel.authStateObservable.value.observe(viewLifecycleOwner, Observer { state ->
+        viewModel.loginStateObservable.value.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
-                is State.Success -> {
+                is LoginState.Success -> {
                     binding.progressBar.hide()
+                    showWebView()
                     gotoMainActivity()
                 }
-                is State.Error -> {
+                is LoginState.Error -> {
+                    binding.progressBar.hide()
                     val message = state.exception.message ?: "Unknown error"
                     showError(message)
-
-                    binding.progressBar.hide()
                 }
-                is State.Loading -> {
+                is LoginState.Loading -> {
                     binding.progressBar.show()
                 }
-                is State.Unrequested -> {
+                is LoginState.Rest -> {
+
+                }
+                else -> {
 
                 }
             }
@@ -141,12 +137,8 @@ class LoginFragment : DaggerFragment() {
 
     fun gotoMainActivity() {
         animateButton()
-        Handler(Looper.myLooper()!!).postDelayed({
-            binding.progressBar.hide()
-
-            startActivity(Intent(requireActivity(), MainActivity::class.java))
-            requireActivity().finish()
-        }, 1500)
+        binding.progressBar.hide()
+        startActivityWithDelay(MainActivity(), 1000)
     }
 
     private fun animateButton() {

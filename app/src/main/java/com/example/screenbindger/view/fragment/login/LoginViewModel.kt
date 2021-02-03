@@ -3,7 +3,8 @@ package com.example.screenbindger.view.fragment.login
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
-import com.example.screenbindger.db.remote.service.auth.firebase.AuthStateObservable
+import com.example.screenbindger.db.remote.service.auth.firebase.FirebaseAuthState
+import com.example.screenbindger.model.state.LoginState
 import com.example.screenbindger.util.state.State
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,13 +16,13 @@ class LoginViewModel
 @Inject constructor(
     val user: UserEntity,
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val authStateObservable: AuthStateObservable
+    val loginStateObservable: LoginStateObservable
 ) : ViewModel() {
 
     fun login() {
         CoroutineScope(Dispatchers.IO).launch {
-            authStateObservable.setValue(State.Loading)
-            remoteDataSource.login(user, authStateObservable)
+            loginStateObservable.setValue(LoginState.Loading)
+            remoteDataSource.login(user, loginStateObservable)
         }
     }
 

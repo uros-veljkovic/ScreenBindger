@@ -2,8 +2,11 @@ package com.example.screenbindger.db.remote.service.auth.firebase
 
 
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
+import com.example.screenbindger.model.state.LoginState
 import com.example.screenbindger.model.state.ObjectState
-import com.example.screenbindger.util.state.State
+import com.example.screenbindger.model.state.RegisterState
+import com.example.screenbindger.view.fragment.login.LoginStateObservable
+import com.example.screenbindger.view.fragment.register.RegisterStateObservable
 import com.google.firebase.auth.FirebaseAuth
 import java.lang.Exception
 import javax.inject.Inject
@@ -17,14 +20,14 @@ class FirebaseAuthService
     override suspend fun signIn(
         email: String,
         password: String,
-        stateObservable: AuthStateObservable
+        loginStateObservable: LoginStateObservable
     ) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    setCurrentUserAndPostResult(stateObservable)
+                    loginStateObservable.setValue(LoginState.Success())
                 } else {
-                    stateObservable.setValue(State.Error(Exception("Failed to login !")))
+                    loginStateObservable.setValue(LoginState.Error(Exception("Failed to login !")))
                 }
             }
     }
@@ -32,20 +35,16 @@ class FirebaseAuthService
     override suspend fun signUp(
         email: String,
         password: String,
-        stateObservable: AuthStateObservable
+        registerStateObservable: RegisterStateObservable
     ) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    setCurrentUserAndPostResult(stateObservable)
+                    registerStateObservable.setValue(RegisterState.Success())
                 } else {
-                    stateObservable.setValue(State.Error(Exception("Failed to register !")))
+                    registerStateObservable.setValue(RegisterState.Error(Exception("Failed to register !")))
                 }
             }
-    }
-
-    private fun setCurrentUserAndPostResult(stateObservable: AuthStateObservable) {
-        stateObservable.setValue(State.Success(auth.currentUser!!))
     }
 
     override suspend fun signOut() {

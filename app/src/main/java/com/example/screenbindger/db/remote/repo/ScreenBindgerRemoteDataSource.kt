@@ -4,7 +4,7 @@ import android.net.Uri
 import com.example.screenbindger.db.remote.request.FavoriteMovieRequestBody
 import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.response.*
-import com.example.screenbindger.db.remote.service.auth.firebase.AuthStateObservable
+import com.example.screenbindger.db.remote.service.auth.firebase.FirebaseAuthState
 import com.example.screenbindger.db.remote.service.auth.firebase.AuthService
 import com.example.screenbindger.db.remote.service.auth.tmdb.TmdbAuthService
 import com.example.screenbindger.db.remote.service.genre.GenreService
@@ -14,6 +14,9 @@ import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.service.user.UserService
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.MovieEntity
+import com.example.screenbindger.util.state.StateObservable
+import com.example.screenbindger.view.fragment.login.LoginStateObservable
+import com.example.screenbindger.view.fragment.register.RegisterStateObservable
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -31,16 +34,16 @@ class ScreenBindgerRemoteDataSource
 
     suspend fun login(
         user: UserEntity,
-        stateObservable: AuthStateObservable
+        loginStateObservable: LoginStateObservable
     ) {
-        authService.signIn(user.email, user.password, stateObservable)
+        authService.signIn(user.email, user.password, loginStateObservable)
     }
 
     suspend fun register(
         user: UserEntity,
-        stateObservable: AuthStateObservable
+        registerStateObservable: RegisterStateObservable
     ) {
-        authService.signUp(user.email, user.password, stateObservable)
+        authService.signUp(user.email, user.password, registerStateObservable)
     }
 
 

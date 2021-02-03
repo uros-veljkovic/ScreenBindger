@@ -24,6 +24,7 @@ import com.example.screenbindger.view.activity.onboarding.OnboardingActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import java.lang.Error
 import javax.inject.Inject
 
 
@@ -145,7 +146,8 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
                     showMessage(R.string.message_update_success, R.color.green)
                 }
                 is ObjectState.Error -> {
-                    showMessage(R.string.message_update_fail, R.color.green)
+                    val message = it.exception.message ?: "Unknown error"
+                    requireView().snack(message, R.color.design_default_color_error)
                 }
                 is ObjectState.Created -> {
                     binding.invalidateAll()

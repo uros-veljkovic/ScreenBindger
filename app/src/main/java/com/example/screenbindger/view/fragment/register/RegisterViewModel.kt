@@ -2,26 +2,32 @@ package com.example.screenbindger.view.fragment.register
 
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
-import com.example.screenbindger.db.remote.service.auth.firebase.AuthStateObservable
+import com.example.screenbindger.db.remote.service.auth.firebase.FirebaseAuthState
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
+import com.example.screenbindger.model.state.RegisterState
 import com.example.screenbindger.util.state.State
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RegisterViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val authStateObservable: AuthStateObservable,
+    val registerStateObservable: RegisterStateObservable,
     val userStateObservable: UserStateObservable
 ) : ViewModel() {
 
     fun register() {
-        CoroutineScope(Dispatchers.IO).launch {
-            authStateObservable.setValue(State.Loading)
+        CoroutineScope(IO).launch {
+            registerStateObservable.setValue(RegisterState.Loading)
+            remoteDataSource.register(userStateObservable.user, registerStateObservable)
+        }
+    }
 
-            remoteDataSource.register(userStateObservable.user, authStateObservable)
+    fun createUser() {
+        CoroutineScope(IO).launch {
             remoteDataSource.create(userStateObservable)
         }
     }

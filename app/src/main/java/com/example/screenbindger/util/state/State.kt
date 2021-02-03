@@ -1,6 +1,6 @@
 package com.example.screenbindger.util.state
 
-sealed class State<out R> {
+abstract class State<out R> {
 
     data class Success<out T>(val data: T? = null) : State<T>()
     data class Error(val exception: Exception) : State<Nothing>()

@@ -22,21 +22,18 @@ class FirebaseUserService @Inject constructor(
     override suspend fun create(
         userStateObservable: UserStateObservable
     ) {
-        database.collection(USER_COLLECTION)
-            .add(userStateObservable.user)
-            .addOnSuccessListener { docRef ->
-                docRef.get().addOnSuccessListener { docSnapshot ->
-                    val user = docSnapshot.toObject(UserEntity::class.java)!!
-                    userStateObservable.user = user
+        auth.currentUser?.uid?.let { id ->
+            database.collection(USER_COLLECTION)
+                .document(id)
+                .set(userStateObservable.user)
+                .addOnSuccessListener {
                     userStateObservable.setState(ObjectState.Created())
                 }.addOnFailureListener {
-                    userStateObservable.setState(ObjectState.Error(Exception("Failed to load user data !")))
+                    userStateObservable.setState(
+                        ObjectState.Error(Exception("Failed to create account !"))
+                    )
                 }
-            }.addOnFailureListener {
-                userStateObservable.setState(
-                    ObjectState.Error(Exception("Failed to create account !"))
-                )
-            }
+        }
     }
 
     override suspend fun read(
@@ -45,13 +42,10 @@ class FirebaseUserService @Inject constructor(
         auth.currentUser?.let { currUser ->
             database
                 .collection(USER_COLLECTION)
-                .whereEqualTo("email", currUser.email)
+                .document(currUser.uid)
                 .get()
-                .addOnSuccessListener { documents ->
-                    var user: UserEntity? = null
-                    for (doc in documents) {
-                        user = doc.toObject(UserEntity::class.java)
-                    }
+                .addOnSuccessListener { document ->
+                    val user: UserEntity? = document.toObject(UserEntity::class.java)
 
                     if (user != null) {
                         userStateObservable.user = user
@@ -63,42 +57,46 @@ class FirebaseUserService @Inject constructor(
                 .addOnFailureListener { _ ->
                     userStateObservable.setState(ObjectState.Error(Exception("Failed to read user data !")))
                 }
-        }
-            ?: userStateObservable.setState(ObjectState.Error(Exception("No logged in user !")))
+        } ?: userStateObservable.setState(ObjectState.Error(Exception("No logged in user !")))
 
     }
 
     override suspend fun delete(
         userStateObservable: UserStateObservable
     ) {
-        database.collection(USER_COLLECTION).document(auth.currentUser!!.email!!)
-            .delete()
-            .addOnSuccessListener { }
-            .addOnFailureListener { }
+        auth.currentUser?.let { currUser ->
+            database.collection(USER_COLLECTION).document(currUser.uid)
+                .delete()
+                .addOnSuccessListener {
+                    userStateObservable.setState(ObjectState.Deleted())
+                }
+                .addOnFailureListener {
+                    userStateObservable.setState(ObjectState.Error(Exception("Error deleting profile")))
+                }
+        }
     }
 
     override suspend fun update(
         userStateObservable: UserStateObservable
     ) {
-        database.collection(USER_COLLECTION)
-            .whereEqualTo("email", auth.currentUser!!.email)
-            .get()
-            .addOnSuccessListener {
-                it.documents.forEach { document: DocumentSnapshot ->
+        auth.currentUser?.let { currUser ->
+            database.collection(USER_COLLECTION)
+                .document(currUser.uid)
+                .get()
+                .addOnSuccessListener { doc ->
                     val map = mapOf(
                         "fullName" to userStateObservable.user.fullName,
                         "dateOfBirth" to userStateObservable.user.dateOfBirth
                     )
-                    document.reference.update(map).addOnSuccessListener {
+                    doc.reference.update(map).addOnSuccessListener {
                         userStateObservable.setState(ObjectState.Updated())
                     }.addOnFailureListener {
-                        userStateObservable.setState(ObjectState.Error(Exception("Error updating profile")))
+                        userStateObservable.setState(ObjectState.Error(Exception("Error updating profile.")))
                     }
-                    return@forEach
+                }.addOnFailureListener {
+                    userStateObservable.setState(ObjectState.Error(Exception("Failed finding user document.")))
                 }
-            }.addOnFailureListener {
-                userStateObservable.setState(ObjectState.Error(Exception("Error updating profile")))
-            }
+        }
     }
 
 }

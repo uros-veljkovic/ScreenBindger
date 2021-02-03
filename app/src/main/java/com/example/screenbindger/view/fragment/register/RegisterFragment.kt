@@ -1,9 +1,6 @@
 package com.example.screenbindger.view.fragment.register
 
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +10,11 @@ import bloder.com.blitzcore.enableWhenUsing
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentRegisterBinding
 import com.example.screenbindger.model.state.ObjectState
+import com.example.screenbindger.model.state.RegisterState
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snack
-import com.example.screenbindger.util.state.State
+import com.example.screenbindger.util.extensions.startActivityWithDelay
 import com.example.screenbindger.util.validator.FieldValidator
 import com.example.screenbindger.view.activity.main.MainActivity
 import dagger.android.support.DaggerFragment
@@ -73,12 +71,9 @@ class RegisterFragment : DaggerFragment() {
     }
 
     private fun gotoMainActivity() {
-        Handler(Looper.myLooper()!!).postDelayed({
-            binding.progressBar.hide()
+        binding.progressBar.hide()
+        startActivityWithDelay(MainActivity(), 1000)
 
-            startActivity(Intent(requireActivity(), MainActivity::class.java))
-            requireActivity().finish()
-        }, 1000)
     }
 
     private fun gotoLoginFragment() {
@@ -93,22 +88,20 @@ class RegisterFragment : DaggerFragment() {
     }
 
     private fun observeRegistration() {
-        viewModel.authStateObservable.value.observe(viewLifecycleOwner) { state ->
+        viewModel.registerStateObservable.value.observe(viewLifecycleOwner) { state ->
             when (state) {
-                is State.Success -> {
-                    binding.progressBar.hide()
-                    gotoMainActivity()
+                is RegisterState.Success<*> -> {
+                    viewModel.createUser()
                 }
-                is State.Error -> {
+                is RegisterState.Error -> {
                     binding.progressBar.hide()
-
                     val message = state.exception.message ?: "Unknown error"
                     showError(message)
                 }
-                is State.Loading -> {
+                is RegisterState.Loading -> {
                     binding.progressBar.show()
                 }
-                is State.Unrequested -> {
+                is RegisterState.Rest -> {
 
                 }
             }
@@ -120,6 +113,9 @@ class RegisterFragment : DaggerFragment() {
             when (it) {
                 is ObjectState.Error -> {
                     showError(it.exception.message ?: "Unknown error occurred.")
+                }
+                is ObjectState.Created -> {
+                    gotoMainActivity()
                 }
                 else -> {
                 }
