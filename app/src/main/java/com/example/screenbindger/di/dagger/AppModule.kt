@@ -2,6 +2,8 @@ package com.example.screenbindger.di.dagger
 
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.service.auth.firebase.FirebaseAuthService
+import com.example.screenbindger.db.remote.service.auth.tmdb.TmdbAuthApi
+import com.example.screenbindger.db.remote.service.auth.tmdb.TmdbAuthService
 import com.example.screenbindger.db.remote.service.genre.GenreApi
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieApi
@@ -33,6 +35,7 @@ class AppModule {
         session: Session,
         movieService: MovieService,
         genreService: GenreService,
+        tmdbAuthService: TmdbAuthService,
         authService: FirebaseAuthService,
         userService: FirebaseUserService,
         storageService: FirebaseStorageService
@@ -41,6 +44,7 @@ class AppModule {
             session,
             movieService,
             genreService,
+            tmdbAuthService,
             authService,
             userService,
             storageService
@@ -64,8 +68,17 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideGenreApi(retrofit: Retrofit): GenreApi = retrofit.create(GenreApi::class.java)
+    fun provideGenreApi(retrofit: Retrofit): GenreApi =
+        retrofit.create(GenreApi::class.java)
 
+    @Singleton
+    @Provides
+    fun provideTmdbAuthService(api: TmdbAuthApi): TmdbAuthService = TmdbAuthService(api)
+
+    @Singleton
+    @Provides
+    fun provideTmdbAuthApi(retrofit: Retrofit): TmdbAuthApi =
+        retrofit.create(TmdbAuthApi::class.java)
 
     @Singleton
     @Provides

@@ -6,6 +6,7 @@ import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.response.*
 import com.example.screenbindger.db.remote.service.auth.firebase.AuthStateObservable
 import com.example.screenbindger.db.remote.service.auth.firebase.AuthService
+import com.example.screenbindger.db.remote.service.auth.tmdb.TmdbAuthService
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieService
 import com.example.screenbindger.db.remote.service.storage.StorageService
@@ -21,6 +22,7 @@ class ScreenBindgerRemoteDataSource
     private val session: Session,
     private val movieService: MovieService,
     private val genreService: GenreService,
+    private val tmdbAuthService: TmdbAuthService,
     private val authService: AuthService,
     private val userService: UserService,
     private val storageService: StorageService
@@ -74,6 +76,14 @@ class ScreenBindgerRemoteDataSource
             sessionId = sessionId,
             favoriteMovieRequestBody = favoriteMovieRequestBody
         )
+    }
+
+    suspend fun getRequestToken(): Response<RequestTokenResponse> {
+        return tmdbAuthService.getRequestToken()
+    }
+
+    suspend fun createSession(requestToken: String): Response<SessionResponse> {
+        return tmdbAuthService.createSession(requestToken = requestToken)
     }
 
     suspend fun create(userStateObservable: UserStateObservable) {
