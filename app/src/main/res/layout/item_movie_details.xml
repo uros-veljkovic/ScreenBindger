@@ -30,6 +30,18 @@
             app:posterUrl="@{movie.bigPosterUrl}"
             tools:src="@drawable/ic_star_black_24" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAddOrRemoveAsFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/normal_100"
+            android:scaleType="center"
+            android:src="@drawable/ic_star_black_24"
+            app:layout_constraintBottom_toBottomOf="@id/ivMoviePoster"
+            app:layout_constraintEnd_toEndOf="@id/ivMoviePoster"
+            app:layout_constraintTop_toBottomOf="@id/ivMoviePoster"
+            app:maxImageSize="32dp" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvMovieTitle"
             android:layout_width="wrap_content"
