@@ -11,12 +11,14 @@ import com.example.screenbindger.db.remote.service.movie.MovieService
 import com.example.screenbindger.db.remote.service.storage.StorageService
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.service.user.UserService
+import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.MovieEntity
 import retrofit2.Response
 import javax.inject.Inject
 
 class ScreenBindgerRemoteDatabase
 @Inject constructor(
+    private val session: Session,
     private val movieService: MovieService,
     private val genreService: GenreService,
     private val authService: AuthService,

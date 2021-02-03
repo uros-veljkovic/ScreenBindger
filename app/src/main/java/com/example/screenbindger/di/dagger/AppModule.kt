@@ -10,6 +10,7 @@ import com.example.screenbindger.db.remote.service.movie.MovieApi
 import com.example.screenbindger.db.remote.service.movie.MovieService
 import com.example.screenbindger.db.remote.service.storage.FirebaseStorageService
 import com.example.screenbindger.db.remote.service.user.FirebaseUserService
+import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.util.constants.API_BASE_URL
 import com.example.screenbindger.util.constants.LOCAL_DATABASE_NAME
 import com.google.firebase.auth.FirebaseAuth
@@ -33,6 +34,7 @@ class AppModule {
     @Singleton
     @Provides
     fun provideRemoteRepository(
+        session: Session,
         movieService: MovieService,
         genreService: GenreService,
         authService: FirebaseAuthService,
@@ -40,6 +42,7 @@ class AppModule {
         storageService: FirebaseStorageService
     ): ScreenBindgerRemoteDatabase {
         return ScreenBindgerRemoteDatabase(
+            session,
             movieService,
             genreService,
             authService,
@@ -116,5 +119,11 @@ class AppModule {
     @Provides
     fun provideStorageReference(): StorageReference {
         return FirebaseStorage.getInstance().reference
+    }
+
+    @Singleton
+    @Provides
+    fun provideSession(): Session {
+        return Session()
     }
 }

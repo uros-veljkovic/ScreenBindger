@@ -22,7 +22,6 @@ class MovieDetailsViewModel
     var responseMovieDetailsCast: MutableLiveData<Response<MovieDetailsCastResponse>?> =
         MutableLiveData(null)
 
-
     fun fetchData(movieId: Int) {
         runBlocking {
             launch(IO) {
