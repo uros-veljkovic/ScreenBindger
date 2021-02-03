@@ -6,7 +6,7 @@ data class Session(
     var success: Boolean? = null,
     var expiresAt: String? = null,
     var requestToken: String? = null,
-    var sessionId: String? = null
+    var id: String? = null
 ) {
     fun getAuthorizationUrl(): String {
         if (requestToken.isNullOrEmpty().not())

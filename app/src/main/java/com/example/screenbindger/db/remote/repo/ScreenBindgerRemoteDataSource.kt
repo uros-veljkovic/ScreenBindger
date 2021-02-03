@@ -68,22 +68,21 @@ class ScreenBindgerRemoteDataSource
         return genreService.getMoviesByGenre(id)
     }
 
-    suspend fun postMovieAsFavorite(
-        sessionId: String,
-        favoriteMovieRequestBody: FavoriteMovieRequestBody
-    ): Response<FavoriteMovieResponse> {
-        return movieService.postMovieAsFavorite(
-            sessionId = sessionId,
-            favoriteMovieRequestBody = favoriteMovieRequestBody
-        )
-    }
-
     suspend fun getRequestToken(): Response<RequestTokenResponse> {
         return tmdbAuthService.getRequestToken()
     }
 
     suspend fun createSession(requestToken: String): Response<SessionResponse> {
         return tmdbAuthService.createSession(requestToken = requestToken)
+    }
+
+    suspend fun postMovieAsFavorite(
+        favoriteMovieRequestBody: FavoriteMovieRequestBody
+    ): Response<FavoriteMovieResponse> {
+        return movieService.postMovieAsFavorite(
+            sessionId = session.id!!,
+            favoriteMovieRequestBody = favoriteMovieRequestBody
+        )
     }
 
     suspend fun create(userStateObservable: UserStateObservable) {
