@@ -111,7 +111,6 @@ class LoginFragment : DaggerFragment() {
                 is LoginState.Success -> {
                     binding.progressBar.hide()
                     showWebView()
-                    gotoMainActivity()
                 }
                 is LoginState.Error -> {
                     binding.progressBar.hide()
@@ -120,9 +119,6 @@ class LoginFragment : DaggerFragment() {
                 }
                 is LoginState.Loading -> {
                     binding.progressBar.show()
-                }
-                is LoginState.Rest -> {
-
                 }
                 else -> {
 

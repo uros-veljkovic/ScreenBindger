@@ -13,6 +13,7 @@ import com.example.screenbindger.db.remote.service.user.FirebaseUserService
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.util.constants.API_BASE_URL
+import com.example.screenbindger.view.fragment.TokenAuthStateObservable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -135,5 +136,11 @@ class AppModule {
     @Provides
     fun provideSession(): Session {
         return Session(UserEntity())
+    }
+
+    @Singleton
+    @Provides
+    fun provideTokenAuthStateObservable(): TokenAuthStateObservable {
+        return TokenAuthStateObservable()
     }
 }
