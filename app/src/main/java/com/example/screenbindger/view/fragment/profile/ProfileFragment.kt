@@ -152,12 +152,7 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
                 is ObjectState.Created -> {
                     binding.invalidateAll()
                 }
-                is ObjectState.Read -> {
-
-                }
-                is ObjectState.Deleted -> {
-                }
-                is ObjectState.InitialState -> {
+                else -> {
                 }
             }
         })
@@ -218,10 +213,6 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
         }
     }
 
-    fun showMessage(stringResId: Int, colorResId: Int) {
-        requireView().snack(stringResId, colorResId)
-    }
-
     private fun setProfileImage(uri: Uri) {
         binding.ivUserImage.setImageDrawable(null)
         binding.ivUserImage.setUri(uri)
@@ -257,6 +248,10 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
                 viewModel.changePassword(newPassword)
             }
         }
+    }
+
+    fun showMessage(stringResId: Int, colorResId: Int) {
+        requireView().snack(stringResId, colorResId)
     }
 
 }
