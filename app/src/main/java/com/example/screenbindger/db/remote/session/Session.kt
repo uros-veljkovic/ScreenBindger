@@ -4,7 +4,7 @@ import com.example.screenbindger.model.domain.UserEntity
 import java.lang.Exception
 
 data class Session(
-    var user: UserEntity,
+    var user: UserEntity? = null,
     var success: Boolean? = null,
     var expiresAt: String? = null,
     var requestToken: String? = null,

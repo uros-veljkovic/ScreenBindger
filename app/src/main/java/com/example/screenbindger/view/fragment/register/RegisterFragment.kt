@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import bloder.com.blitzcore.enableWhenUsing
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentRegisterBinding
+import com.example.screenbindger.model.state.AuthState
 import com.example.screenbindger.model.state.ObjectState
-import com.example.screenbindger.model.state.RegisterState
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snack
@@ -88,24 +89,46 @@ class RegisterFragment : DaggerFragment() {
     }
 
     private fun observeRegistration() {
-        viewModel.registerStateObservable.value.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is RegisterState.Success<*> -> {
-                    viewModel.createUser()
+        viewModel.apply {
+            authStateObservable.value.observe(viewLifecycleOwner, Observer { state ->
+                when (state) {
+                    is AuthState.FirebaseAuthSuccess -> {
+                        getRequestToken()
+                    }
+                    is AuthState.TokenGathered -> {
+                        authorizeRequestToken()
+                    }
+                    is AuthState.TokenAuthorized -> {
+                        createSession()
+                    }
+                    is AuthState.SessionStarted -> {
+                        gotoMainActivity()
+                    }
+                    is AuthState.Error -> {
+                        binding.progressBar.hide()
+                        val message = state.exception.message ?: "Unknown error"
+                        showError(message)
+                    }
+                    is AuthState.Loading -> {
+                        binding.progressBar.show()
+                    }
+                    is AuthState.Rest -> {
+                    }
                 }
-                is RegisterState.Error -> {
-                    binding.progressBar.hide()
-                    val message = state.exception.message ?: "Unknown error"
-                    showError(message)
-                }
-                is RegisterState.Loading -> {
-                    binding.progressBar.show()
-                }
-                is RegisterState.Rest -> {
-
-                }
-            }
+            })
         }
+    }
+
+    private fun getRequestToken() {
+        TODO("Not yet implemented")
+    }
+
+    private fun authorizeRequestToken() {
+        TODO("Not yet implemented")
+    }
+
+    private fun createSession() {
+        TODO("Not yet implemented")
     }
 
     private fun observeUserPersistence() {

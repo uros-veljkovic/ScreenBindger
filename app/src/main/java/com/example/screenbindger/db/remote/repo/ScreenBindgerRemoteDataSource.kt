@@ -4,7 +4,6 @@ import android.net.Uri
 import com.example.screenbindger.db.remote.request.FavoriteMovieRequestBody
 import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.response.*
-import com.example.screenbindger.db.remote.service.auth.firebase.FirebaseAuthState
 import com.example.screenbindger.db.remote.service.auth.firebase.AuthService
 import com.example.screenbindger.db.remote.service.auth.tmdb.TmdbAuthService
 import com.example.screenbindger.db.remote.service.genre.GenreService
@@ -14,8 +13,7 @@ import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.service.user.UserService
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.MovieEntity
-import com.example.screenbindger.util.state.StateObservable
-import com.example.screenbindger.view.fragment.login.LoginStateObservable
+import com.example.screenbindger.view.fragment.login.AuthorizationStateObservable
 import com.example.screenbindger.view.fragment.register.RegisterStateObservable
 import retrofit2.Response
 import javax.inject.Inject
@@ -34,16 +32,16 @@ class ScreenBindgerRemoteDataSource
 
     suspend fun login(
         user: UserEntity,
-        loginStateObservable: LoginStateObservable
+        authStateObservable: AuthorizationStateObservable
     ) {
-        authService.signIn(user.email, user.password, loginStateObservable)
+        authService.signIn(user.email, user.password, authStateObservable)
     }
 
     suspend fun register(
         user: UserEntity,
-        registerStateObservable: RegisterStateObservable
+        authStateObservable: AuthorizationStateObservable
     ) {
-        authService.signUp(user.email, user.password, registerStateObservable)
+        authService.signUp(user.email, user.password, authStateObservable)
     }
 
 
@@ -71,12 +69,12 @@ class ScreenBindgerRemoteDataSource
         return genreService.getMoviesByGenre(id)
     }
 
-    suspend fun getRequestToken(): Response<RequestTokenResponse> {
-        return tmdbAuthService.getRequestToken()
+    suspend fun getRequestToken(authStateObservable: AuthorizationStateObservable) {
+        tmdbAuthService.getRequestToken(authStateObservable)
     }
 
-    suspend fun createSession(requestToken: String): Response<SessionResponse> {
-        return tmdbAuthService.createSession(requestToken = requestToken)
+    suspend fun createSession(authStateObservable: AuthorizationStateObservable) {
+        tmdbAuthService.createSession(authStateObservable = authStateObservable)
     }
 
     suspend fun postMovieAsFavorite(

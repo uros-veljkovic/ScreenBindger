@@ -2,11 +2,9 @@ package com.example.screenbindger.db.remote.service.auth.firebase
 
 
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
-import com.example.screenbindger.model.state.LoginState
+import com.example.screenbindger.model.state.AuthState
 import com.example.screenbindger.model.state.ObjectState
-import com.example.screenbindger.model.state.RegisterState
-import com.example.screenbindger.view.fragment.login.LoginStateObservable
-import com.example.screenbindger.view.fragment.register.RegisterStateObservable
+import com.example.screenbindger.view.fragment.login.AuthorizationStateObservable
 import com.google.firebase.auth.FirebaseAuth
 import java.lang.Exception
 import javax.inject.Inject
@@ -20,14 +18,18 @@ class FirebaseAuthService
     override suspend fun signIn(
         email: String,
         password: String,
-        loginStateObservable: LoginStateObservable
+        authStateObservable: AuthorizationStateObservable
     ) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    loginStateObservable.setValue(LoginState.Success())
+                    authStateObservable.setValue(AuthState.FirebaseAuthSuccess())
                 } else {
-                    loginStateObservable.setValue(LoginState.Error(Exception("Failed to login !")))
+                    authStateObservable.setValue(
+                        AuthState.Error.FirebaseAuthFailed(
+                            Exception("Failed to login !")
+                        )
+                    )
                 }
             }
     }
@@ -35,14 +37,18 @@ class FirebaseAuthService
     override suspend fun signUp(
         email: String,
         password: String,
-        registerStateObservable: RegisterStateObservable
+        authStateObservable: AuthorizationStateObservable
     ) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    registerStateObservable.setValue(RegisterState.Success())
+                    authStateObservable.setValue(AuthState.FirebaseAuthSuccess())
                 } else {
-                    registerStateObservable.setValue(RegisterState.Error(Exception("Failed to register !")))
+                    authStateObservable.setValue(
+                        AuthState.Error.FirebaseAuthFailed(
+                            Exception("Failed to register !")
+                        )
+                    )
                 }
             }
     }

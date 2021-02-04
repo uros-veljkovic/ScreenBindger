@@ -1,19 +1,21 @@
 package com.example.screenbindger.db.remote.service.auth.firebase
 
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
-import com.example.screenbindger.model.domain.UserEntity
-import com.example.screenbindger.model.state.LoginState
-import com.example.screenbindger.model.state.RegisterState
-import com.example.screenbindger.view.fragment.login.LoginStateObservable
+import com.example.screenbindger.view.fragment.login.AuthorizationStateObservable
 import com.example.screenbindger.view.fragment.register.RegisterStateObservable
 
 interface AuthService {
 
-    suspend fun signIn(email: String, password: String, loginStateObservable: LoginStateObservable)
+    suspend fun signIn(
+        email: String,
+        password: String,
+        authStateObservable: AuthorizationStateObservable
+    )
+
     suspend fun signUp(
         email: String,
         password: String,
-        registerStateObservable: RegisterStateObservable
+        authStateObservable: AuthorizationStateObservable
     )
 
     suspend fun signOut()
