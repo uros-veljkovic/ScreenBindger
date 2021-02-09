@@ -1,6 +1,7 @@
 package com.example.screenbindger.db.remote.repo
 
 import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.db.remote.request.FavoriteMovieRequestBody
 import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.response.*
@@ -13,7 +14,8 @@ import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.service.user.UserService
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.MovieEntity
-import com.example.screenbindger.view.fragment.login.AuthorizationStateObservable
+import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
+import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -31,14 +33,14 @@ class ScreenBindgerRemoteDataSource
 
     suspend fun login(
         user: UserEntity,
-        authStateObservable: AuthorizationStateObservable
+        authStateObservable: AuthorizationEventObservable
     ) {
         authService.signIn(user.email, user.password, authStateObservable)
     }
 
     suspend fun register(
         user: UserEntity,
-        authStateObservable: AuthorizationStateObservable
+        authStateObservable: AuthorizationEventObservable
     ) {
         authService.signUp(user.email, user.password, authStateObservable)
     }
@@ -47,8 +49,8 @@ class ScreenBindgerRemoteDataSource
         userService.create(userStateObservable)
     }
 
-    suspend fun getTrending(): Response<TrendingMoviesResponse> {
-        return movieService.getTrending()
+    suspend fun getTrending(trendingViewState: MutableLiveData<TrendingViewState>){
+         movieService.getTrending(trendingViewState)
     }
 
     suspend fun getUpcoming(): Response<UpcomingMoviesResponse> {
@@ -72,16 +74,16 @@ class ScreenBindgerRemoteDataSource
     }
 
     suspend fun getRequestToken(
-        authStateObservable: AuthorizationStateObservable
+        authStateObservable: AuthorizationEventObservable
     ) {
         tmdbAuthService.getRequestToken(authStateObservable)
     }
 
-    suspend fun createSession(authStateObservable: AuthorizationStateObservable) {
+    suspend fun createSession(authStateObservable: AuthorizationEventObservable) {
         tmdbAuthService.createSession(authStateObservable)
     }
 
-    suspend fun getAccountDetails(authStateObservable: AuthorizationStateObservable) {
+    suspend fun getAccountDetails(authStateObservable: AuthorizationEventObservable) {
         tmdbAuthService.getAccountDetails(session, authStateObservable)
     }
 

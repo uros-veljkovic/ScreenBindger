@@ -4,8 +4,10 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
+import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.view.fragment.profile.FragmentStateObservable
+import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import dagger.Module
 import dagger.Provides
 
@@ -43,6 +45,11 @@ class MainModule {
     ): UserStateObservable {
         return UserStateObservable(MutableLiveData(userState), profilePictureUri, userEntity)
     }
+
+    @MainScope
+    @Provides
+    fun provideTrendingViewState(): MutableLiveData<TrendingViewState> =
+        MutableLiveData(TrendingViewState(ListState.Init, emptyList()))
 
 
 }

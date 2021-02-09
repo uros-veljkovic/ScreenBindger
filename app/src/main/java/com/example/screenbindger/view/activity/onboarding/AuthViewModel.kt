@@ -1,12 +1,8 @@
 package com.example.screenbindger.view.activity.onboarding
 
 import androidx.lifecycle.ViewModel
-import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.session.Session
-import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.model.state.AuthState
-import com.example.screenbindger.view.fragment.login.AuthorizationStateObservable
-import javax.inject.Inject
 
 abstract class AuthViewModel : ViewModel() {
 

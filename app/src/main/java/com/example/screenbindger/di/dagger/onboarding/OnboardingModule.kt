@@ -6,8 +6,8 @@ import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.state.ObjectState
-import com.example.screenbindger.view.fragment.login.AuthorizationStateObservable
-import com.example.screenbindger.view.fragment.register.RegisterStateObservable
+import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
+import com.example.screenbindger.view.fragment.register.RegisterEventObservable
 import dagger.Module
 import dagger.Provides
 
@@ -20,14 +20,14 @@ object OnboardingModule {
 
     @OnboardingScope
     @Provides
-    fun provideLoginStateObservable(session: Session): AuthorizationStateObservable {
-        return AuthorizationStateObservable(session)
+    fun provideLoginStateObservable(session: Session): AuthorizationEventObservable {
+        return AuthorizationEventObservable(session)
     }
 
     @OnboardingScope
     @Provides
-    fun provideRegisterStateObservable(): RegisterStateObservable {
-        return RegisterStateObservable()
+    fun provideRegisterStateObservable(): RegisterEventObservable {
+        return RegisterEventObservable()
     }
 
     @OnboardingScope

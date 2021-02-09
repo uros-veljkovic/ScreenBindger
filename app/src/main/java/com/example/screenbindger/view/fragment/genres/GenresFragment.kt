@@ -1,17 +1,14 @@
 package com.example.screenbindger.view.fragment.genres
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.databinding.FragmentGenresBinding
 import com.example.screenbindger.util.adapter.recyclerview.ItemGenreRecyclerViewAdapter
-import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
 import dagger.android.support.DaggerFragment
@@ -60,8 +57,8 @@ class GenresFragment : DaggerFragment(), OnCardItemClickListener {
         })
     }
 
-    override fun onCardItemClick(position: Int) {
-        val genre = viewModel.list?.get(position)
+    override fun onCardItemClick(movieId: Int) {
+        val genre = viewModel.list?.get(movieId)
         val genreId = genre?.id
         val genreName = genre?.name
 

@@ -5,7 +5,7 @@ import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.state.AuthState
 import com.example.screenbindger.view.activity.onboarding.AuthViewModel
-import com.example.screenbindger.view.fragment.login.AuthorizationStateObservable
+import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ class RegisterViewModel
 @Inject constructor(
     val userStateObservable: UserStateObservable,
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val authStateObservable: AuthorizationStateObservable
+    val authStateObservable: AuthorizationEventObservable
 ) : AuthViewModel() {
 
     override fun onboarding() {

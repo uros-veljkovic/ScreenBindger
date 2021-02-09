@@ -5,9 +5,8 @@ import com.example.screenbindger.db.remote.response.AccountDetailsResponse
 import com.example.screenbindger.db.remote.response.RequestTokenResponse
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.state.AuthState
-import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
-import com.example.screenbindger.view.fragment.login.AuthorizationStateObservable
+import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
 import kotlin.Exception
 
 class TmdbAuthService(
@@ -15,7 +14,7 @@ class TmdbAuthService(
 ) {
 
     suspend fun getRequestToken(
-        authStateObservable: AuthorizationStateObservable
+        authStateObservable: AuthorizationEventObservable
     ) {
         api.getRequestToken().let { response ->
             if (response.isSuccessful) {
@@ -34,7 +33,7 @@ class TmdbAuthService(
     }
 
     suspend fun createSession(
-        authStateObservable: AuthorizationStateObservable
+        authStateObservable: AuthorizationEventObservable
     ) {
         val token = authStateObservable.getToken()
 
@@ -66,7 +65,7 @@ class TmdbAuthService(
 
     suspend fun getAccountDetails(
         session: Session,
-        authStateObservable: AuthorizationStateObservable
+        authStateObservable: AuthorizationEventObservable
     ) {
         val sessionId = session.id
 

@@ -1,17 +1,14 @@
 package com.example.screenbindger.view.fragment.login
 
 import com.example.screenbindger.db.remote.session.Session
-import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.model.state.AuthState
-import com.example.screenbindger.model.state.SessionState
-import com.example.screenbindger.util.state.StateObservable
-import java.lang.Exception
+import com.example.screenbindger.util.event.EventObservable
 import javax.inject.Inject
 
-class AuthorizationStateObservable
+class AuthorizationEventObservable
 @Inject constructor(
     val session: Session
-) : StateObservable<AuthState>() {
+) : EventObservable<AuthState>() {
 
     fun getState(): AuthState =
         this.value.value?.getContentIfNotHandled()

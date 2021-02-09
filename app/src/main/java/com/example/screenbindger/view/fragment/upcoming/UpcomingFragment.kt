@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -60,8 +59,8 @@ class UpcomingFragment : DaggerFragment(),
         })
     }
 
-    override fun onCardItemClick(position: Int) {
-        val movieId = viewModel.list?.get(position)?.id
+    override fun onCardItemClick(movieId: Int) {
+        val movieId = viewModel.list?.get(movieId)?.id
 
         if (movieId != null) {
             val action =

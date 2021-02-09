@@ -14,29 +14,17 @@ import javax.inject.Inject
 
 class TrendingViewModel
 @Inject constructor(
-    val remoteDataSource: ScreenBindgerRemoteDataSource
+    val remoteDataSource: ScreenBindgerRemoteDataSource,
+    val trendingViewState: MutableLiveData<TrendingViewState>
 ) : ViewModel() {
 
-    var response: MutableLiveData<Response<TrendingMoviesResponse>?> = MutableLiveData(null)
-    val list: List<MovieEntity>? get() = response.value?.body()?.list
-
-    init {
-        fetchData()
-    }
-
-    private fun fetchData() {
+    fun fetchData() {
         CoroutineScope(IO).launch {
-            val result = remoteDataSource.getTrending()
-
-            result.body()?.list?.forEach {entity ->
-                generateStringGenresFor(entity)
-            }
-
-            response.postValue(result)
+            remoteDataSource.getTrending(trendingViewState)
         }
     }
 
-    private fun generateStringGenresFor(entity: MovieEntity) {
+/*    private fun generateStringGenresFor(entity: MovieEntity) {
         entity.genreIds?.forEach { singleEntityGenreId ->
             Genres.list.forEach {
                 if (it.id == singleEntityGenreId) {
@@ -45,9 +33,9 @@ class TrendingViewModel
             }
         }
         entity.genresString = entity.genresString.dropLast(2)
-    }
+    }*/
 
-    fun getAccountDetails(): String{
+    fun getAccountDetails(): String {
         return remoteDataSource.getDetails()
     }
 }

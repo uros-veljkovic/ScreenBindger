@@ -4,17 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.databinding.FragmentTrendingBinding
+import com.example.screenbindger.model.domain.MovieEntity
+import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
+import com.example.screenbindger.util.event.Event
+import com.example.screenbindger.util.extensions.hide
+import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snack
-import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -54,24 +56,50 @@ class TrendingFragment : DaggerFragment(),
     }
 
     private fun observeViewModel() {
-        viewModel.response.observe(viewLifecycleOwner, Observer { response ->
-            if (response != null && response.isSuccessful) {
-                val list = response.body()?.list?.toMutableList() ?: mutableListOf()
-                binding.rvTrending.adapter =
-                    ItemMovieRecyclerViewAdapter(this, list)
-                binding.rvTrending.startLayoutAnimation()
+        viewModel.trendingViewState.observe(viewLifecycleOwner, Observer { response ->
+            when (response.state) {
+                is ListState.Init -> {
+                    viewModel.fetchData()
+                }
+                is ListState.Fetching -> {
+                    showProgressBar()
+                }
+                is ListState.Fetched -> {
+                    hideProgressBar()
+                    populateRecyclerView(response.list!!)
+                }
+                is ListState.NotFetched -> {
+                    hideProgressBar()
+                    showMessage(response.state.message)
+                }
             }
         })
     }
 
-    override fun onCardItemClick(position: Int) {
-        val movieId = viewModel.list?.get(position)?.id
+    private fun populateRecyclerView(list: List<MovieEntity>) {
+        binding.rvTrending.adapter =
+            ItemMovieRecyclerViewAdapter(this, list.toMutableList())
+        binding.rvTrending.startLayoutAnimation()
+    }
 
-        if (movieId != null) {
-            val action =
-                TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(movieId)
-            findNavController().navigate(action)
+    private fun showMessage(message: Event<String>) {
+        message.getContentIfNotHandled()?.let {
+            requireView().snack(it)
         }
+    }
+
+    override fun onCardItemClick(movieId: Int) {
+        val action =
+            TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(movieId)
+        findNavController().navigate(action)
+    }
+
+    private fun showProgressBar(){
+        binding.progressBar.show()
+    }
+
+    private fun hideProgressBar(){
+        binding.progressBar.hide()
     }
 
     override fun onDestroyView() {

@@ -13,7 +13,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     val user: UserEntity,
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val authStateObservable: AuthorizationStateObservable
+    val authStateObservable: AuthorizationEventObservable
 ) : AuthViewModel() {
 
     override fun onboarding() {

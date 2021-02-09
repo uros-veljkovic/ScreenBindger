@@ -12,9 +12,7 @@ import com.example.screenbindger.db.remote.service.storage.FirebaseStorageServic
 import com.example.screenbindger.db.remote.service.user.FirebaseUserService
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.UserEntity
-import com.example.screenbindger.model.domain.UserEntity_Factory
 import com.example.screenbindger.util.constants.API_BASE_URL
-import com.example.screenbindger.view.fragment.login.AuthorizationStateObservable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore

@@ -4,6 +4,7 @@ import com.example.screenbindger.db.remote.request.FavoriteMovieRequestBody
 import com.example.screenbindger.db.remote.response.*
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.util.constants.API_KEY
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 

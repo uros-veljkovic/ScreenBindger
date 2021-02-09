@@ -32,7 +32,7 @@ class ItemMovieRecyclerViewAdapter(
         holder.bind(movie)
         bindPoster(poster, movie.smallPosterUrl)
 
-        holder.itemView.setOnClickListener { listener.onCardItemClick(position) }
+        holder.itemView.setOnClickListener { listener.onCardItemClick(movie.id!!) }
     }
 
     private fun bindPoster(imageView: ImageView, smallPosterUrl: String?) {

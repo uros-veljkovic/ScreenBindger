@@ -2,6 +2,6 @@ package com.example.screenbindger.view.fragment.register
 
 import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.model.state.RegisterState
-import com.example.screenbindger.util.state.StateObservable
+import com.example.screenbindger.util.event.EventObservable
 
-class RegisterStateObservable : StateObservable<RegisterState<UserEntity>>()
+class RegisterEventObservable : EventObservable<RegisterState<UserEntity>>()
