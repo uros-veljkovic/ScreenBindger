@@ -4,11 +4,12 @@ import com.example.screenbindger.model.domain.UserEntity
 import java.lang.Exception
 
 data class Session(
+    var id: String? = null,
+    var accountId: Int? = null,
     var user: UserEntity? = null,
     var success: Boolean? = null,
     var expiresAt: String? = null,
-    var requestToken: String? = null,
-    var id: String? = null
+    var requestToken: String? = null
 ) {
     fun getAuthorizationUrl(): String {
         if (requestToken.isNullOrEmpty().not())

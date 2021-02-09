@@ -3,12 +3,7 @@ package com.example.screenbindger.db.remote.service.movie
 import com.example.screenbindger.db.remote.request.FavoriteMovieRequestBody
 import com.example.screenbindger.db.remote.response.*
 import com.example.screenbindger.model.domain.MovieEntity
-import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
-import com.example.screenbindger.util.constants.API_KEY
-import com.example.screenbindger.util.constants.POSTER_SIZE_SMALL
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.Query
 import javax.inject.Inject
 
 class MovieService

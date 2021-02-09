@@ -146,7 +146,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/large_100"
-            android:onClick="@{() -> viewModel.register()}"
+            android:onClick="@{() -> viewModel.onboarding()}"
             android:text="@string/register_placeholder"
             app:layout_constraintBottom_toTopOf="@id/tvAlreadyHaveAccount"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -157,13 +157,15 @@
             android:id="@+id/tvAlreadyHaveAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/normal_100"
             android:layout_marginBottom="@dimen/large_100"
             android:text="@string/already_have_an_account_placeholder"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tvHere"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnRegister" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvHere"

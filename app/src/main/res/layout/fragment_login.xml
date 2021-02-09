@@ -16,15 +16,6 @@
         android:layout_height="match_parent"
         tools:context=".view.fragment.login.LoginFragment">
 
-        <WebView
-            android:id="@+id/wvCreateSession"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
@@ -54,11 +45,33 @@
             android:layout_marginBottom="@dimen/large_100"
             android:text="Screen Bindger"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
-            app:layout_constraintBottom_toTopOf="@id/tilUserEmail"
+            app:layout_constraintBottom_toTopOf="@+id/tilTmdbUsername"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivScreenBindger" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilTmdbUsername"
+            style="@style/Widget.ScreenBindger.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/tmdb_username_placeholder"
+            app:layout_constraintBottom_toTopOf="@+id/tilUserEmail"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvScreenBindgerText"
+            app:startIconDrawable="@drawable/ic_profile_filled_black_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTmdbUsername"
+                style="@style/Widget.ScreenBindger.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textShortMessage"
+                android:text="@={viewModel.user.username}" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilUserEmail"
@@ -70,7 +83,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvScreenBindgerText"
+            app:layout_constraintTop_toBottomOf="@+id/tilTmdbUsername"
             app:startIconDrawable="@drawable/ic_email_24">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -112,19 +125,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/large_100"
-            android:onClick="@{() -> viewModel.login()}"
+            android:onClick="@{() -> viewModel.onboarding()}"
             android:text="@string/login_placeholder"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvAlreadyHaveAccount"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilUserPassword"
-            app:layout_constraintVertical_bias="0.501" />
+            app:layout_constraintTop_toBottomOf="@+id/tilUserPassword" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvAlreadyHaveAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
             android:layout_marginBottom="@dimen/large_100"
             android:fontFamily="@font/cardo"
             android:text="@string/do_not_have_account_placeholder"
@@ -132,7 +145,8 @@
             app:layout_constraintEnd_toStartOf="@+id/tvHere"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvHere"
@@ -145,6 +159,18 @@
             app:layout_constraintStart_toEndOf="@+id/tvAlreadyHaveAccount"
             app:layout_constraintTop_toTopOf="@id/tvAlreadyHaveAccount" />
 
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/btnFinishVerification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/small_100"
+            android:layout_marginBottom="@dimen/small_100"
+            android:backgroundTint="@color/green"
+            android:text="Finished verification"
+            android:visibility="gone"
+            app:icon="@drawable/ic_check_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

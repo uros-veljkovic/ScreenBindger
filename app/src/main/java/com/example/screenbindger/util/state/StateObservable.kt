@@ -10,7 +10,7 @@ abstract class StateObservable<T>(
     private val _state: MutableLiveData<T> = MutableLiveData()
     val value: LiveData<T> = _state
 
-    fun setValue(state: T) {
+    fun setState(state: T) {
         _state.postValue(state)
     }
 }

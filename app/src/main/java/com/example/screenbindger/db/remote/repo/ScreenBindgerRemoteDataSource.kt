@@ -14,7 +14,6 @@ import com.example.screenbindger.db.remote.service.user.UserService
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.view.fragment.login.AuthorizationStateObservable
-import com.example.screenbindger.view.fragment.register.RegisterStateObservable
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -69,12 +68,18 @@ class ScreenBindgerRemoteDataSource
         return genreService.getMoviesByGenre(id)
     }
 
-    suspend fun getRequestToken(authStateObservable: AuthorizationStateObservable) {
+    suspend fun getRequestToken(
+        authStateObservable: AuthorizationStateObservable
+    ) {
         tmdbAuthService.getRequestToken(authStateObservable)
     }
 
     suspend fun createSession(authStateObservable: AuthorizationStateObservable) {
         tmdbAuthService.createSession(authStateObservable = authStateObservable)
+    }
+
+    suspend fun getAccountDetails(authStateObservable: AuthorizationStateObservable) {
+        tmdbAuthService.getAccountDetails(authStateObservable)
     }
 
     suspend fun postMovieAsFavorite(
@@ -113,5 +118,16 @@ class ScreenBindgerRemoteDataSource
         storageService.downloadImage(userStateObservable)
     }
 
+    fun setSession(session: Session) {
+        this.session.apply {
+            accountId = session.accountId
+            id = session.id
+            expiresAt = session.expiresAt
+        }
+    }
+
+    fun getDetails(): String {
+        return "SessionID: $session.id\n AccountID: ${session.accountId}"
+    }
 
 }

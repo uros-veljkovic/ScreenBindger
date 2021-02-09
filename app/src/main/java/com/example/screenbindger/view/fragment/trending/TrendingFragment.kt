@@ -13,6 +13,8 @@ import com.example.screenbindger.databinding.FragmentTrendingBinding
 import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
+import com.example.screenbindger.util.extensions.snack
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -65,10 +67,22 @@ class TrendingFragment : DaggerFragment(),
     override fun onCardItemClick(position: Int) {
         val movieId = viewModel.list?.get(position)?.id
 
-        if(movieId != null){
-            val action = TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(movieId)
+        if (movieId != null) {
+            val action =
+                TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(movieId)
             findNavController().navigate(action)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        showDetails()
+    }
+
+    fun showDetails() {
+        val message = viewModel.getAccountDetails()
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

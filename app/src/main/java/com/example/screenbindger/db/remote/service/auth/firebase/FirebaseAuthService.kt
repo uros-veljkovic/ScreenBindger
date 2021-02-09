@@ -23,9 +23,9 @@ class FirebaseAuthService
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    authStateObservable.setValue(AuthState.FirebaseAuthSuccess())
+                    authStateObservable.setState(AuthState.FirebaseAuthSuccess())
                 } else {
-                    authStateObservable.setValue(
+                    authStateObservable.setState(
                         AuthState.Error.FirebaseAuthFailed(
                             Exception("Failed to login !")
                         )
@@ -42,9 +42,9 @@ class FirebaseAuthService
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    authStateObservable.setValue(AuthState.FirebaseAuthSuccess())
+                    authStateObservable.setState(AuthState.FirebaseAuthSuccess())
                 } else {
-                    authStateObservable.setValue(
+                    authStateObservable.setState(
                         AuthState.Error.FirebaseAuthFailed(
                             Exception("Failed to register !")
                         )

@@ -53,4 +53,8 @@
     <string name="message_upload_image_fail">Failed to update the image</string>
     <string name="message_download_image_error">Failed to download profile image</string>
     <string name="message_load_image_from_gallery_error">Error loading picture from gallery</string>
+    <string name="tmdb_username_placeholder">TMDB username</string>
+    <string name="tmdb_password_placeholder">TMDB password</string>
+    <string name="message_title_token_auth_failed">Token not authenticated</string>
+    <string name="message_body_token_auth_failed">Please login/register on TMDB and follow the steps.</string>
 </resources>

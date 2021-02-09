@@ -32,6 +32,15 @@ class UserEntity
         }
 
     @get: Bindable
+    @get: PropertyName("username")
+    @set: PropertyName("username")
+    var username: String = ""
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.username)
+        }
+
+    @get: Bindable
     @get: PropertyName("email")
     @set: PropertyName("email")
     var email: String = ""

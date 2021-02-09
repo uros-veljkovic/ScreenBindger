@@ -15,7 +15,6 @@ class FirebaseStorageService
     val auth: FirebaseAuth
 ) : StorageService {
 
-    private val TAG = "FirebaseStorageService"
     private val storage: StorageReference = FirebaseStorage.getInstance().reference
 
     override suspend fun downloadImage(userStateObservable: UserStateObservable) {

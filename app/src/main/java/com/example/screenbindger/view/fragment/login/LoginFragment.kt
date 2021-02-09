@@ -1,28 +1,28 @@
 package com.example.screenbindger.view.fragment.login
 
-import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.os.Message
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.widget.LinearLayout
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import bloder.com.blitzcore.enableWhenUsing
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentLoginBinding
 import com.example.screenbindger.model.state.AuthState
+import com.example.screenbindger.util.constants.REQUEST_CODE_TOKEN_AUTH
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snack
 import com.example.screenbindger.util.extensions.startActivityWithDelay
 import com.example.screenbindger.util.validator.FieldValidator
 import com.example.screenbindger.view.activity.main.MainActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -64,75 +64,9 @@ class LoginFragment : DaggerFragment() {
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    fun configWebView() {
-
-        binding.wvCreateSession.apply {
-            webChromeClient = object : WebChromeClient() {
-                // popup webview!
-                override fun onCreateWindow(
-                    view: WebView,
-                    isDialog: Boolean,
-                    isUserGesture: Boolean,
-                    resultMsg: Message
-                ): Boolean {
-                    val newWebView: WebView = WebView(requireActivity()).apply {
-                        settings.javaScriptEnabled = true
-                        settings.javaScriptCanOpenWindowsAutomatically = true
-                        settings.setSupportMultipleWindows(true)
-                        layoutParams =
-                            LinearLayout.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.MATCH_PARENT
-                            ) //making sure the popup opens full screen
-                    }
-                    view.addView(newWebView)
-                    resultMsg.obj = newWebView
-                    resultMsg.sendToTarget()
-                    newWebView.webChromeClient = object : WebChromeClient() {
-                        override fun onCloseWindow(window: WebView) {
-                            super.onCloseWindow(window)
-
-                            binding.wvCreateSession.removeView(newWebView)
-                        }
-                    }
-                    return true
-                }
-
-                override fun onCloseWindow(window: WebView) {
-                    super.onCloseWindow(window)
-                    Log.d(TAG, "onCloseWindow: WEB_VIEW CLOSED")
-                }
-
-            }
-
-            setOnKeyListener { _, keyCode, event ->
-                if (keyCode == KeyEvent.KEYCODE_BACK
-                    && event.action == MotionEvent.ACTION_UP
-                    && canGoBack()
-                ) {
-                    goBack()
-                    return@setOnKeyListener true
-                } else {
-                    requireView().snack("Went home !")
-                    elevation = 0f
-                    return@setOnKeyListener false
-                }
-            }
-            loadUrl("https://www.themoviedb.org/authenticate/${viewModel.requestToken}")
-            elevation = 16f
-        }
-
-    }
-
     private fun initOnClickListeners() {
-        binding.apply {
-            tvHere.setOnClickListener {
-                findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
-            }
-            ivScreenBindger.setOnClickListener {
-                configWebView()
-            }
+        binding.tvHere.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
     }
 
@@ -150,43 +84,65 @@ class LoginFragment : DaggerFragment() {
                 2. If user is logging in -> back to ScreenBindger
      */
     private fun observeFragmentActions() {
-        viewModel.apply {
-            authStateObservable.value.observe(viewLifecycleOwner, Observer { state ->
+        viewModel.also {
+            it.authStateObservable.value.observe(viewLifecycleOwner, Observer { state ->
                 when (state) {
                     is AuthState.FirebaseAuthSuccess -> {
-                        getToken()
+                        it.requestToken()
                     }
                     is AuthState.TokenGathered -> {
-                        this@LoginFragment.authorizeToken()
+                        state.event.getContentIfNotHandled()?.let { response ->
+                            val token = response.requestToken!!
+                            viewModel.token = token
+                            authorizeToken(token)
+                        }
                     }
                     is AuthState.TokenAuthorized -> {
-                        println("observe: Authorized token")
-                        createSession()
+                        it.createSession()
                     }
                     is AuthState.SessionStarted -> {
-                        gotoMainActivity()
+                        it.getAccountDetails()
+                    }
+                    is AuthState.AccountDetailsGathered -> {
+                        state.session.getContentIfNotHandled()?.let { session ->
+                            hideProgressBar()
+                            it.setSession(session)
+                            gotoMainActivity()
+                        }
+                    }
+                    is AuthState.Error.SessionStartFailed -> {
+                        val message = it.getErrorMessage()
+                        showSessionFailDialog(message)
                     }
                     is AuthState.Error -> {
-                        binding.progressBar.hide()
-                        val message = state.exception.message ?: "Unknown error"
-                        showError(message)
+                        hideProgressBar()
+                        val message = state.getMessage()
+                        if (message != null) {
+                            showError(message)
+                        }
                     }
                     is AuthState.Loading -> {
                         showProgressBar()
                     }
                     is AuthState.Rest -> {
+                        hideProgressBar()
                     }
                 }
             })
         }
     }
 
-    private fun showProgressBar() {
-        binding.progressBar.show()
-    }
-
-    private fun authorizeToken() {
-
+    private fun showSessionFailDialog(message: String?) {
+        MaterialAlertDialogBuilder(
+            requireContext(),
+            R.style.Widget_ScreenBindger_MaterialAlertDialog
+        )
+            .setTitle(resources.getString(R.string.message_title_token_auth_failed))
+            .setMessage(message)
+            .setNeutralButton(resources.getString(R.string.ok)) { _, _ ->
+                viewModel.setState(AuthState.FirebaseAuthSuccess())
+            }
+            .show()
     }
 
     private fun showError(message: String) {
@@ -194,9 +150,18 @@ class LoginFragment : DaggerFragment() {
         requireView().snack(message, R.color.logout_red)
     }
 
-    fun gotoMainActivity() {
+    private fun authorizeToken(token: String?) {
+
+        val uri = Uri.parse("https://www.themoviedb.org/authenticate/$token")
+        val i = Intent(Intent.ACTION_VIEW, uri)
+        startActivityForResult(i, REQUEST_CODE_TOKEN_AUTH)
+
+    }
+
+    private fun gotoMainActivity() {
+        viewModel.setState(AuthState.Rest)
         animateButton()
-        binding.progressBar.hide()
+        hideProgressBar()
         startActivityWithDelay(MainActivity(), 1000)
     }
 
@@ -213,6 +178,23 @@ class LoginFragment : DaggerFragment() {
             })
         }
     }
+
+    private fun showProgressBar() {
+        binding.progressBar.show()
+    }
+
+    private fun hideProgressBar() {
+        binding.progressBar.hide()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE_TOKEN_AUTH) {
+            viewModel.setState(AuthState.TokenAuthorized(viewModel.token))
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

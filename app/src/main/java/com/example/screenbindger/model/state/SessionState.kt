@@ -1,6 +1,5 @@
 package com.example.screenbindger.model.state
 
-import com.example.screenbindger.db.remote.response.RequestTokenResponse
 import com.example.screenbindger.db.remote.session.Session
 
 sealed class SessionState {
