@@ -1,16 +1,11 @@
 package com.example.screenbindger.view.fragment.register
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Message
-import android.util.Log
-import android.view.*
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.widget.LinearLayout
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -94,54 +89,96 @@ class RegisterFragment : DaggerFragment() {
         super.onResume()
 
         observeRegistration()
+        observeUserActions()
     }
 
     private fun observeRegistration() {
         viewModel.also {
-            it.authStateObservable.value.observe(viewLifecycleOwner, Observer { state ->
-                when (state) {
-                    is AuthState.FirebaseAuthSuccess -> {
-                        it.requestToken()
-                    }
-                    is AuthState.TokenGathered -> {
-                        state.event.getContentIfNotHandled()?.let { response ->
-                            val token = response.requestToken!!
-                            viewModel.token = token
+            it.authStateObservable.value.observe(viewLifecycleOwner, Observer { event ->
+                event.getContentIfNotHandled()?.let { state ->
+                    when (state) {
+                        is AuthState.FirebaseAuthSuccess -> {
+                            it.createUser()
+                        }
+                        is AuthState.UserCreated -> {
+                            it.fetchToken()
+                        }
+                        is AuthState.TokenFetched -> {
+                            val token = state.getToken()
+                            viewModel.token = token!!
                             authorizeToken(token)
                         }
-                    }
-                    is AuthState.TokenAuthorized -> {
-                        it.createSession()
-                    }
-                    is AuthState.SessionStarted -> {
-                        it.getAccountDetails()
-                    }
-                    is AuthState.AccountDetailsGathered -> {
-                        hideProgressBar()
-                        state.session.getContentIfNotHandled()?.let { session ->
-                            it.setSession(session)
+                        is AuthState.TokenAuthorized -> {
+                            confirmEmail()
+                        }
+                        is AuthState.ConfirmedEmail -> {
+                            it.startSession()
+                        }
+                        is AuthState.SessionStarted -> {
+                            it.fetchAccountDetails()
+                        }
+                        is AuthState.AccountDetailsFetched -> {
+                            hideProgressBar()
+                            it.setSession(state.session)
                             gotoMainActivity()
                         }
-                    }
-                    is AuthState.Error.SessionStartFailed -> {
-                        val message = it.getErrorMessage()
-                        showSessionFailDialog(message)
-                    }
-                    is AuthState.Error -> {
-                        hideProgressBar()
-                        val message = state.getMessage()
-                        if (message != null) {
-                            showError(message)
+                        is AuthState.Error.SessionStartFailed -> {
+                            val message = it.getErrorMessage()
+                            showSessionFailDialog(message)
                         }
-                    }
-                    is AuthState.Loading -> {
-                        showProgressBar()
-                    }
-                    is AuthState.Rest -> {
-                        hideProgressBar()
+                        is AuthState.Error -> {
+                            hideProgressBar()
+                            val message = state.getMessage()
+                            showError(message ?: "Unknown error")
+                        }
+                        is AuthState.Loading -> {
+                            showProgressBar()
+                        }
+                        is AuthState.Rest -> {
+                            hideProgressBar()
+                        }
                     }
                 }
             })
+        }
+    }
+
+    private fun confirmEmail() {
+        MaterialAlertDialogBuilder(
+            requireContext(),
+            R.style.Widget_ScreenBindger_MaterialAlertDialog
+        )
+            .setTitle(resources.getString(R.string.message_confirm_email_title))
+            .setMessage(resources.getString(R.string.message_confirm_email_body))
+            .setNeutralButton(resources.getString(R.string.ok)) { _, _ ->
+                openMailApp()
+            }
+            .show()
+    }
+
+    private fun openMailApp() {
+
+/*        val intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_APP_EMAIL)
+        startActivity(intent)
+        startActivity(Intent.createChooser(intent, getString(R.string.choose_mail_client)))*/
+
+        val mailer = Intent.createChooser(Intent(Intent.EXTRA_TEXT), null)
+        startActivity(mailer)
+    }
+
+    private fun observeUserActions() {
+        viewModel.let {
+            it.userStateObservable.value.observe(viewLifecycleOwner) { state ->
+                when (state) {
+                    is ObjectState.Created -> {
+                        it.setState(AuthState.UserCreated)
+                    }
+                    is ObjectState.Error -> TODO()
+                    else -> {
+                    }
+                }
+            }
         }
     }
 

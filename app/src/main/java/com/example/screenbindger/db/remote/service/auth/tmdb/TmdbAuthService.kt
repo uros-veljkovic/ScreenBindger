@@ -8,7 +8,7 @@ import com.example.screenbindger.model.state.AuthState
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
 import com.example.screenbindger.view.fragment.login.AuthorizationStateObservable
-import java.lang.Exception
+import kotlin.Exception
 
 class TmdbAuthService(
     private val api: TmdbAuthApi
@@ -20,7 +20,8 @@ class TmdbAuthService(
         api.getRequestToken().let { response ->
             if (response.isSuccessful) {
                 val tokenResponse: RequestTokenResponse = response.body()!!
-                authStateObservable.setState(AuthState.TokenGathered(Event(tokenResponse)))
+                authStateObservable.setToken(tokenResponse.requestToken)
+                authStateObservable.setState(AuthState.TokenFetched(tokenResponse))
             } else {
                 val errorResponse = response.getErrorResponse()
                 authStateObservable.setState(
@@ -35,43 +36,46 @@ class TmdbAuthService(
     suspend fun createSession(
         authStateObservable: AuthorizationStateObservable
     ) {
+        val token = authStateObservable.getToken()
 
-        val token =
-            (authStateObservable.getState() as AuthState.TokenAuthorized).token
-
-        val body = TokenRequestBody(token)
-        api.postCreateSession(body = body).let { response ->
-            if (response.isSuccessful) {
-                val session = Session().apply {
-                    success = response.body()!!.success
-                    id = response.body()!!.sessionId
+        if (token.isNullOrEmpty().not()) {
+            api.postCreateSession(body = TokenRequestBody(token!!)).let { response ->
+                response.apply {
+                    if (isSuccessful) {
+                        body()?.let {
+                            val sessionId = it.sessionId
+                            authStateObservable.setSessionId(sessionId)
+                        }
+                        authStateObservable.setState(AuthState.SessionStarted)
+                    } else {
+                        val errorResponse = getErrorResponse()
+                        val message = errorResponse.statusMessage
+                        authStateObservable.setState(
+                            AuthState.Error.SessionStartFailed(
+                                Exception(message)
+                            )
+                        )
+                    }
                 }
-                authStateObservable.setState(AuthState.SessionStarted(session))
-            } else {
-                val errorResponse = response.getErrorResponse()
-                authStateObservable.setState(
-                    AuthState.Error.SessionStartFailed(
-                        Exception(errorResponse.statusMessage)
-                    )
-                )
             }
+        } else {
+            authStateObservable.setState(AuthState.Error.TokenNotGathered(Exception("No token available for creating session")))
         }
+
     }
 
     suspend fun getAccountDetails(
+        session: Session,
         authStateObservable: AuthorizationStateObservable
     ) {
-        val state = authStateObservable.getState() as AuthState.SessionStarted
-        val session = state.session
         val sessionId = session.id
 
         api.getAccountDetails(sessionId = sessionId!!).let { response ->
             if (response.isSuccessful) {
-                val res = response.body() as AccountDetailsResponse
-                state.session.apply {
-                    accountId = res.accountId
-                }
-                authStateObservable.setState(AuthState.AccountDetailsGathered(Event(session)))
+                val accountDetails = response.body() as AccountDetailsResponse
+                session.accountId = accountDetails.accountId
+
+                authStateObservable.setState(AuthState.AccountDetailsFetched(session))
             } else {
                 val errorResponse = response.getErrorResponse()
                 authStateObservable.setState(

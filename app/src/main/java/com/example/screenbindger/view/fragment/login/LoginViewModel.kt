@@ -23,19 +23,19 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    override fun requestToken() {
+    override fun fetchToken() {
         CoroutineScope(IO).launch {
             remoteDataSource.getRequestToken(authStateObservable)
         }
     }
 
-    override fun createSession() {
+    override fun startSession() {
         CoroutineScope(IO).launch {
             remoteDataSource.createSession(authStateObservable)
         }
     }
 
-    override fun getAccountDetails() {
+    override fun fetchAccountDetails() {
         CoroutineScope(IO).launch {
             remoteDataSource.getAccountDetails(authStateObservable)
         }

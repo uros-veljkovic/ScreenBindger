@@ -13,9 +13,9 @@ abstract class AuthViewModel : ViewModel() {
     var token: String = ""
 
     abstract fun onboarding()
-    abstract fun requestToken()
-    abstract fun createSession()
-    abstract fun getAccountDetails()
+    abstract fun fetchToken()
+    abstract fun startSession()
+    abstract fun fetchAccountDetails()
 
     abstract fun getState()
     abstract fun setState(state: AuthState)

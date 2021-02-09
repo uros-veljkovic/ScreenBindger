@@ -85,47 +85,44 @@ class LoginFragment : DaggerFragment() {
      */
     private fun observeFragmentActions() {
         viewModel.also {
-            it.authStateObservable.value.observe(viewLifecycleOwner, Observer { state ->
-                when (state) {
-                    is AuthState.FirebaseAuthSuccess -> {
-                        it.requestToken()
-                    }
-                    is AuthState.TokenGathered -> {
-                        state.event.getContentIfNotHandled()?.let { response ->
-                            val token = response.requestToken!!
-                            viewModel.token = token
+            it.authStateObservable.value.observe(viewLifecycleOwner, Observer { event ->
+                event.getContentIfNotHandled()?.let { state ->
+                    when (state) {
+                        is AuthState.FirebaseAuthSuccess -> {
+                            it.fetchToken()
+                        }
+                        is AuthState.TokenFetched -> {
+                            val token = state.getToken()
+                            viewModel.token = token!!
                             authorizeToken(token)
                         }
-                    }
-                    is AuthState.TokenAuthorized -> {
-                        it.createSession()
-                    }
-                    is AuthState.SessionStarted -> {
-                        it.getAccountDetails()
-                    }
-                    is AuthState.AccountDetailsGathered -> {
-                        state.session.getContentIfNotHandled()?.let { session ->
+                        is AuthState.TokenAuthorized -> {
+                            it.startSession()
+                        }
+                        is AuthState.SessionStarted -> {
+                            it.fetchAccountDetails()
+                        }
+                        is AuthState.AccountDetailsFetched -> {
                             hideProgressBar()
-                            it.setSession(session)
+                            it.setSession(state.session)
                             gotoMainActivity()
                         }
-                    }
-                    is AuthState.Error.SessionStartFailed -> {
-                        val message = it.getErrorMessage()
-                        showSessionFailDialog(message)
-                    }
-                    is AuthState.Error -> {
-                        hideProgressBar()
-                        val message = state.getMessage()
-                        if (message != null) {
-                            showError(message)
+                        is AuthState.Error.SessionStartFailed -> {
+                            showSessionFailDialog(state.e.message)
                         }
-                    }
-                    is AuthState.Loading -> {
-                        showProgressBar()
-                    }
-                    is AuthState.Rest -> {
-                        hideProgressBar()
+                        is AuthState.Error -> {
+                            hideProgressBar()
+                            val message = state.getMessage()
+                            showError(message ?: "Unknown error")
+                        }
+                        is AuthState.Loading -> {
+                            showProgressBar()
+                        }
+                        is AuthState.Rest -> {
+                            hideProgressBar()
+                        }
+                        else -> {
+                        }
                     }
                 }
             })

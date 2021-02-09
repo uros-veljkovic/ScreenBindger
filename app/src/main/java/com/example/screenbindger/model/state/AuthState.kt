@@ -11,12 +11,21 @@ import java.lang.Exception
 sealed class AuthState {
 
     data class FirebaseAuthSuccess(val data: UserEntity? = null) : AuthState()
+    object UserCreated : AuthState()
 
-    data class TokenGathered(val event: Event<RequestTokenResponse>) : AuthState()
+    data class TokenFetched(val requestTokenResponse: RequestTokenResponse) : AuthState() {
+
+        fun getToken(): String? =
+            requestTokenResponse.requestToken
+
+    }
+
     data class TokenAuthorized(val token: String) : AuthState()
 
-    data class SessionStarted(val session: Session) : AuthState()
-    data class AccountDetailsGathered(val session: Event<Session>) : AuthState()
+    object ConfirmedEmail : AuthState()
+
+    object SessionStarted : AuthState()
+    data class AccountDetailsFetched(val session: Session) : AuthState()
 
     sealed class Error(val exception: Exception) : AuthState() {
         data class NoState(val e: Exception) : Error(e)

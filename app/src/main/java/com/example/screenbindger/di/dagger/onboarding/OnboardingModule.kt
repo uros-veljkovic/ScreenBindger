@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
+import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.view.fragment.login.AuthorizationStateObservable
 import com.example.screenbindger.view.fragment.register.RegisterStateObservable
@@ -19,8 +20,8 @@ object OnboardingModule {
 
     @OnboardingScope
     @Provides
-    fun provideLoginStateObservable(): AuthorizationStateObservable {
-        return AuthorizationStateObservable()
+    fun provideLoginStateObservable(session: Session): AuthorizationStateObservable {
+        return AuthorizationStateObservable(session)
     }
 
     @OnboardingScope

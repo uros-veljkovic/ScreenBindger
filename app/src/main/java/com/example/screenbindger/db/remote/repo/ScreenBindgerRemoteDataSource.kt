@@ -43,6 +43,9 @@ class ScreenBindgerRemoteDataSource
         authService.signUp(user.email, user.password, authStateObservable)
     }
 
+    suspend fun create(userStateObservable: UserStateObservable) {
+        userService.create(userStateObservable)
+    }
 
     suspend fun getTrending(): Response<TrendingMoviesResponse> {
         return movieService.getTrending()
@@ -75,11 +78,11 @@ class ScreenBindgerRemoteDataSource
     }
 
     suspend fun createSession(authStateObservable: AuthorizationStateObservable) {
-        tmdbAuthService.createSession(authStateObservable = authStateObservable)
+        tmdbAuthService.createSession(authStateObservable)
     }
 
     suspend fun getAccountDetails(authStateObservable: AuthorizationStateObservable) {
-        tmdbAuthService.getAccountDetails(authStateObservable)
+        tmdbAuthService.getAccountDetails(session, authStateObservable)
     }
 
     suspend fun postMovieAsFavorite(
@@ -89,10 +92,6 @@ class ScreenBindgerRemoteDataSource
             sessionId = session.id!!,
             favoriteMovieRequestBody = favoriteMovieRequestBody
         )
-    }
-
-    suspend fun create(userStateObservable: UserStateObservable) {
-        userService.create(userStateObservable)
     }
 
     suspend fun changePassword(
@@ -118,11 +117,11 @@ class ScreenBindgerRemoteDataSource
         storageService.downloadImage(userStateObservable)
     }
 
-    fun setSession(session: Session) {
+    fun setSession(createdSession: Session) {
         this.session.apply {
-            accountId = session.accountId
-            id = session.id
-            expiresAt = session.expiresAt
+            accountId = createdSession.accountId
+            id = createdSession.id
+            expiresAt = createdSession.expiresAt
         }
     }
 
