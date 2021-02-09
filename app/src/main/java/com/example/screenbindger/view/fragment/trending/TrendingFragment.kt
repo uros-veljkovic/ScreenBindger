@@ -78,7 +78,7 @@ class TrendingFragment : DaggerFragment(),
 
     private fun populateRecyclerView(list: List<MovieEntity>) {
         with(binding.rvTrending) {
-            adapter = ItemMovieRecyclerViewAdapter(this@TrendingFragment, list.toMutableList())
+            (adapter as ItemMovieRecyclerViewAdapter).setList(list)
             startLayoutAnimation()
         }
     }
