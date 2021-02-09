@@ -57,4 +57,7 @@
     <string name="tmdb_password_placeholder">TMDB password</string>
     <string name="message_title_token_auth_failed">Token not authenticated</string>
     <string name="message_body_token_auth_failed">Please login/register on TMDB and follow the steps.</string>
+    <string name="message_confirm_email_title">Confirm email</string>
+    <string name="message_confirm_email_body">Please confirm email so you could proceed with creating profile.</string>
+    <string name="choose_mail_client">Choose Email app to open</string>
 </resources>

@@ -74,17 +74,6 @@ class TrendingFragment : DaggerFragment(),
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        showDetails()
-    }
-
-    fun showDetails() {
-        val message = viewModel.getAccountDetails()
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
 
