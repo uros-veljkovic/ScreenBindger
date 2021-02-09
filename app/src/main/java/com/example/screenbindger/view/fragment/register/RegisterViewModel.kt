@@ -1,10 +1,8 @@
 package com.example.screenbindger.view.fragment.register
 
-import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.session.Session
-import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.model.state.AuthState
 import com.example.screenbindger.view.activity.onboarding.AuthViewModel
 import com.example.screenbindger.view.fragment.login.AuthorizationStateObservable
@@ -22,7 +20,6 @@ class RegisterViewModel
 
     override fun onboarding() {
         startLoading()
-        createUser()
         registerUser()
     }
 
@@ -36,25 +33,25 @@ class RegisterViewModel
         }
     }
 
-    private fun createUser() {
+    fun createUser() {
         CoroutineScope(IO).launch {
             remoteDataSource.create(userStateObservable)
         }
     }
 
-    override fun requestToken() {
+    override fun fetchToken() {
         CoroutineScope(IO).launch {
             remoteDataSource.getRequestToken(authStateObservable)
         }
     }
 
-    override fun createSession() {
+    override fun startSession() {
         CoroutineScope(IO).launch {
             remoteDataSource.createSession(authStateObservable)
         }
     }
 
-    override fun getAccountDetails() {
+    override fun fetchAccountDetails() {
         CoroutineScope(IO).launch {
             remoteDataSource.getAccountDetails(authStateObservable)
         }
