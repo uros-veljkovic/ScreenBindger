@@ -42,10 +42,10 @@ class TrendingFragment : DaggerFragment(),
     }
 
     private fun initRecyclerView() {
-        binding.rvTrending.also {
-            it.layoutManager = GridLayoutManager(requireContext(), 2)
-            it.addItemDecoration(GridLayoutRecyclerViewDecorator(2, 16, true))
-            it.adapter = ItemMovieRecyclerViewAdapter(this)
+        binding.rvTrending.apply {
+            layoutManager = GridLayoutManager(requireContext(), 2)
+            addItemDecoration(GridLayoutRecyclerViewDecorator(2, 16, true))
+            adapter = ItemMovieRecyclerViewAdapter(this@TrendingFragment)
         }
     }
 
@@ -77,9 +77,10 @@ class TrendingFragment : DaggerFragment(),
     }
 
     private fun populateRecyclerView(list: List<MovieEntity>) {
-        binding.rvTrending.adapter =
-            ItemMovieRecyclerViewAdapter(this, list.toMutableList())
-        binding.rvTrending.startLayoutAnimation()
+        with(binding.rvTrending) {
+            adapter = ItemMovieRecyclerViewAdapter(this@TrendingFragment, list.toMutableList())
+            startLayoutAnimation()
+        }
     }
 
     private fun showMessage(message: Event<String>) {
@@ -94,11 +95,11 @@ class TrendingFragment : DaggerFragment(),
         findNavController().navigate(action)
     }
 
-    private fun showProgressBar(){
+    private fun showProgressBar() {
         binding.progressBar.show()
     }
 
-    private fun hideProgressBar(){
+    private fun hideProgressBar() {
         binding.progressBar.hide()
     }
 
