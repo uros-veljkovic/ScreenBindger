@@ -13,8 +13,8 @@ import com.example.screenbindger.db.remote.service.storage.StorageService
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.service.user.UserService
 import com.example.screenbindger.db.remote.session.Session
-import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
+import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewState
 import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import retrofit2.Response
 import javax.inject.Inject
@@ -49,8 +49,8 @@ class ScreenBindgerRemoteDataSource
         userService.create(userStateObservable)
     }
 
-    suspend fun getTrending(trendingViewState: MutableLiveData<TrendingViewState>){
-         movieService.getTrending(trendingViewState)
+    suspend fun getTrending(trendingViewState: MutableLiveData<TrendingViewState>) {
+        movieService.getTrending(trendingViewState)
     }
 
     suspend fun getUpcoming(): Response<UpcomingMoviesResponse> {
@@ -61,12 +61,18 @@ class ScreenBindgerRemoteDataSource
         return genreService.getAll()
     }
 
-    suspend fun getMovieDetails(movieId: Int): Response<MovieEntity> {
-        return movieService.getMovieDetails(movieId)
+    suspend fun getMovieDetails(
+        movieId: Int,
+        viewState: MutableLiveData<MovieDetailsViewState>
+    ) {
+        movieService.getMovieDetails(movieId, viewState)
     }
 
-    suspend fun getMovieCasts(movieId: Int): Response<MovieDetailsCastResponse> {
-        return movieService.getMovieCasts(movieId)
+    suspend fun getMovieCasts(
+        movieId: Int,
+        viewState: MutableLiveData<MovieDetailsViewState>
+    ) {
+        movieService.getMovieCasts(movieId, viewState)
     }
 
     suspend fun getMoviesByGenre(id: String): Response<GenreMoviesResponse> {

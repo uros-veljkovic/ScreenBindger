@@ -24,18 +24,4 @@ class TrendingViewModel
         }
     }
 
-/*    private fun generateStringGenresFor(entity: MovieEntity) {
-        entity.genreIds?.forEach { singleEntityGenreId ->
-            Genres.list.forEach {
-                if (it.id == singleEntityGenreId) {
-                    entity.genresString += "${it.name}, "
-                }
-            }
-        }
-        entity.genresString = entity.genresString.dropLast(2)
-    }*/
-
-    fun getAccountDetails(): String {
-        return remoteDataSource.getDetails()
-    }
 }

@@ -3,41 +3,33 @@ package com.example.screenbindger.view.fragment.movie_details
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
-import com.example.screenbindger.db.remote.response.MovieDetailsCastResponse
-import com.example.screenbindger.model.domain.MovieEntity
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import retrofit2.Response
 import javax.inject.Inject
 
 class MovieDetailsViewModel
 @Inject constructor(
-    val remoteDataSource: ScreenBindgerRemoteDataSource
+    val remoteDataSource: ScreenBindgerRemoteDataSource,
+    var viewState: MutableLiveData<MovieDetailsViewState>,
+    var viewAction: MutableLiveData<MovieDetailsViewAction>
 ) : ViewModel() {
 
-    var responseMovieDetails: MutableLiveData<Response<MovieEntity>?> =
-        MutableLiveData(null)
-    var responseMovieDetailsCast: MutableLiveData<Response<MovieDetailsCastResponse>?> =
-        MutableLiveData(null)
-
     fun fetchData(movieId: Int) {
-        runBlocking {
-            launch(IO) {
-                val response = remoteDataSource.getMovieDetails(movieId)
-                responseMovieDetails.postValue(response)
+        CoroutineScope(IO).launch {
+            launch {
+                remoteDataSource.getMovieDetails(movieId, viewState)
             }
-            launch(IO) {
-                val response = remoteDataSource.getMovieCasts(movieId)
-                responseMovieDetailsCast.postValue(response)
+            launch {
+                remoteDataSource.getMovieCasts(movieId, viewState)
             }
         }
 
     }
 
-    fun reset(){
-        responseMovieDetailsCast.value = null
-        responseMovieDetails.value = null
+    fun reset() {
+        viewState = MutableLiveData()
+        viewAction = MutableLiveData()
     }
 
 }

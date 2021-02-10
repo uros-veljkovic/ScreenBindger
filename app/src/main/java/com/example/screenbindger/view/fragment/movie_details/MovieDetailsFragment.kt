@@ -6,15 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.NavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentMovieDetailsBinding
+import com.example.screenbindger.model.domain.Item
 import com.example.screenbindger.util.adapter.recyclerview.MovieDetailsRecyclerViewAdapter
+import com.example.screenbindger.util.extensions.hide
+import com.example.screenbindger.util.extensions.show
+import com.example.screenbindger.util.extensions.snack
 import com.example.screenbindger.view.activity.main.MainActivity
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -46,6 +47,11 @@ class MovieDetailsFragment : DaggerFragment() {
         return view
     }
 
+    private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
+        _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     private fun modifyToolbarForFragment() {
 
         val activity = (requireActivity() as MainActivity)
@@ -71,11 +77,6 @@ class MovieDetailsFragment : DaggerFragment() {
 
     }
 
-    private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
-        _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     private fun initRecyclerView() {
         binding.rvMovieDetails.apply {
             adapter = MovieDetailsRecyclerViewAdapter()
@@ -88,39 +89,61 @@ class MovieDetailsFragment : DaggerFragment() {
     }
 
     private fun observeServerResponse() {
-        viewModel.responseMovieDetails.observe(viewLifecycleOwner, Observer { response ->
-            if (response?.body() != null && response.isSuccessful) {
-                val movieEntity = response.body()
-                if (movieEntity != null) {
-                    (binding.rvMovieDetails.adapter as MovieDetailsRecyclerViewAdapter).addItems(
-                        listOf(
-                            movieEntity
-                        )
-                    )
-                    binding.rvMovieDetails.startLayoutAnimation()
+        viewModel.viewState.observe(viewLifecycleOwner, Observer {
+            it.eventState.getContentIfNotHandled()?.let { state ->
+                when (state) {
+                    MovieDetailsState.Fetching -> {
+                        showProgressBar()
+                    }
+                    MovieDetailsState.MovieFetched -> {
+                        val movie = it.movie
+                        with(binding) {
+                            val adapter = rvMovieDetails.adapter as MovieDetailsRecyclerViewAdapter
+                            adapter.addItems(listOf(movie as Item))
+                            rvMovieDetails.startLayoutAnimation()
+                            invalidateAll()
+                        }
+                        hideProgressBar()
+                    }
+                    MovieDetailsState.CastsFetched -> {
+                        val list = it.casts
+                        with(binding) {
+                            val adapter = rvMovieDetails.adapter as MovieDetailsRecyclerViewAdapter
+                            adapter.addItems(list as List<Item>)
+                            rvMovieDetails.startLayoutAnimation()
+                            invalidateAll()
+                        }
+                    }
+                    is MovieDetailsState.Error.MovieNotFetched -> {
+                        showError(state)
+                    }
+                    is MovieDetailsState.Error.CastsNotFetched -> {
+                        showError(state)
+                    }
                 }
             }
-        })
 
-        viewModel.responseMovieDetailsCast.observe(viewLifecycleOwner, Observer { response ->
-            if (response != null && response.isSuccessful) {
-                val items = response.body()?.casts
-                if (!items.isNullOrEmpty())
-                    (binding.rvMovieDetails.adapter as MovieDetailsRecyclerViewAdapter).addItems(
-                        items
-                    )
-            }
-            binding.invalidateAll()
         })
+    }
 
+    private fun showError(state: MovieDetailsState.Error) {
+        requireView().snack(state.message)
+    }
+
+    private fun showProgressBar() {
+        binding.progressBar.show()
+    }
+
+    private fun hideProgressBar() {
+        binding.progressBar.hide()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 
-        _binding = null
         viewModel.reset()
         modifyToolbarForActivity()
+        _binding = null
     }
 
     private fun modifyToolbarForActivity() {
