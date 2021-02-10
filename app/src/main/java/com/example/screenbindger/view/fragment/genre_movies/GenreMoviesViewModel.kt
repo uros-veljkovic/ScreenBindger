@@ -3,7 +3,7 @@ package com.example.screenbindger.view.fragment.genre_movies
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
-import com.example.screenbindger.db.remote.response.GenreMoviesResponse
+import com.example.screenbindger.db.remote.response.MoviesByGenreResponse
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.model.global.Genres
 import kotlinx.coroutines.CoroutineScope
@@ -18,7 +18,7 @@ class GenreMoviesViewModel
     val remoteDataSource: ScreenBindgerRemoteDataSource
 ) : ViewModel() {
 
-    var response: MutableLiveData<Response<GenreMoviesResponse>?> = MutableLiveData(null)
+    var response: MutableLiveData<Response<MoviesByGenreResponse>?> = MutableLiveData(null)
     val list: List<MovieEntity>? get() = response.value?.body()?.list
 
     fun fetchData(genreId: Int) {
