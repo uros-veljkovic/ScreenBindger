@@ -14,36 +14,14 @@ import javax.inject.Inject
 
 class UpcomingViewModel
 @Inject constructor(
-    val remoteDataSource: ScreenBindgerRemoteDataSource
+    val remoteDataSource: ScreenBindgerRemoteDataSource,
+    val upcomingViewState: MutableLiveData<UpcomingViewState>
 ) : ViewModel() {
 
-    val response: MutableLiveData<Response<UpcomingMoviesResponse>?> = MutableLiveData(null)
-    val list: List<MovieEntity>? get() = response.value?.body()?.list
-
-    init {
-        fetchData()
-    }
-
-    private fun fetchData() {
+    fun fetchData() {
         CoroutineScope(IO).launch {
-            val result = remoteDataSource.getUpcoming()
-
-            result.body()?.list?.forEach {entity ->
-                generateStringGenresFor(entity)
-            }
-
-            response.postValue(result)
+            remoteDataSource.getUpcoming(upcomingViewState)
         }
     }
 
-    private fun generateStringGenresFor(entity: MovieEntity) {
-        entity.genreIds?.forEach { singleEntityGenreId ->
-            Genres.list.forEach {
-                if (it.id == singleEntityGenreId) {
-                    entity.genresString += "${it.name}, "
-                }
-            }
-        }
-        entity.genresString = entity.genresString.dropLast(2)
-    }
 }

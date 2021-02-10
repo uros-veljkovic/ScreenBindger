@@ -12,6 +12,7 @@ import com.example.screenbindger.util.extensions.getErrorResponse
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsState
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewState
 import com.example.screenbindger.view.fragment.trending.TrendingViewState
+import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,6 +40,21 @@ constructor(
         }
     }
 
+    suspend fun getUpcoming(upcomingViewState: MutableLiveData<UpcomingViewState>) {
+        movieApi.getUpcoming().let { response ->
+            val list = response.body()?.list ?: emptyList()
+            if (response.isSuccessful) {
+                generateGenres(list)
+                val state = UpcomingViewState(ListState.Fetched, list)
+                upcomingViewState.postValue(state)
+            } else {
+                val message = response.getErrorResponse().statusMessage
+                val state = UpcomingViewState(ListState.NotFetched(Event(message)), null)
+                upcomingViewState.postValue(state)
+            }
+        }
+    }
+
     private fun generateGenres(list: List<MovieEntity>) {
         CoroutineScope(Dispatchers.Default).launch {
             list.forEach { item ->
@@ -52,10 +68,6 @@ constructor(
                 item.genresString = item.genresString.dropLast(2)
             }
         }
-    }
-
-    suspend fun getUpcoming(): Response<UpcomingMoviesResponse> {
-        return movieApi.getUpcoming()
     }
 
     suspend fun getMovieDetails(

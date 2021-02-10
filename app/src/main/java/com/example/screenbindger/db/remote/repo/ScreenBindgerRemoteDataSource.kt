@@ -16,6 +16,7 @@ import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewState
 import com.example.screenbindger.view.fragment.trending.TrendingViewState
+import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -53,8 +54,8 @@ class ScreenBindgerRemoteDataSource
         movieService.getTrending(trendingViewState)
     }
 
-    suspend fun getUpcoming(): Response<UpcomingMoviesResponse> {
-        return movieService.getUpcoming()
+    suspend fun getUpcoming(upcomingViewState: MutableLiveData<UpcomingViewState>){
+        movieService.getUpcoming(upcomingViewState)
     }
 
     suspend fun getGenres(): Response<GenresResponse> {
