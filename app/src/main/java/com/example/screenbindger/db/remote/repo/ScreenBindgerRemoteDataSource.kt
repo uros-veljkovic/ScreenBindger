@@ -2,7 +2,7 @@ package com.example.screenbindger.db.remote.repo
 
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
-import com.example.screenbindger.db.remote.request.FavoriteMovieRequestBody
+import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.response.*
 import com.example.screenbindger.db.remote.service.auth.firebase.AuthService
@@ -13,7 +13,9 @@ import com.example.screenbindger.db.remote.service.storage.StorageService
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.service.user.UserService
 import com.example.screenbindger.db.remote.session.Session
+import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
+import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewEvent
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewState
 import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
@@ -54,11 +56,11 @@ class ScreenBindgerRemoteDataSource
         movieService.getTrending(trendingViewState)
     }
 
-    suspend fun getUpcoming(upcomingViewState: MutableLiveData<UpcomingViewState>){
+    suspend fun getUpcoming(upcomingViewState: MutableLiveData<UpcomingViewState>) {
         movieService.getUpcoming(upcomingViewState)
     }
 
-    suspend fun getGenres(): Response<GenresResponse> {
+    suspend fun getGenres(): Response<AllGenresResponse> {
         return genreService.getAll()
     }
 
@@ -76,7 +78,7 @@ class ScreenBindgerRemoteDataSource
         movieService.getMovieCasts(movieId, viewState)
     }
 
-    suspend fun getMoviesByGenre(id: String): Response<GenreMoviesResponse> {
+    suspend fun getMoviesByGenre(id: String): Response<MoviesByGenreResponse> {
         return genreService.getMoviesByGenre(id)
     }
 
@@ -92,15 +94,6 @@ class ScreenBindgerRemoteDataSource
 
     suspend fun getAccountDetails(authStateObservable: AuthorizationEventObservable) {
         tmdbAuthService.getAccountDetails(session, authStateObservable)
-    }
-
-    suspend fun postMovieAsFavorite(
-        favoriteMovieRequestBody: FavoriteMovieRequestBody
-    ): Response<FavoriteMovieResponse> {
-        return movieService.postMovieAsFavorite(
-            sessionId = session.id!!,
-            favoriteMovieRequestBody = favoriteMovieRequestBody
-        )
     }
 
     suspend fun changePassword(
@@ -136,6 +129,13 @@ class ScreenBindgerRemoteDataSource
 
     fun getDetails(): String {
         return "SessionID: $session.id\n AccountID: ${session.accountId}"
+    }
+
+    suspend fun markAsFavorite(
+        requestBody: MarkAsFavoriteRequestBody,
+        viewEvent: MutableLiveData<Event<MovieDetailsViewEvent>>
+    ) {
+        movieService.postMovieAsFavorite(session, requestBody, viewEvent)
     }
 
 }

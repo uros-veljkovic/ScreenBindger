@@ -1,7 +1,7 @@
 package com.example.screenbindger.db.remote.service.genre
 
-import com.example.screenbindger.db.remote.response.GenreMoviesResponse
-import com.example.screenbindger.db.remote.response.GenresResponse
+import com.example.screenbindger.db.remote.response.MoviesByGenreResponse
+import com.example.screenbindger.db.remote.response.AllGenresResponse
 import retrofit2.Response
 
 class GenreService
@@ -9,11 +9,11 @@ constructor(
     private val genreApi: GenreApi
 ){
 
-    suspend fun getAll(): Response<GenresResponse>{
-        return genreApi.getAll()
+    suspend fun getAll(): Response<AllGenresResponse>{
+        return genreApi.getAllGenres()
     }
 
-    suspend fun getMoviesByGenre(id: String): Response<GenreMoviesResponse>{
+    suspend fun getMoviesByGenre(id: String): Response<MoviesByGenreResponse>{
         return  genreApi.getMoviesByGenre(id)
     }
 
