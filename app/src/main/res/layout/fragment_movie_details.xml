@@ -8,17 +8,31 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="false"
         tools:context=".view.fragment.movie_details.MovieDetailsFragment">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:visibility="gone"
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/btnAddOrRemoveAsFavorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="@dimen/small_100"
+            android:layout_marginEnd="@dimen/small_100"
+            android:backgroundTint="@color/blue"
+            android:scaleType="center"
+            android:text="Favorite"
+            app:icon="@drawable/ic_add_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/rvMovieDetails"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,10 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:elevation="0dp"
-            android:layoutAnimation="@anim/layout_anim_appear"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layoutAnimation="@anim/layout_anim_appear" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

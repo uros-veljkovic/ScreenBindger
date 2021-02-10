@@ -13,7 +13,6 @@ import java.lang.ref.WeakReference
 
 
 class MovieDetailsRecyclerViewAdapter(
-    val listener: WeakReference<OnMarkAsFavoriteClickListener>,
     val list: MutableList<Item> = mutableListOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -48,9 +47,6 @@ class MovieDetailsRecyclerViewAdapter(
                     bind(item)
 
                     val movie = item as MovieEntity
-                    binding.btnAddOrRemoveAsFavorite.setOnClickListener {
-                        listener.get()?.onMarkAsFavorite(movie.id!!)
-                    }
                 }
 
             }
@@ -97,10 +93,6 @@ class MovieDetailsRecyclerViewAdapter(
         fun bind(item: Item) {
             binding.cast = item as CastEntity?
         }
-    }
-
-    interface OnMarkAsFavoriteClickListener {
-        fun onMarkAsFavorite(movieId: Int)
     }
 
 }
