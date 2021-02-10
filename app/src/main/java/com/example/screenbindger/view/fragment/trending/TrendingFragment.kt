@@ -40,6 +40,11 @@ class TrendingFragment : DaggerFragment(),
         observeViewModel()
         return view
     }
+    private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
+        _binding = FragmentTrendingBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
+        return binding.root
+    }
 
     private fun initRecyclerView() {
         binding.rvTrending.apply {
@@ -47,12 +52,6 @@ class TrendingFragment : DaggerFragment(),
             addItemDecoration(GridLayoutRecyclerViewDecorator(2, 16, true))
             adapter = ItemMovieRecyclerViewAdapter(this@TrendingFragment)
         }
-    }
-
-    private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
-        _binding = FragmentTrendingBinding.inflate(inflater, container, false)
-        setHasOptionsMenu(true)
-        return binding.root
     }
 
     private fun observeViewModel() {
