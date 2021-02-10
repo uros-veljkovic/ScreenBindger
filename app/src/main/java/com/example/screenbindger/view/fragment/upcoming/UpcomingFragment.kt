@@ -11,6 +11,7 @@ import com.example.screenbindger.databinding.FragmentUpcomingBinding
 import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
+import com.example.screenbindger.view.fragment.trending.TrendingFragmentDirections
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -37,6 +38,7 @@ class UpcomingFragment : DaggerFragment(),
 
     private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
         _binding = FragmentUpcomingBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -60,13 +62,9 @@ class UpcomingFragment : DaggerFragment(),
     }
 
     override fun onCardItemClick(movieId: Int) {
-        val movieId = viewModel.list?.get(movieId)?.id
-
-        if (movieId != null) {
-            val action =
-                UpcomingFragmentDirections.actionUpcomingFragmentToMovieDetailsFragment(movieId)
-            findNavController().navigate(action)
-        }
+        val action =
+            TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(movieId)
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {
