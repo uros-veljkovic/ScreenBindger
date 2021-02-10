@@ -19,9 +19,11 @@ import com.example.screenbindger.util.extensions.snack
 import com.example.screenbindger.view.activity.main.MainActivity
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
-class MovieDetailsFragment : DaggerFragment() {
+class MovieDetailsFragment : DaggerFragment(),
+    MovieDetailsRecyclerViewAdapter.OnMarkAsFavoriteClickListener {
 
     @Inject
     lateinit var viewModel: MovieDetailsViewModel
@@ -43,7 +45,7 @@ class MovieDetailsFragment : DaggerFragment() {
         modifyToolbarForFragment()
         initRecyclerView()
         fetchData()
-        observeServerResponse()
+        observeViewModelState()
         return view
     }
 
@@ -79,7 +81,8 @@ class MovieDetailsFragment : DaggerFragment() {
 
     private fun initRecyclerView() {
         binding.rvMovieDetails.apply {
-            adapter = MovieDetailsRecyclerViewAdapter()
+            adapter =
+                MovieDetailsRecyclerViewAdapter(listener = WeakReference(this@MovieDetailsFragment))
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
     }
@@ -88,7 +91,7 @@ class MovieDetailsFragment : DaggerFragment() {
         viewModel.fetchData(movieId)
     }
 
-    private fun observeServerResponse() {
+    private fun observeViewModelState() {
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             it.eventState.getContentIfNotHandled()?.let { state ->
                 when (state) {
@@ -130,12 +133,66 @@ class MovieDetailsFragment : DaggerFragment() {
         requireView().snack(state.message)
     }
 
+    private fun showError(message: String) {
+        requireView().snack(message, R.color.logout_red)
+    }
+
     private fun showProgressBar() {
         binding.progressBar.show()
     }
 
     private fun hideProgressBar() {
         binding.progressBar.hide()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        observeViewModelAction()
+        observeViewModelEvents()
+    }
+
+    override fun onMarkAsFavorite(movieId: Int) {
+        viewModel.setAction(MovieDetailsViewAction.MarkAsFavorite(movieId))
+    }
+
+    private fun observeViewModelAction() {
+        viewModel.viewAction.observe(viewLifecycleOwner, Observer { event ->
+            event.getContentIfNotHandled()?.let { action ->
+                when (action) {
+                    is MovieDetailsViewAction.MarkAsFavorite -> {
+                        viewModel.markAsFavorite(action.movieID)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun observeViewModelEvents() {
+        viewModel.viewEvent.observe(viewLifecycleOwner, Observer { event ->
+            event.getContentIfNotHandled()?.let {
+                when (it) {
+                    is MovieDetailsViewEvent.AddedToFavorites -> {
+                        showMessage(it.message)
+                        //changeFabIconColor(R.color.red)
+                    }
+                    is MovieDetailsViewEvent.RemovedFromFavorites -> {
+                        showMessage(it.message)
+                        //changeFabIconColor(R.color.white)
+                    }
+                    is MovieDetailsViewEvent.Error -> {
+                        showError(it.message)
+                    }
+                    is MovieDetailsViewEvent.Rest -> {
+
+                    }
+                }
+            }
+        })
+    }
+
+    fun showMessage(message: String) {
+        requireView().snack(message, R.color.green)
     }
 
     override fun onDestroyView() {
@@ -168,8 +225,6 @@ class MovieDetailsFragment : DaggerFragment() {
             )
             it.applyTo(constraintLayout)
         }
-
-
     }
 
 

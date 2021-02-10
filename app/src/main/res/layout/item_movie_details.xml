@@ -35,13 +35,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/normal_100"
-            android:scaleType="center"
+            android:background="@color/blue"
             android:backgroundTint="@color/blue"
+            android:scaleType="center"
             android:src="@drawable/ic_favorite_24"
+            app:borderWidth="0dp"
             app:layout_constraintBottom_toBottomOf="@id/ivMoviePoster"
             app:layout_constraintEnd_toEndOf="@id/ivMoviePoster"
             app:layout_constraintTop_toBottomOf="@id/ivMoviePoster"
-            app:maxImageSize="32dp" />
+            app:maxImageSize="32dp"
+            android:contentDescription="Favorite" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvMovieTitle"

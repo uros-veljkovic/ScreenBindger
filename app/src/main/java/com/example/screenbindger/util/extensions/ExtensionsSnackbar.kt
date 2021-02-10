@@ -17,7 +17,7 @@ fun View.snack(
 
 fun View.snack(
     message: String,
-    backgroundColorRes: Int = R.color.design_default_color_background,
+    backgroundColorRes: Int = R.color.blue,
     length: Int = Snackbar.LENGTH_LONG
 ) {
 

@@ -9,9 +9,11 @@ import com.example.screenbindger.model.domain.CastEntity
 import com.example.screenbindger.model.domain.Item
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.model.enums.ItemType
+import java.lang.ref.WeakReference
 
 
 class MovieDetailsRecyclerViewAdapter(
+    val listener: WeakReference<OnMarkAsFavoriteClickListener>,
     val list: MutableList<Item> = mutableListOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -27,6 +29,7 @@ class MovieDetailsRecyclerViewAdapter(
             ItemType.CAST.value -> {
                 val binding = ItemMovieCastsBinding.inflate(inflater, parent, false)
                 viewHolder = MovieCastsViewHolder(binding)
+
             }
         }
 
@@ -41,10 +44,20 @@ class MovieDetailsRecyclerViewAdapter(
         val item = list[position]
         when (item.getItemType()) {
             ItemType.MOVIE_DETAILS -> {
-                (holder as MovieDetailsViewHolder).bind(item)
+                with(holder as MovieDetailsViewHolder) {
+                    bind(item)
+
+                    val movie = item as MovieEntity
+                    binding.btnAddOrRemoveAsFavorite.setOnClickListener {
+                        listener.get()?.onMarkAsFavorite(movie.id!!)
+                    }
+                }
+
             }
             ItemType.CAST -> {
-                (holder as MovieCastsViewHolder).bind(item)
+                with(holder as MovieCastsViewHolder) {
+                    bind(item)
+                }
             }
         }
     }
@@ -84,6 +97,10 @@ class MovieDetailsRecyclerViewAdapter(
         fun bind(item: Item) {
             binding.cast = item as CastEntity?
         }
+    }
+
+    interface OnMarkAsFavoriteClickListener {
+        fun onMarkAsFavorite(movieId: Int)
     }
 
 }

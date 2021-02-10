@@ -1,22 +1,23 @@
 package com.example.screenbindger.db.remote.service.movie
 
 import androidx.lifecycle.MutableLiveData
-import com.example.screenbindger.db.remote.request.FavoriteMovieRequestBody
-import com.example.screenbindger.db.remote.response.*
+import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
+import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.CastEntity
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.model.global.Genres
 import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
+import com.example.screenbindger.util.extensions.ifLet
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsState
+import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewEvent
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewState
 import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Response
 import javax.inject.Inject
 
 class MovieService
@@ -26,7 +27,7 @@ constructor(
 ) {
 
     suspend fun getTrending(trendingViewState: MutableLiveData<TrendingViewState>) {
-        movieApi.getTrending().let { response ->
+        movieApi.getTrendingMovies().let { response ->
             val list = response.body()?.list ?: emptyList()
             if (response.isSuccessful) {
                 generateGenres(list)
@@ -41,7 +42,7 @@ constructor(
     }
 
     suspend fun getUpcoming(upcomingViewState: MutableLiveData<UpcomingViewState>) {
-        movieApi.getUpcoming().let { response ->
+        movieApi.getUpcomingMovies().let { response ->
             val list = response.body()?.list ?: emptyList()
             if (response.isSuccessful) {
                 generateGenres(list)
@@ -112,13 +113,24 @@ constructor(
     }
 
     suspend fun postMovieAsFavorite(
-        sessionId: String,
-        favoriteMovieRequestBody: FavoriteMovieRequestBody
-    ): Response<FavoriteMovieResponse> {
-        return movieApi.postMovieAsFavorite(
-            sessionId = sessionId,
-            favoriteMovieRequestBody = favoriteMovieRequestBody
-        )
+        session: Session,
+        body: MarkAsFavoriteRequestBody,
+        viewEffect: MutableLiveData<Event<MovieDetailsViewEvent>>
+    ) {
+        ifLet(session.id, session.accountId) {
+            movieApi.postMarkAsFavorite(
+                sessionId = session.id!!,
+                accountId = session.accountId!!,
+                body = body
+            ).let {
+                if (it.isSuccessful) {
+                    viewEffect.postValue(Event(MovieDetailsViewEvent.AddedToFavorites()))
+                } else {
+                    val error = it.getErrorResponse().statusMessage
+                    viewEffect.postValue(Event(MovieDetailsViewEvent.Error(error)))
+                }
+            }
+        }
     }
 
 }
