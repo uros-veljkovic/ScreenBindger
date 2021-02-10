@@ -6,8 +6,10 @@ import com.example.screenbindger.model.domain.UserEntity
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.model.state.ObjectState
+import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsState
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewAction
+import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewEvent
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewState
 import com.example.screenbindger.view.fragment.profile.FragmentStateObservable
 import com.example.screenbindger.view.fragment.trending.TrendingViewState
@@ -68,7 +70,13 @@ class MainModule {
 
     @MainScope
     @Provides
-    fun provideMovieDetailsViewAction(): MutableLiveData<MovieDetailsViewAction> {
+    fun provideMovieDetailsViewAction(): MutableLiveData<Event<MovieDetailsViewAction>> {
+        return MutableLiveData()
+    }
+
+    @MainScope
+    @Provides
+    fun provideMovieDetailsViewEvent(): MutableLiveData<Event<MovieDetailsViewEvent>> {
         return MutableLiveData()
     }
 

@@ -1,4 +1,7 @@
 package com.example.screenbindger.view.fragment.movie_details
 
-class MovieDetailsViewAction {
+sealed class MovieDetailsViewAction {
+    data class MarkAsFavorite(val movieID: Int) : MovieDetailsViewAction()
+    data class MarkAsNotFavorite(val movieID: Int) : MovieDetailsViewAction()
 }
+
