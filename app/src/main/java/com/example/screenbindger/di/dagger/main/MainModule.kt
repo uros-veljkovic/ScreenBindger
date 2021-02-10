@@ -11,6 +11,7 @@ import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewAct
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewState
 import com.example.screenbindger.view.fragment.profile.FragmentStateObservable
 import com.example.screenbindger.view.fragment.trending.TrendingViewState
+import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import dagger.Module
 import dagger.Provides
 
@@ -52,7 +53,12 @@ class MainModule {
     @MainScope
     @Provides
     fun provideTrendingViewState(): MutableLiveData<TrendingViewState> =
-        MutableLiveData(TrendingViewState(ListState.Init, emptyList()))
+        MutableLiveData(TrendingViewState())
+
+    @MainScope
+    @Provides
+    fun provideUpcomingViewState(): MutableLiveData<UpcomingViewState> =
+        MutableLiveData(UpcomingViewState())
 
     @MainScope
     @Provides
