@@ -60,7 +60,8 @@ class MainActivity : DaggerAppCompatActivity() {
                     R.id.profileFragment,
                     R.id.genresFragment,
                     R.id.upcomingFragment,
-                    R.id.trendingFragment
+                    R.id.trendingFragment,
+                    R.id.favoriteMoviesFragment
                 )
             )
         ) {
