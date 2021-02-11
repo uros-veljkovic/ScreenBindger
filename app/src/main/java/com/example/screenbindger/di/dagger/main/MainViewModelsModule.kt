@@ -2,6 +2,7 @@ package com.example.screenbindger.di.dagger.main
 
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.di.dagger.ViewModelKey
+import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesViewModel
 import com.example.screenbindger.view.fragment.genre_movies.GenreMoviesViewModel
 import com.example.screenbindger.view.fragment.genres.GenresViewModel
 import com.example.screenbindger.view.fragment.login.LoginViewModel
@@ -49,4 +50,9 @@ abstract class MainViewModelsModule {
     @IntoMap
     @ViewModelKey(UpcomingViewModel::class)
     abstract fun bindUpcomingViewModel(viewModel: UpcomingViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FavoriteMoviesViewModel::class)
+    abstract fun bindFavoriteMoviesViewModel(viewModel: FavoriteMoviesViewModel): ViewModel
 }

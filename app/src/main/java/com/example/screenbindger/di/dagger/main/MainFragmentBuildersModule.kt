@@ -1,5 +1,6 @@
 package com.example.screenbindger.di.dagger.main
 
+import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragment
 import com.example.screenbindger.view.fragment.genre_movies.GenreMoviesFragment
 import com.example.screenbindger.view.fragment.genres.GenresFragment
 import com.example.screenbindger.view.fragment.login.LoginFragment
@@ -34,4 +35,7 @@ abstract class MainFragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeUpcomingFragment() : UpcomingFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeFavoriteMoviesFragment() : FavoriteMoviesFragment
 }

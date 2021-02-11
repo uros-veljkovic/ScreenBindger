@@ -7,6 +7,9 @@ import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.event.Event
+import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesViewAction
+import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesViewEvent
+import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesViewState
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsState
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewAction
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewEvent
@@ -77,6 +80,24 @@ class MainModule {
     @MainScope
     @Provides
     fun provideMovieDetailsViewEvent(): MutableLiveData<Event<MovieDetailsViewEvent>> {
+        return MutableLiveData()
+    }
+
+    @MainScope
+    @Provides
+    fun provideFavoriteMoviesViewState(): MutableLiveData<FavoriteMoviesViewState> {
+        return MutableLiveData()
+    }
+
+    @MainScope
+    @Provides
+    fun provideFavoriteMoviesViewAction(): MutableLiveData<Event<FavoriteMoviesViewAction>> {
+        return MutableLiveData()
+    }
+
+    @MainScope
+    @Provides
+    fun provideFavoriteMoviesViewEvent(): MutableLiveData<Event<FavoriteMoviesViewEvent>> {
         return MutableLiveData()
     }
 
