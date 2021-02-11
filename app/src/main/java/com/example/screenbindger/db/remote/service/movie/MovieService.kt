@@ -133,4 +133,35 @@ constructor(
         }
     }
 
+    suspend fun getIsMovieFavorite(
+        movieId: Int,
+        session: Session,
+        viewEvent: MutableLiveData<Event<MovieDetailsViewEvent>>
+    ) {
+        ifLet(session.id, session.accountId) {
+            movieApi.getFavoriteMovieList(
+                sessionId = session.id!!,
+                accountId = session.accountId!!
+            ).let { response ->
+                if (response.isSuccessful) {
+                    response.body()?.list?.forEach { movie ->
+                        if (movie.id!! == movieId) {
+                            viewEvent.postValue(Event(MovieDetailsViewEvent.IsLoadedAsFavorite))
+                            return
+                        }
+                    }
+                    viewEvent.postValue(Event(MovieDetailsViewEvent.IsLoadedAsNotFavorite))
+                } else {
+                    viewEvent.postValue(
+                        Event(
+                            MovieDetailsViewEvent.Error(
+                                "Error finding out if this is you favorite movie :("
+                            )
+                        )
+                    )
+                }
+            }
+        }
+    }
+
 }

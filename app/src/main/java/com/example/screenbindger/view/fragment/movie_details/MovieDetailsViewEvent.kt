@@ -4,6 +4,9 @@ sealed class MovieDetailsViewEvent {
 
     object Rest : MovieDetailsViewEvent()
 
+    object IsLoadedAsFavorite : MovieDetailsViewEvent()
+    object IsLoadedAsNotFavorite : MovieDetailsViewEvent()
+
     data class AddedToFavorites(
         val message: String = "Added to favorites :)"
     ) : MovieDetailsViewEvent()

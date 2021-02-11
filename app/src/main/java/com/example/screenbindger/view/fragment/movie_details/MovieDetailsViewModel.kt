@@ -26,6 +26,9 @@ class MovieDetailsViewModel
             launch {
                 remoteDataSource.getMovieCasts(movieId, viewState)
             }
+            launch {
+                checkIsFavorite(movieId)
+            }
         }
 
     }
@@ -39,11 +42,17 @@ class MovieDetailsViewModel
         viewAction = MutableLiveData()
     }
 
-    fun markAsFavorite(movieId: Int) {
+    fun markAsFavorite(isFavorite: Boolean, movieId: Int) {
         CoroutineScope(IO).launch {
-            MarkAsFavoriteRequestBody(mediaId = movieId, favorite = true).let { body ->
+            MarkAsFavoriteRequestBody(mediaId = movieId, favorite = isFavorite).let { body ->
                 remoteDataSource.markAsFavorite(body, viewEvent)
             }
+        }
+    }
+
+    private fun checkIsFavorite(movieId: Int) {
+        CoroutineScope(IO).launch {
+            remoteDataSource.getIsMovieFavorite(movieId, viewEvent)
         }
     }
 

@@ -19,11 +19,9 @@ import com.example.screenbindger.util.extensions.snack
 import com.example.screenbindger.view.activity.main.MainActivity
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.ref.WeakReference
 import javax.inject.Inject
 
-class MovieDetailsFragment : DaggerFragment(),
-    MovieDetailsRecyclerViewAdapter.OnMarkAsFavoriteClickListener {
+class MovieDetailsFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModel: MovieDetailsViewModel
@@ -81,8 +79,7 @@ class MovieDetailsFragment : DaggerFragment(),
 
     private fun initRecyclerView() {
         binding.rvMovieDetails.apply {
-            adapter =
-                MovieDetailsRecyclerViewAdapter(listener = WeakReference(this@MovieDetailsFragment))
+            adapter = MovieDetailsRecyclerViewAdapter()
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
     }
@@ -152,16 +149,15 @@ class MovieDetailsFragment : DaggerFragment(),
         observeViewModelEvents()
     }
 
-    override fun onMarkAsFavorite(movieId: Int) {
-        viewModel.setAction(MovieDetailsViewAction.MarkAsFavorite(movieId))
-    }
-
     private fun observeViewModelAction() {
         viewModel.viewAction.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let { action ->
                 when (action) {
                     is MovieDetailsViewAction.MarkAsFavorite -> {
-                        viewModel.markAsFavorite(action.movieID)
+                        viewModel.markAsFavorite(true, action.movieID)
+                    }
+                    is MovieDetailsViewAction.MarkAsNotFavorite -> {
+                        viewModel.markAsFavorite(false, action.movieID)
                     }
                 }
             }
@@ -172,6 +168,12 @@ class MovieDetailsFragment : DaggerFragment(),
         viewModel.viewEvent.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
                 when (it) {
+                    MovieDetailsViewEvent.IsLoadedAsFavorite -> {
+                        paintFabTo("It is fab :)", R.color.green)
+                    }
+                    MovieDetailsViewEvent.IsLoadedAsNotFavorite -> {
+                        paintFabTo("It is NOT...", R.color.logout_red)
+                    }
                     is MovieDetailsViewEvent.AddedToFavorites -> {
                         showMessage(it.message)
                         //changeFabIconColor(R.color.red)
@@ -191,7 +193,11 @@ class MovieDetailsFragment : DaggerFragment(),
         })
     }
 
-    fun showMessage(message: String) {
+    private fun paintFabTo(message: String, colorRes: Int) {
+        requireView().snack(message, colorRes)
+    }
+
+    private fun showMessage(message: String) {
         requireView().snack(message, R.color.green)
     }
 

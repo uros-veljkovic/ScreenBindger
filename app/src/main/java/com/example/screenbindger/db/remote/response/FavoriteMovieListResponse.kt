@@ -1,7 +1,8 @@
 package com.example.screenbindger.db.remote.response
 
 import com.example.screenbindger.model.domain.MovieEntity
+import com.google.gson.annotations.SerializedName
 
 data class FavoriteMovieListResponse(
-    val list: List<MovieEntity>? = emptyList()
+    @SerializedName("results") val list: List<MovieEntity>? = emptyList()
 )
