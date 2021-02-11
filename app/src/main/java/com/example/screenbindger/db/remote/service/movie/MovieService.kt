@@ -124,7 +124,10 @@ constructor(
                 body = body
             ).let {
                 if (it.isSuccessful) {
-                    viewEffect.postValue(Event(MovieDetailsViewEvent.AddedToFavorites()))
+                    if (body.favorite)
+                        viewEffect.postValue(Event(MovieDetailsViewEvent.AddedToFavorites()))
+                    else
+                        viewEffect.postValue(Event(MovieDetailsViewEvent.RemovedFromFavorites()))
                 } else {
                     val error = it.getErrorResponse().statusMessage
                     viewEffect.postValue(Event(MovieDetailsViewEvent.Error(error)))

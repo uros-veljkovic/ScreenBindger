@@ -1,11 +1,17 @@
 package com.example.screenbindger.view.fragment.movie_details
 
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +26,7 @@ import com.example.screenbindger.view.activity.main.MainActivity
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
+
 
 class MovieDetailsFragment : DaggerFragment() {
 
@@ -41,6 +48,7 @@ class MovieDetailsFragment : DaggerFragment() {
         setHasOptionsMenu(true)
 
         modifyToolbarForFragment()
+        initOnClickListeners()
         initRecyclerView()
         fetchData()
         observeViewModelState()
@@ -75,6 +83,23 @@ class MovieDetailsFragment : DaggerFragment() {
             it.applyTo(constraintLayout)
         }
 
+    }
+
+    private fun initOnClickListeners() {
+        binding.btnAddOrRemoveAsFavorite.setOnClickListener {
+
+            with(viewModel) {
+                val event = viewEvent.value?.peekContent()
+                if (event != null &&
+                    (event is MovieDetailsViewEvent.IsLoadedAsFavorite ||
+                            event is MovieDetailsViewEvent.AddedToFavorites)
+
+                )
+                    markAsFavorite(false, movieId)
+                else
+                    markAsFavorite(true, movieId)
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -169,18 +194,17 @@ class MovieDetailsFragment : DaggerFragment() {
             event.getContentIfNotHandled()?.let {
                 when (it) {
                     MovieDetailsViewEvent.IsLoadedAsFavorite -> {
-                        paintFabTo("It is fab :)", R.color.green)
+                        animateFabToFavorite()
                     }
                     MovieDetailsViewEvent.IsLoadedAsNotFavorite -> {
-                        paintFabTo("It is NOT...", R.color.logout_red)
+                        animateFabToNotFavorite()
                     }
                     is MovieDetailsViewEvent.AddedToFavorites -> {
-                        showMessage(it.message)
-                        //changeFabIconColor(R.color.red)
+                        showMessage(it.message, R.color.green)
+                        animateFabToFavorite()
                     }
                     is MovieDetailsViewEvent.RemovedFromFavorites -> {
-                        showMessage(it.message)
-                        //changeFabIconColor(R.color.white)
+                        animateFabToNotFavorite()
                     }
                     is MovieDetailsViewEvent.Error -> {
                         showError(it.message)
@@ -193,12 +217,40 @@ class MovieDetailsFragment : DaggerFragment() {
         })
     }
 
+    private fun animateFabToFavorite() {
+        with(binding) {
+            btnAddOrRemoveAsFavorite.animate()
+                .scaleY(1.2f)
+                .scaleX(1.2f)
+                .setDuration(500)
+                .withEndAction {
+                    binding.btnAddOrRemoveAsFavorite.setColorFilter(Color.RED)
+                    binding.btnAddOrRemoveAsFavorite.refreshDrawableState()
+                }
+
+        }
+    }
+
+    private fun animateFabToNotFavorite() {
+        with(binding) {
+            btnAddOrRemoveAsFavorite.animate()
+                .scaleY(1f)
+                .scaleX(1f)
+                .setDuration(500)
+                .withEndAction {
+                    binding.btnAddOrRemoveAsFavorite.setColorFilter(Color.WHITE)
+                    binding.btnAddOrRemoveAsFavorite.refreshDrawableState()
+                }
+
+        }
+    }
+
     private fun paintFabTo(message: String, colorRes: Int) {
         requireView().snack(message, colorRes)
     }
 
-    private fun showMessage(message: String) {
-        requireView().snack(message, R.color.green)
+    private fun showMessage(message: String, colorRes: Int) {
+        requireView().snack(message, colorRes)
     }
 
     override fun onDestroyView() {
@@ -206,6 +258,7 @@ class MovieDetailsFragment : DaggerFragment() {
 
         viewModel.reset()
         modifyToolbarForActivity()
+        animateFabToNotFavorite()
         _binding = null
     }
 

@@ -9,22 +9,23 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="false"
         tools:context=".view.fragment.movie_details.MovieDetailsFragment">
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnAddOrRemoveAsFavorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/small_100"
             android:layout_marginBottom="@dimen/small_100"
             android:backgroundTint="@color/blue"
             android:scaleType="center"
-            android:text="Favorite"
-            app:icon="@drawable/ic_add_24"
+            android:src="@drawable/ic_favorite_24"
+            app:borderWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
