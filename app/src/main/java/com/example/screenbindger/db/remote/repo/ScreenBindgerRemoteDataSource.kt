@@ -14,6 +14,7 @@ import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.service.user.UserService
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.util.event.Event
+import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesViewEvent
 import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewEvent
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewState
@@ -143,6 +144,12 @@ class ScreenBindgerRemoteDataSource
         viewEvent: MutableLiveData<Event<MovieDetailsViewEvent>>
     ) {
         movieService.getIsMovieFavorite(movieId, session, viewEvent)
+    }
+
+    suspend fun getFavoriteMovieList(
+        viewEvent: MutableLiveData<Event<FavoriteMoviesViewEvent>>
+    ) {
+        movieService.getFavoriteMovieList(session, viewEvent)
     }
 
 }

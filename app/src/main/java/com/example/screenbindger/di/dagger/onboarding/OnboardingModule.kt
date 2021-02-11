@@ -16,7 +16,10 @@ object OnboardingModule {
 
     @OnboardingScope
     @Provides
-    fun provideUser(): UserEntity = UserEntity()
+    fun provideUser(): UserEntity = UserEntity().apply {
+        email = "uros@gmail.com"
+        password = "lozinka"
+    }
 
     @OnboardingScope
     @Provides

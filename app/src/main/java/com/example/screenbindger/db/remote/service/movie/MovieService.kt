@@ -10,6 +10,7 @@ import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
 import com.example.screenbindger.util.extensions.ifLet
+import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesViewEvent
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsState
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewEvent
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewState
@@ -163,6 +164,29 @@ constructor(
                         )
                     )
                 }
+            }
+        }
+    }
+
+    suspend fun getFavoriteMovieList(
+        session: Session,
+        viewEvent: MutableLiveData<Event<FavoriteMoviesViewEvent>>
+    ) {
+        movieApi.getFavoriteMovieList(
+            sessionId = session.id!!,
+            accountId = session.accountId!!
+        ).let { response ->
+            var message = ""
+            if (response.isSuccessful) {
+                val list = response.body()?.list
+                if (list.isNullOrEmpty()) {
+                    message = "No favorite movies added so far."
+                    viewEvent.postValue(Event(FavoriteMoviesViewEvent.EmptyList(message)))
+                } else
+                    viewEvent.postValue(Event(FavoriteMoviesViewEvent.MoviesLoaded(list)))
+            } else {
+                message = "Error loading favorite movies :("
+                viewEvent.postValue(Event(FavoriteMoviesViewEvent.Error(message)))
             }
         }
     }
