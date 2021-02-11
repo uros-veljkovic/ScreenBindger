@@ -22,6 +22,9 @@
         <item name="textInputStyle">@style/Widget.ScreenBindger.TextInputLayout</item>
         <item name="fontFamily">@font/cardo</item>
         <item name="android:fontFamily">@font/cardo</item>
+        <item name="extendedFloatingActionButtonStyle">
+            @style/Widget.MaterialComponents.ExtendedFloatingActionButton
+        </item>
 
     </style>
 
