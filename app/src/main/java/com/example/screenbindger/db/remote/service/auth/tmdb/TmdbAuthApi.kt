@@ -1,9 +1,9 @@
 package com.example.screenbindger.db.remote.service.auth.tmdb
 
 import com.example.screenbindger.db.remote.request.TokenRequestBody
-import com.example.screenbindger.db.remote.response.AccountDetailsResponse
-import com.example.screenbindger.db.remote.response.RequestTokenResponse
-import com.example.screenbindger.db.remote.response.CreateSessionResponse
+import com.example.screenbindger.db.remote.response.account.AccountDetailsResponse
+import com.example.screenbindger.db.remote.response.account.RequestTokenResponse
+import com.example.screenbindger.db.remote.response.account.CreateSessionResponse
 import com.example.screenbindger.util.constants.API_KEY
 import retrofit2.Response
 import retrofit2.http.Body

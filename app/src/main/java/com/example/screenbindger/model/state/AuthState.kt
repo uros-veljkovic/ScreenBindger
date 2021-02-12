@@ -1,11 +1,8 @@
 package com.example.screenbindger.model.state
 
-import com.example.screenbindger.db.remote.response.RequestTokenResponse
-import com.example.screenbindger.db.remote.response.ValidateRequestTokenResponse
+import com.example.screenbindger.db.remote.response.account.RequestTokenResponse
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.UserEntity
-import com.example.screenbindger.util.event.Event
-import java.lang.Error
 import java.lang.Exception
 
 sealed class AuthState {

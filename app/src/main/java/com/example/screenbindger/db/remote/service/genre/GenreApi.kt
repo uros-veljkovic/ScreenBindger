@@ -1,7 +1,7 @@
 package com.example.screenbindger.db.remote.service.genre
 
-import com.example.screenbindger.db.remote.response.MoviesByGenreResponse
-import com.example.screenbindger.db.remote.response.AllGenresResponse
+import com.example.screenbindger.db.remote.response.movie.MoviesByGenreResponse
+import com.example.screenbindger.db.remote.response.genre.AllGenresResponse
 import com.example.screenbindger.util.constants.API_KEY
 import retrofit2.Response
 import retrofit2.http.GET

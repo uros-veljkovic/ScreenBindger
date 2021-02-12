@@ -1,6 +1,6 @@
 package com.example.screenbindger.model.state
 
-import com.example.screenbindger.db.remote.response.RequestTokenResponse
+import com.example.screenbindger.db.remote.response.account.RequestTokenResponse
 
 sealed class TokenState {
     object InitState : TokenState()

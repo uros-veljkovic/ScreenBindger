@@ -3,7 +3,7 @@ package com.example.screenbindger.view.fragment.genres
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
-import com.example.screenbindger.db.remote.response.AllGenresResponse
+import com.example.screenbindger.db.remote.response.genre.AllGenresResponse
 import com.example.screenbindger.model.domain.GenreEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO

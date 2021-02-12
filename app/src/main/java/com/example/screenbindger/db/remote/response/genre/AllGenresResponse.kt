@@ -1,4 +1,4 @@
-package com.example.screenbindger.db.remote.response
+package com.example.screenbindger.db.remote.response.genre
 
 import com.example.screenbindger.model.domain.GenreEntity
 import com.google.gson.annotations.SerializedName

@@ -1,7 +1,11 @@
 package com.example.screenbindger.db.remote.service.movie
 
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
-import com.example.screenbindger.db.remote.response.*
+import com.example.screenbindger.db.remote.response.movie.FavoriteMovieListResponse
+import com.example.screenbindger.db.remote.response.movie.MarkAsFavoriteResponse
+import com.example.screenbindger.db.remote.response.movie.MovieCastsResponse
+import com.example.screenbindger.db.remote.response.movie.TrendingMoviesResponse
+import com.example.screenbindger.db.remote.response.movie.UpcomingMoviesResponse
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.util.constants.API_KEY
 import retrofit2.Response

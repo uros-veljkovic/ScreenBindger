@@ -1,4 +1,4 @@
-package com.example.screenbindger.db.remote.response
+package com.example.screenbindger.db.remote.response.account
 
 import com.google.gson.annotations.SerializedName
 

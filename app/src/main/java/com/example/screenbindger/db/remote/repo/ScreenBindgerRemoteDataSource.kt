@@ -4,7 +4,8 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.model.domain.UserEntity
-import com.example.screenbindger.db.remote.response.*
+import com.example.screenbindger.db.remote.response.genre.AllGenresResponse
+import com.example.screenbindger.db.remote.response.movie.MoviesByGenreResponse
 import com.example.screenbindger.db.remote.service.auth.firebase.AuthService
 import com.example.screenbindger.db.remote.service.auth.tmdb.TmdbAuthService
 import com.example.screenbindger.db.remote.service.genre.GenreService

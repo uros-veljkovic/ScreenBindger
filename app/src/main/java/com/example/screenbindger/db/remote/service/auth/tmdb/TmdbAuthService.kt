@@ -1,8 +1,8 @@
 package com.example.screenbindger.db.remote.service.auth.tmdb
 
 import com.example.screenbindger.db.remote.request.TokenRequestBody
-import com.example.screenbindger.db.remote.response.AccountDetailsResponse
-import com.example.screenbindger.db.remote.response.RequestTokenResponse
+import com.example.screenbindger.db.remote.response.account.AccountDetailsResponse
+import com.example.screenbindger.db.remote.response.account.RequestTokenResponse
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.state.AuthState
 import com.example.screenbindger.util.extensions.getErrorResponse
