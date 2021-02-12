@@ -1,7 +1,7 @@
 package com.example.screenbindger.view.fragment.movie_details
 
-import com.example.screenbindger.model.domain.CastEntity
-import com.example.screenbindger.model.domain.MovieEntity
+import com.example.screenbindger.model.domain.cast.CastEntity
+import com.example.screenbindger.model.domain.movie.MovieEntity
 import com.example.screenbindger.util.event.Event
 
 data class MovieDetailsViewState(

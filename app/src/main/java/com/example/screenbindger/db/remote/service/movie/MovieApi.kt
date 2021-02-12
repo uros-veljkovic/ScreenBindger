@@ -6,7 +6,7 @@ import com.example.screenbindger.db.remote.response.movie.MarkAsFavoriteResponse
 import com.example.screenbindger.db.remote.response.movie.MovieCastsResponse
 import com.example.screenbindger.db.remote.response.movie.TrendingMoviesResponse
 import com.example.screenbindger.db.remote.response.movie.UpcomingMoviesResponse
-import com.example.screenbindger.model.domain.MovieEntity
+import com.example.screenbindger.model.domain.movie.MovieEntity
 import com.example.screenbindger.util.constants.API_KEY
 import retrofit2.Response
 import retrofit2.http.*

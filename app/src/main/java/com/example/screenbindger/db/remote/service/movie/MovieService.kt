@@ -3,8 +3,8 @@ package com.example.screenbindger.db.remote.service.movie
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.db.remote.session.Session
-import com.example.screenbindger.model.domain.CastEntity
-import com.example.screenbindger.model.domain.MovieEntity
+import com.example.screenbindger.model.domain.cast.CastEntity
+import com.example.screenbindger.model.domain.movie.MovieEntity
 import com.example.screenbindger.model.global.Genres
 import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.event.Event

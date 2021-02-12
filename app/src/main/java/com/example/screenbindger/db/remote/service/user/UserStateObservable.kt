@@ -3,7 +3,7 @@ package com.example.screenbindger.db.remote.service.user
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.screenbindger.model.domain.UserEntity
+import com.example.screenbindger.model.domain.user.UserEntity
 import com.example.screenbindger.model.state.ObjectState
 
 class UserStateObservable(

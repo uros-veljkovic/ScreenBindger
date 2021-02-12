@@ -1,12 +1,9 @@
 package com.example.screenbindger.db.remote.service.user
 
-import android.util.Log
-import com.example.screenbindger.model.domain.UserEntity
+import com.example.screenbindger.model.domain.user.UserEntity
 import com.example.screenbindger.model.state.ObjectState
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.StorageReference
 import java.lang.Exception
 import javax.inject.Inject
 

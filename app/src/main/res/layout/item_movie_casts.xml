@@ -10,7 +10,7 @@
 
         <variable
             name="cast"
-            type="com.example.screenbindger.model.domain.CastEntity" />
+            type="com.example.screenbindger.model.domain.cast.CastEntity" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

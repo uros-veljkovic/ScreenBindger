@@ -2,7 +2,7 @@ package com.example.screenbindger.model.state
 
 import com.example.screenbindger.db.remote.response.account.RequestTokenResponse
 import com.example.screenbindger.db.remote.session.Session
-import com.example.screenbindger.model.domain.UserEntity
+import com.example.screenbindger.model.domain.user.UserEntity
 import java.lang.Exception
 
 sealed class AuthState {

@@ -1,6 +1,6 @@
 package com.example.screenbindger.db.remote.session
 
-import com.example.screenbindger.model.domain.UserEntity
+import com.example.screenbindger.model.domain.user.UserEntity
 import java.lang.Exception
 
 data class Session(

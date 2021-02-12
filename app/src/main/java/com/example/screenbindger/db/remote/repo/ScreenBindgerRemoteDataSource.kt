@@ -3,7 +3,7 @@ package com.example.screenbindger.db.remote.repo
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
-import com.example.screenbindger.model.domain.UserEntity
+import com.example.screenbindger.model.domain.user.UserEntity
 import com.example.screenbindger.db.remote.response.genre.AllGenresResponse
 import com.example.screenbindger.db.remote.response.movie.MoviesByGenreResponse
 import com.example.screenbindger.db.remote.service.auth.firebase.AuthService

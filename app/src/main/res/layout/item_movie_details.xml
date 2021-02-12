@@ -10,7 +10,7 @@
 
         <variable
             name="movie"
-            type="com.example.screenbindger.model.domain.MovieEntity" />
+            type="com.example.screenbindger.model.domain.movie.MovieEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -87,16 +87,15 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="@dimen/small_100"
             android:layout_marginBottom="@dimen/normal_100"
-            android:justificationMode="inter_word"
             android:text="@{movie.description}"
             android:textSize="14sp"
-            app:colorClickableText="#FF0000"
-            app:layout_constraintBottom_toTopOf="@id/tvCastPlaceholder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvRatingPlaceholder"
             app:showTrimExpandedText="true"
             app:trimCollapsedText="@string/show_more"
+            android:justificationMode="inter_word"
+            app:colorClickableText="#FF0000"
             app:trimExpandedText="@string/show_less"
             app:trimLength="100"
             app:trimMode="trimModeLength"

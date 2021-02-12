@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.ItemGenreBinding
-import com.example.screenbindger.model.domain.GenreEntity
+import com.example.screenbindger.model.domain.genre.GenreEntity
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import java.lang.ref.WeakReference
 

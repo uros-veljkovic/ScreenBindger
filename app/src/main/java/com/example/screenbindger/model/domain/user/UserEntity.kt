@@ -1,4 +1,4 @@
-package com.example.screenbindger.model.domain
+package com.example.screenbindger.model.domain.user
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable

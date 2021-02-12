@@ -1,4 +1,4 @@
-package com.example.screenbindger.model.domain
+package com.example.screenbindger.model.domain.genre
 
 import com.google.gson.annotations.SerializedName
 

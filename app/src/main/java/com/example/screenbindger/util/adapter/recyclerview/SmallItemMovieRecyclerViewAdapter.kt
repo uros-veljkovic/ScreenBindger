@@ -6,7 +6,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.screenbindger.databinding.ItemMovieSmallBinding
-import com.example.screenbindger.model.domain.MovieEntity
+import com.example.screenbindger.model.domain.movie.MovieEntity
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
 import com.example.screenbindger.util.constants.API_KEY

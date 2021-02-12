@@ -1,8 +1,10 @@
-package com.example.screenbindger.model.domain
+package com.example.screenbindger.model.domain.movie
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
+import com.example.screenbindger.model.domain.Item
+import com.example.screenbindger.model.domain.genre.GenreEntity
 import com.example.screenbindger.model.enums.ItemType
 import com.google.gson.annotations.SerializedName
 

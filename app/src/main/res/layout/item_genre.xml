@@ -8,7 +8,7 @@
 
         <variable
             name="genre"
-            type="com.example.screenbindger.model.domain.GenreEntity" />
+            type="com.example.screenbindger.model.domain.genre.GenreEntity" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

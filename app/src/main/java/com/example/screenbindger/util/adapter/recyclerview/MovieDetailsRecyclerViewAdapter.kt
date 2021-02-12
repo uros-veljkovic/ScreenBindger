@@ -5,11 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.screenbindger.databinding.ItemMovieCastsBinding
 import com.example.screenbindger.databinding.ItemMovieDetailsBinding
-import com.example.screenbindger.model.domain.CastEntity
+import com.example.screenbindger.model.domain.cast.CastEntity
 import com.example.screenbindger.model.domain.Item
-import com.example.screenbindger.model.domain.MovieEntity
+import com.example.screenbindger.model.domain.movie.MovieEntity
 import com.example.screenbindger.model.enums.ItemType
-import java.lang.ref.WeakReference
 
 
 class MovieDetailsRecyclerViewAdapter(
