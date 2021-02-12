@@ -1,17 +1,12 @@
 package com.example.screenbindger.view.fragment.movie_details
 
-import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.DecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -122,22 +117,12 @@ class MovieDetailsFragment : DaggerFragment() {
                     }
                     MovieDetailsState.MovieFetched -> {
                         val movie = it.movie
-                        with(binding) {
-                            val adapter = rvMovieDetails.adapter as MovieDetailsRecyclerViewAdapter
-                            adapter.addItems(listOf(movie as Item))
-                            rvMovieDetails.startLayoutAnimation()
-                            invalidateAll()
-                        }
+                        populateList(listOf(movie as Item))
                         hideProgressBar()
                     }
                     MovieDetailsState.CastsFetched -> {
                         val list = it.casts
-                        with(binding) {
-                            val adapter = rvMovieDetails.adapter as MovieDetailsRecyclerViewAdapter
-                            adapter.addItems(list as List<Item>)
-                            rvMovieDetails.startLayoutAnimation()
-                            invalidateAll()
-                        }
+                        populateList(list as List<Item>)
                     }
                     is MovieDetailsState.Error.MovieNotFetched -> {
                         showError(state)
@@ -149,6 +134,15 @@ class MovieDetailsFragment : DaggerFragment() {
             }
 
         })
+    }
+
+    fun populateList(list: List<Item>) {
+        with(binding) {
+            val adapter = rvMovieDetails.adapter as MovieDetailsRecyclerViewAdapter
+            adapter.addItems(list)
+            rvMovieDetails.startLayoutAnimation()
+            invalidateAll()
+        }
     }
 
     private fun showError(state: MovieDetailsState.Error) {

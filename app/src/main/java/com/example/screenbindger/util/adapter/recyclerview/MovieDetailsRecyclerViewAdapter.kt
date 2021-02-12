@@ -66,7 +66,7 @@ class MovieDetailsRecyclerViewAdapter(
     /**
      * Adapter notifies that data set is changed only when
      * both types of items are in the list.
-     * 
+     *
      * For example, if either movie object or cast list is in the adapter list,
      * when another object (cast list/movie) is inserted to list, only then
      * adapter notifies change.

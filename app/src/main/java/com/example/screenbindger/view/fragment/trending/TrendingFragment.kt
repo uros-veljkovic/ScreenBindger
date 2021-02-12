@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.databinding.FragmentTrendingBinding
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.model.state.ListState
-import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
+import com.example.screenbindger.util.adapter.recyclerview.SmallItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
 import com.example.screenbindger.util.event.Event
@@ -50,7 +50,7 @@ class TrendingFragment : DaggerFragment(),
         binding.rvTrending.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             addItemDecoration(GridLayoutRecyclerViewDecorator(2, 16, true))
-            adapter = ItemMovieRecyclerViewAdapter(this@TrendingFragment)
+            adapter = SmallItemMovieRecyclerViewAdapter(this@TrendingFragment)
         }
     }
 
@@ -77,7 +77,7 @@ class TrendingFragment : DaggerFragment(),
 
     private fun populateRecyclerView(list: List<MovieEntity>) {
         with(binding.rvTrending) {
-            (adapter as ItemMovieRecyclerViewAdapter).setList(list)
+            (adapter as SmallItemMovieRecyclerViewAdapter).setList(list)
             startLayoutAnimation()
         }
     }

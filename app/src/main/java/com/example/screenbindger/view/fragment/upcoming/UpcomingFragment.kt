@@ -10,14 +10,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.databinding.FragmentUpcomingBinding
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.model.state.ListState
-import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
+import com.example.screenbindger.util.adapter.recyclerview.SmallItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snack
-import com.example.screenbindger.view.fragment.trending.TrendingFragmentDirections
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -52,7 +51,7 @@ class UpcomingFragment : DaggerFragment(),
         binding.rvUpcoming.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             addItemDecoration(GridLayoutRecyclerViewDecorator(2, 16, true))
-            adapter = ItemMovieRecyclerViewAdapter(this@UpcomingFragment)
+            adapter = SmallItemMovieRecyclerViewAdapter(this@UpcomingFragment)
         }
     }
 
@@ -79,7 +78,7 @@ class UpcomingFragment : DaggerFragment(),
 
     private fun populateRecyclerView(list: List<MovieEntity>) {
         with(binding.rvUpcoming) {
-            (adapter as ItemMovieRecyclerViewAdapter).setList(list)
+            (adapter as SmallItemMovieRecyclerViewAdapter).setList(list)
             startLayoutAnimation()
         }
     }

@@ -10,7 +10,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentGenreMoviesBinding
-import com.example.screenbindger.util.adapter.recyclerview.ItemMovieRecyclerViewAdapter
+import com.example.screenbindger.util.adapter.recyclerview.SmallItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
 import dagger.android.support.DaggerFragment
@@ -61,7 +61,7 @@ class GenreMoviesFragment : DaggerFragment(),
         binding.rvGenreMovies.also {
             it.layoutManager = GridLayoutManager(requireContext(), 2)
             it.addItemDecoration(GridLayoutRecyclerViewDecorator(2, 16, true))
-            it.adapter = ItemMovieRecyclerViewAdapter(this)
+            it.adapter = SmallItemMovieRecyclerViewAdapter(this)
         }
     }
 
@@ -70,7 +70,7 @@ class GenreMoviesFragment : DaggerFragment(),
             if (response != null && response.isSuccessful) {
                 val list = response.body()?.list?.toMutableList() ?: mutableListOf()
                 binding.rvGenreMovies.adapter =
-                    ItemMovieRecyclerViewAdapter(this, list)
+                    SmallItemMovieRecyclerViewAdapter(this, list)
                 binding.rvGenreMovies.startLayoutAnimation()
             }
         })
