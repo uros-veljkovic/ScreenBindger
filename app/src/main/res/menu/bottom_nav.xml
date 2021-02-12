@@ -17,12 +17,12 @@
     <item
         android:id="@+id/favoriteMoviesFragment"
         android:icon="@drawable/ic_favorite_24"
-        android:title="@string/upcoming_placeholder" />
+        android:title="@string/favorites_placeholder" />
 
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_profile_filled_black_24"
-        android:title="Profile" />
+        android:title="@string/profile_placeholder" />
 
 
 </menu>
