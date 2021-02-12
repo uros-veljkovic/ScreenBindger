@@ -5,27 +5,27 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.screenbindger.databinding.ItemMovieBinding
+import com.example.screenbindger.databinding.ItemMovieSmallBinding
 import com.example.screenbindger.model.domain.MovieEntity
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
 import com.example.screenbindger.util.constants.API_KEY
 import com.example.screenbindger.util.constants.POSTER_SIZE_SMALL
-import kotlinx.android.synthetic.main.item_movie.view.*
+import kotlinx.android.synthetic.main.item_movie_small.view.*
 
-class ItemMovieRecyclerViewAdapter(
+class SmallItemMovieRecyclerViewAdapter(
     val listener: OnCardItemClickListener,
     private var list: MutableList<MovieEntity> = mutableListOf()
 ) :
-    RecyclerView.Adapter<ItemMovieRecyclerViewAdapter.ItemMovieViewHolder>() {
+    RecyclerView.Adapter<SmallItemMovieRecyclerViewAdapter.SmallItemMovieViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemMovieViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SmallItemMovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemMovieBinding.inflate(inflater)
-        return ItemMovieViewHolder(binding)
+        val binding = ItemMovieSmallBinding.inflate(inflater)
+        return SmallItemMovieViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ItemMovieViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SmallItemMovieViewHolder, position: Int) {
         val movie = list[position]
         val poster = holder.itemView.ivMoviePoster
 
@@ -61,7 +61,7 @@ class ItemMovieRecyclerViewAdapter(
         return list
     }
 
-    inner class ItemMovieViewHolder constructor(val binding: ItemMovieBinding) :
+    inner class SmallItemMovieViewHolder constructor(val binding: ItemMovieSmallBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: MovieEntity) {
