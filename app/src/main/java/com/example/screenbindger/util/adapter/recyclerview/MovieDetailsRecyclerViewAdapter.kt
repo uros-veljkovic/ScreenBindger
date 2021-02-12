@@ -63,8 +63,18 @@ class MovieDetailsRecyclerViewAdapter(
         return itemType.value
     }
 
+    /**
+     * Adapter notifies that data set is changed only when
+     * both types of items are in the list.
+     * 
+     * For example, if either movie object or cast list is in the adapter list,
+     * when another object (cast list/movie) is inserted to list, only then
+     * adapter notifies change.
+     */
     fun addItems(items: List<Item>) {
         val itemTypeOfFirstItem = items[0].getItemType()
+        val listContainedItem: Boolean = this.list.isEmpty().not()
+
         when (itemTypeOfFirstItem) {
             ItemType.MOVIE_DETAILS -> {
                 val movie = items[0] as MovieEntity
@@ -75,8 +85,10 @@ class MovieDetailsRecyclerViewAdapter(
                 list.addAll(items)
             }
         }
-        notifyDataSetChanged()
 
+        if (listContainedItem) {
+            notifyDataSetChanged()
+        }
     }
 
     inner class MovieDetailsViewHolder constructor(val binding: ItemMovieDetailsBinding) :
