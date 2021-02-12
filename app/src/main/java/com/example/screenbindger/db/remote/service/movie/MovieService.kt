@@ -30,44 +30,46 @@ constructor(
     suspend fun getTrending(trendingViewState: MutableLiveData<TrendingViewState>) {
         movieApi.getTrendingMovies().let { response ->
             val list = response.body()?.list ?: emptyList()
-            if (response.isSuccessful) {
+            val state: TrendingViewState
+            state = if (response.isSuccessful) {
                 generateGenres(list)
-                val state = TrendingViewState(ListState.Fetched, list)
-                trendingViewState.postValue(state)
+                TrendingViewState(ListState.Fetched, list)
             } else {
                 val message = response.getErrorResponse().statusMessage
-                val state = TrendingViewState(ListState.NotFetched(Event(message)), null)
-                trendingViewState.postValue(state)
+                TrendingViewState(ListState.NotFetched(Event(message)), null)
             }
+            trendingViewState.postValue(state)
         }
     }
 
     suspend fun getUpcoming(upcomingViewState: MutableLiveData<UpcomingViewState>) {
         movieApi.getUpcomingMovies().let { response ->
             val list = response.body()?.list ?: emptyList()
-            if (response.isSuccessful) {
+            val state: UpcomingViewState
+            state = if (response.isSuccessful) {
                 generateGenres(list)
-                val state = UpcomingViewState(ListState.Fetched, list)
-                upcomingViewState.postValue(state)
+                UpcomingViewState(ListState.Fetched, list)
             } else {
                 val message = response.getErrorResponse().statusMessage
-                val state = UpcomingViewState(ListState.NotFetched(Event(message)), null)
-                upcomingViewState.postValue(state)
+                UpcomingViewState(ListState.NotFetched(Event(message)), null)
             }
+            upcomingViewState.postValue(state)
         }
     }
 
     private fun generateGenres(list: List<MovieEntity>) {
         CoroutineScope(Dispatchers.Default).launch {
-            list.forEach { item ->
-                item.genreIds?.forEach { generId ->
-                    Genres.list.forEach {
-                        if (it.id == generId) {
-                            item.genresString += "${it.name}, "
+            list.forEach { movie ->
+                movie.genreIds?.forEach { generId ->
+                    Genres.list.forEach { concreteGenre ->
+                        if (concreteGenre.id == generId &&
+                            movie.genresString.contains(concreteGenre.name!!).not()
+                        ) {
+                            movie.genresString += "${concreteGenre.name}, "
                         }
                     }
                 }
-                item.genresString = item.genresString.dropLast(2)
+                movie.genresString = movie.genresString.dropLast(2)
             }
         }
     }
@@ -182,8 +184,10 @@ constructor(
                 if (list.isNullOrEmpty()) {
                     message = "No favorite movies added so far."
                     viewEvent.postValue(Event(FavoriteMoviesViewEvent.EmptyList(message)))
-                } else
+                } else {
+                    generateGenres(list)
                     viewEvent.postValue(Event(FavoriteMoviesViewEvent.MoviesLoaded(list)))
+                }
             } else {
                 message = "Error loading favorite movies :("
                 viewEvent.postValue(Event(FavoriteMoviesViewEvent.Error(message)))
