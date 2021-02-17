@@ -42,7 +42,7 @@ class GenresFragment : DaggerFragment(), OnCardItemClickListener {
     private fun initRecyclerView() {
         binding.rvGenres.also {
             it.layoutManager = GridLayoutManager(requireContext(), 2)
-            it.addItemDecoration(GridLayoutRecyclerViewDecorator(2, 16, true))
+            it.addItemDecoration(GridLayoutRecyclerViewDecorator(2, 32, true))
         }
     }
 
