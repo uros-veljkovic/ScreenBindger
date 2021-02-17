@@ -2,7 +2,7 @@ package com.example.screenbindger.db.remote.response.review
 import com.example.screenbindger.model.domain.review.ReviewEntity
 import com.google.gson.annotations.SerializedName
 
-data class ReviewsResponse(
+data class MovieReviewsResponse(
     @SerializedName("id")
     val id: Int? = null,
     @SerializedName("page")
