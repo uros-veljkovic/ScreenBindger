@@ -37,7 +37,7 @@ class ItemGenreRecyclerViewAdapter(
         val resources = context.get()?.resources
 
         val resourceId: Int = resources!!.getIdentifier(
-            "ic_genre_${genre.id}",
+            "ic_new_genre_${genre.id}",
             "drawable",
             context.get()?.packageName
         )
