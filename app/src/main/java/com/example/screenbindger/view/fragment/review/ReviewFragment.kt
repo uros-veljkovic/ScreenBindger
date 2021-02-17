@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.screenbindger.databinding.FragmentReviewBinding
 import com.example.screenbindger.util.adapter.recyclerview.ReviewRecyclerViewAdapter
+import com.example.screenbindger.util.decorator.ItemReviewDecorator
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.snack
 import dagger.android.support.DaggerFragment
@@ -54,10 +55,7 @@ class ReviewFragment : DaggerFragment() {
         binding.rvReviews.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(
-                DividerItemDecoration(
-                    requireContext(),
-                    DividerItemDecoration.HORIZONTAL
-                )
+                ItemReviewDecorator(8)
             )
         }
     }
