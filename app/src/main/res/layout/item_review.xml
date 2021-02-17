@@ -1,6 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="review"
+            type="com.example.screenbindger.model.domain.review.ReviewEntity" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_margin="@dimen/small_100"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="@dimen/small_100"
+            android:layout_marginTop="@dimen/small_100"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@mipmap/leak_canary_icon" />
+
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_100"
+            android:text="@{`@` + review.authorDetails.username.toLowerCase()}"
+            android:textStyle="bold"
+            app:fontFamily="@font/cardo"
+            app:layout_constraintBottom_toTopOf="@+id/tvReviewContent"
+            app:layout_constraintStart_toEndOf="@+id/ivAvatar"
+            app:layout_constraintTop_toBottomOf="@+id/tvUserFullName"
+            tools:text="\@username" />
+
+        <TextView
+            android:id="@+id/tvUserFullName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_100"
+            android:text="@{review.authorDetails.name}"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/tvUsername"
+            app:layout_constraintStart_toEndOf="@+id/ivAvatar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Uros Veljkovic" />
+
+        <TextView
+            android:id="@+id/tvDatePosted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/small_100"
+            android:text="@{review.createdAt.subSequence(0,10)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivAvatar"
+            tools:text="26. January 2020." />
+
+        <com.borjabravo.readmoretextview.ReadMoreTextView
+            android:id="@+id/tvReviewContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/small_100"
+            android:layout_marginTop="@dimen/small_100"
+            android:justificationMode="inter_word"
+            android:text="@{review.content}"
+            app:colorClickableText="#FF0000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivAvatar"
+            app:showTrimExpandedText="true"
+            app:trimCollapsedText="@string/show_more"
+            app:trimExpandedText="@string/show_less"
+            app:trimLength="100"
+            app:trimMode="trimModeLength"
+            tools:targetApi="o"
+            tools:text="@string/lorem" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

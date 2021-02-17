@@ -2,19 +2,20 @@ package com.example.screenbindger.di.dagger.main
 
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
-import com.example.screenbindger.model.domain.UserEntity
+import com.example.screenbindger.model.domain.user.UserEntity
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
-import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesViewAction
 import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesViewEvent
 import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesViewState
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsState
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewAction
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewEvent
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewState
 import com.example.screenbindger.view.fragment.profile.FragmentStateObservable
+import com.example.screenbindger.view.fragment.review.ReviewFragmentViewAction
+import com.example.screenbindger.view.fragment.review.ReviewFragmentViewEvent
+import com.example.screenbindger.view.fragment.review.ReviewFragmentViewState
 import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import dagger.Module
@@ -25,7 +26,8 @@ class MainModule {
 
     @MainScope
     @Provides
-    fun provideUser(): UserEntity = UserEntity()
+    fun provideUser(): UserEntity =
+        UserEntity()
 
     @MainScope
     @Provides
@@ -98,6 +100,24 @@ class MainModule {
     @MainScope
     @Provides
     fun provideFavoriteMoviesViewEvent(): MutableLiveData<Event<FavoriteMoviesViewEvent>> {
+        return MutableLiveData()
+    }
+
+    @MainScope
+    @Provides
+    fun provideReviewFragmentViewState(): MutableLiveData<ReviewFragmentViewState> {
+        return MutableLiveData()
+    }
+
+    @MainScope
+    @Provides
+    fun provideReviewFragmentViewAction(): MutableLiveData<Event<ReviewFragmentViewAction>> {
+        return MutableLiveData()
+    }
+
+    @MainScope
+    @Provides
+    fun provideReviewFragmentViewEvent(): MutableLiveData<Event<ReviewFragmentViewEvent>> {
         return MutableLiveData()
     }
 

@@ -10,6 +10,7 @@ import com.example.screenbindger.db.remote.service.auth.firebase.AuthService
 import com.example.screenbindger.db.remote.service.auth.tmdb.TmdbAuthService
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieService
+import com.example.screenbindger.db.remote.service.review.ReviewService
 import com.example.screenbindger.db.remote.service.storage.StorageService
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.service.user.UserService
@@ -19,6 +20,7 @@ import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesVie
 import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewEvent
 import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewState
+import com.example.screenbindger.view.fragment.review.ReviewFragmentViewEvent
 import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import retrofit2.Response
@@ -32,8 +34,8 @@ class ScreenBindgerRemoteDataSource
     private val tmdbAuthService: TmdbAuthService,
     private val authService: AuthService,
     private val userService: UserService,
-    private val storageService: StorageService
-
+    private val storageService: StorageService,
+    private val reviewService: ReviewService
 ) {
 
     suspend fun login(
@@ -151,6 +153,13 @@ class ScreenBindgerRemoteDataSource
         viewEvent: MutableLiveData<Event<FavoriteMoviesViewEvent>>
     ) {
         movieService.getFavoriteMovieList(session, viewEvent)
+    }
+
+    suspend fun getMovieReviews(
+        movieId: Int,
+        viewEvent: MutableLiveData<Event<ReviewFragmentViewEvent>>
+    ) {
+        reviewService.getMovieReviews(movieId, viewEvent)
     }
 
 }

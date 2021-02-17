@@ -8,6 +8,8 @@ import com.example.screenbindger.db.remote.service.genre.GenreApi
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieApi
 import com.example.screenbindger.db.remote.service.movie.MovieService
+import com.example.screenbindger.db.remote.service.review.ReviewApi
+import com.example.screenbindger.db.remote.service.review.ReviewService
 import com.example.screenbindger.db.remote.service.storage.FirebaseStorageService
 import com.example.screenbindger.db.remote.service.user.FirebaseUserService
 import com.example.screenbindger.db.remote.session.Session
@@ -39,7 +41,8 @@ class AppModule {
         tmdbAuthService: TmdbAuthService,
         authService: FirebaseAuthService,
         userService: FirebaseUserService,
-        storageService: FirebaseStorageService
+        storageService: FirebaseStorageService,
+        reviewService: ReviewService
     ): ScreenBindgerRemoteDataSource {
         return ScreenBindgerRemoteDataSource(
             session,
@@ -48,7 +51,8 @@ class AppModule {
             tmdbAuthService,
             authService,
             userService,
-            storageService
+            storageService,
+            reviewService
         )
     }
 
@@ -80,6 +84,15 @@ class AppModule {
     @Provides
     fun provideTmdbAuthApi(retrofit: Retrofit): TmdbAuthApi =
         retrofit.create(TmdbAuthApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideReviewService(api: ReviewApi): ReviewService = ReviewService(api)
+
+    @Singleton
+    @Provides
+    fun provideReviewApi(retrofit: Retrofit): ReviewApi =
+        retrofit.create(ReviewApi::class.java)
 
     @Singleton
     @Provides
