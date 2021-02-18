@@ -68,7 +68,6 @@ class ReviewFragment : DaggerFragment() {
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is ReviewFragmentViewState.ReviewsFetched -> {
-                    requireView().snack("GOOD")
                     binding.rvReviews.apply {
                         adapter = ReviewRecyclerViewAdapter(state.list)
                     }
