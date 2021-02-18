@@ -82,7 +82,10 @@ constructor(
             if (response.isSuccessful) {
                 val movie: MovieEntity? = response.body()
                 val state =
-                    MovieDetailsFragmentViewState(Event(MovieDetailsState.MovieFetched), movie = movie)
+                    MovieDetailsFragmentViewState(
+                        Event(MovieDetailsState.MovieFetched),
+                        movie = movie
+                    )
                 viewState.postValue(state)
             } else {
                 val message = "Error loading movie poster and description."
@@ -103,7 +106,10 @@ constructor(
             if (it.isSuccessful) {
                 val list: List<CastEntity>? = it.body()?.casts
                 val state =
-                    MovieDetailsFragmentViewState(Event(MovieDetailsState.CastsFetched), casts = list)
+                    MovieDetailsFragmentViewState(
+                        Event(MovieDetailsState.CastsFetched),
+                        casts = list
+                    )
                 viewState.postValue(state)
             } else {
                 val message = "Failed to load cast for the movie."
@@ -191,6 +197,25 @@ constructor(
             } else {
                 message = "Error loading favorite movies :("
                 viewEvent.postValue(Event(FavoriteMoviesFragmentViewEvent.Error(message)))
+            }
+        }
+    }
+
+    suspend fun getMovieTrailersInfo(
+        movieId: Int,
+        viewEvent: MutableLiveData<Event<MovieDetailsFragmentViewEvent>>
+    ) {
+        movieApi.getMovieTrailers(movieId).let { response ->
+            if (response.isSuccessful) {
+                response.body()?.list?.let { list ->
+                    if (list.isNotEmpty()) {
+                        viewEvent.postValue(Event(MovieDetailsFragmentViewEvent.TrailersFetched(list)))
+                    } else {
+                        viewEvent.postValue(Event(MovieDetailsFragmentViewEvent.TrailersNotFetched))
+                    }
+                }
+            } else {
+                viewEvent.postValue(Event(MovieDetailsFragmentViewEvent.Error("Error loading trailer.")))
             }
         }
     }

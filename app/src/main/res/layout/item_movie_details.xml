@@ -32,13 +32,13 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvMovieTitle"
+            style="@style/TextAppearance.MaterialComponents.Headline4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/normal_100"
             android:layout_marginTop="@dimen/normal_100"
             android:text="@{movie.title}"
-            android:textSize="22sp"
-            android:textStyle="bold"
+            app:fontFamily="@font/cardo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivMoviePoster"
             tools:text="Movie Title" />
@@ -80,6 +80,19 @@
             app:layout_constraintTop_toTopOf="@id/tvRatingPlaceholder"
             tools:text="7.4" />
 
+        <ImageButton
+            android:id="@+id/btnWatchTrailer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/normal_100"
+            android:layout_marginStart="@dimen/normal_100"
+            android:tint="@color/defaultBackground"
+            android:src="@drawable/ic_video_24"
+            android:backgroundTint="@color/defaultButtonColor"
+            app:layout_constraintBottom_toBottomOf="@id/tvMovieRating"
+            app:layout_constraintStart_toEndOf="@id/tvMovieRating"
+            app:layout_constraintTop_toTopOf="@id/tvMovieRating" />
+
         <com.borjabravo.readmoretextview.ReadMoreTextView
             android:id="@+id/tvMovieDescription"
             android:layout_width="match_parent"
@@ -87,15 +100,15 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="@dimen/small_100"
             android:layout_marginBottom="@dimen/normal_100"
+            android:justificationMode="inter_word"
             android:text="@{movie.description}"
             android:textSize="14sp"
+            app:colorClickableText="#FF0000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvRatingPlaceholder"
             app:showTrimExpandedText="true"
             app:trimCollapsedText="@string/show_more"
-            android:justificationMode="inter_word"
-            app:colorClickableText="#FF0000"
             app:trimExpandedText="@string/show_less"
             app:trimLength="100"
             app:trimMode="trimModeLength"

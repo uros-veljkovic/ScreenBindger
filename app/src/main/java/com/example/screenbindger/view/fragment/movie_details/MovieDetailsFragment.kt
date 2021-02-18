@@ -1,6 +1,9 @@
 package com.example.screenbindger.view.fragment.movie_details
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +15,10 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentMovieDetailsBinding
+import com.example.screenbindger.db.remote.response.movie.trailer.MovieTrailerDetails
 import com.example.screenbindger.model.domain.Item
 import com.example.screenbindger.util.adapter.recyclerview.MovieDetailsRecyclerViewAdapter
+import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snack
@@ -23,7 +28,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 
-class MovieDetailsFragment : DaggerFragment() {
+class MovieDetailsFragment : DaggerFragment(),
+    MovieDetailsRecyclerViewAdapter.OnClickListener {
 
     @Inject
     lateinit var viewModel: MovieDetailsFragmentViewModel
@@ -99,7 +105,7 @@ class MovieDetailsFragment : DaggerFragment() {
 
     private fun initRecyclerView() {
         binding.rvMovieDetails.apply {
-            adapter = MovieDetailsRecyclerViewAdapter()
+            adapter = MovieDetailsRecyclerViewAdapter(this@MovieDetailsFragment)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
     }
@@ -178,6 +184,9 @@ class MovieDetailsFragment : DaggerFragment() {
                     is MovieDetailsFragmentViewAction.MarkAsNotFavorite -> {
                         viewModel.markAsFavorite(false, action.movieID)
                     }
+                    is MovieDetailsFragmentViewAction.FetchTrailers -> {
+                        viewModel.fetchTrailers(movieId)
+                    }
                 }
             }
         })
@@ -188,27 +197,62 @@ class MovieDetailsFragment : DaggerFragment() {
             event.getContentIfNotHandled()?.let {
                 when (it) {
                     MovieDetailsFragmentViewEvent.IsLoadedAsFavorite -> {
+                        hideProgressBar()
                         animateFabToFavorite()
                     }
                     MovieDetailsFragmentViewEvent.IsLoadedAsNotFavorite -> {
+                        hideProgressBar()
                         animateFabToNotFavorite()
                     }
+                    is MovieDetailsFragmentViewEvent.TrailersFetched -> {
+                        hideProgressBar()
+                        val firstVideo = it.trailers[0]
+                        showTrailer(firstVideo)
+                    }
+                    is MovieDetailsFragmentViewEvent.TrailersNotFetched -> {
+                        hideProgressBar()
+                        showMessage("No trailer found")
+                    }
                     is MovieDetailsFragmentViewEvent.AddedToFavorites -> {
+                        hideProgressBar()
                         showMessage(it.message, R.color.green)
                         animateFabToFavorite()
                     }
                     is MovieDetailsFragmentViewEvent.RemovedFromFavorites -> {
+                        hideProgressBar()
                         animateFabToNotFavorite()
                     }
                     is MovieDetailsFragmentViewEvent.Error -> {
+                        hideProgressBar()
                         showError(it.message)
+
                     }
                     is MovieDetailsFragmentViewEvent.Rest -> {
-
+                        hideProgressBar()
+                    }
+                    is MovieDetailsFragmentViewEvent.Loading -> {
+                        showProgressBar()
                     }
                 }
             }
         })
+    }
+
+    private fun showTrailer(video: MovieTrailerDetails) {
+        val videoKey = video.key
+        val url = "https://youtube.com/watch?v=$videoKey"
+
+        val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$videoKey"))
+        val webIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(url)
+        )
+
+        try {
+            startActivity(appIntent)
+        } catch (ex: ActivityNotFoundException) {
+            startActivity(webIntent)
+        }
     }
 
     private fun animateFabToFavorite() {
@@ -243,7 +287,11 @@ class MovieDetailsFragment : DaggerFragment() {
         requireView().snack(message, colorRes)
     }
 
-    private fun showMessage(message: String, colorRes: Int) {
+    private fun showMessage(message: String) {
+        requireView().snack(message)
+    }
+
+    private fun showMessage(message: String, colorRes: Int = R.color.defaultBackground) {
         requireView().snack(message, colorRes)
     }
 
@@ -278,6 +326,10 @@ class MovieDetailsFragment : DaggerFragment() {
             )
             it.applyTo(constraintLayout)
         }
+    }
+
+    override fun onButtonWatchTrailerClick() {
+        viewModel.viewAction.postValue(Event(MovieDetailsFragmentViewAction.FetchTrailers))
     }
 
 

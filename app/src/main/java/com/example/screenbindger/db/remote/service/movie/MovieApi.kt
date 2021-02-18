@@ -6,6 +6,7 @@ import com.example.screenbindger.db.remote.response.movie.MarkAsFavoriteResponse
 import com.example.screenbindger.db.remote.response.movie.MovieCastsResponse
 import com.example.screenbindger.db.remote.response.movie.TrendingMoviesResponse
 import com.example.screenbindger.db.remote.response.movie.UpcomingMoviesResponse
+import com.example.screenbindger.db.remote.response.movie.trailer.MovieTrailersResponse
 import com.example.screenbindger.model.domain.movie.MovieEntity
 import com.example.screenbindger.util.constants.API_KEY
 import retrofit2.Response
@@ -43,5 +44,11 @@ interface MovieApi {
         @Query("api_key") apiKey: String = API_KEY,
         @Body body: MarkAsFavoriteRequestBody
     ): Response<MarkAsFavoriteResponse>
+
+    @GET("movie/{movie_id}/videos")
+    suspend fun getMovieTrailers(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String = API_KEY
+    ): Response<MovieTrailersResponse>
 
 }

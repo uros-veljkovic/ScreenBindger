@@ -12,6 +12,7 @@ import com.example.screenbindger.model.enums.ItemType
 
 
 class MovieDetailsRecyclerViewAdapter(
+    val listener: OnClickListener,
     val list: MutableList<Item> = mutableListOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -43,6 +44,9 @@ class MovieDetailsRecyclerViewAdapter(
         when (item.getItemType()) {
             ItemType.MOVIE_DETAILS -> {
                 with(holder as MovieDetailsViewHolder) {
+                    holder.binding.btnWatchTrailer.setOnClickListener {
+                        listener.onButtonWatchTrailerClick()
+                    }
                     bind(item)
                 }
 
@@ -102,6 +106,10 @@ class MovieDetailsRecyclerViewAdapter(
         fun bind(item: Item) {
             binding.cast = item as CastEntity?
         }
+    }
+
+    interface OnClickListener {
+        fun onButtonWatchTrailerClick()
     }
 
 }

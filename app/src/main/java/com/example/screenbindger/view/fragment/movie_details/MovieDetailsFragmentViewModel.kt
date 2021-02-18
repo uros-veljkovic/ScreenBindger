@@ -56,4 +56,11 @@ class MovieDetailsFragmentViewModel
         }
     }
 
+    fun fetchTrailers(movieId: Int) {
+        CoroutineScope(IO).launch {
+            viewEvent.postValue(Event(MovieDetailsFragmentViewEvent.Loading))
+            remoteDataSource.getMovieTrailersInfo(movieId, viewEvent)
+        }
+    }
+
 }
