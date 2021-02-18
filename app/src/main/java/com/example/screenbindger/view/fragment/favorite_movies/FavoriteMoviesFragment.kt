@@ -36,7 +36,6 @@ class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
     ): View? {
         val view = bind(inflater, container)
 
-        modifyToolbarForFragment()
         initRecyclerView()
         observeViewEvents()
         observeViewState()
@@ -70,7 +69,6 @@ class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
                             viewState.postValue(FavoriteMoviesViewState.EmptyList)
                         }
                         is FavoriteMoviesViewEvent.Error -> {
-//                            showMessage(event.message)
                             viewState.postValue(FavoriteMoviesViewState.EmptyList)
                         }
                     }
@@ -99,60 +97,9 @@ class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
         }
     }
 
-    private fun modifyToolbarForFragment() {
-
-        val activity = (requireActivity() as MainActivity)
-        val transparentBackground =
-            ContextCompat.getDrawable(requireContext(), R.drawable.background_toolbar)
-        activity.toolbar.background = (transparentBackground)
-
-        val constraintLayout = activity.container
-
-        ConstraintSet().also {
-
-            it.clone(constraintLayout)
-
-            it.connect(
-                activity.nav_host_fragment_activity_main.id,
-                ConstraintSet.TOP,
-                activity.toolbar.id,
-                ConstraintSet.TOP,
-                0
-            )
-            it.applyTo(constraintLayout)
-        }
-
-    }
-
-
-    private fun modifyToolbarForActivity() {
-
-        val activity = (requireActivity() as MainActivity)
-        val transparentBackground =
-            ContextCompat.getColor(requireContext(), R.color.defaultBackground)
-        activity.toolbar.setBackgroundColor(transparentBackground)
-
-        val constraintLayout = activity.container
-
-        ConstraintSet().also {
-
-            it.clone(constraintLayout)
-
-            it.connect(
-                activity.nav_host_fragment_activity_main.id,
-                ConstraintSet.TOP,
-                activity.toolbar.id,
-                ConstraintSet.BOTTOM,
-                0
-            )
-            it.applyTo(constraintLayout)
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
 
-        modifyToolbarForActivity()
         _binding = null
     }
 
@@ -161,10 +108,15 @@ class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
             FavoriteMoviesFragmentDirections.actionFavoriteMoviesFragmentToMovieDetailsFragment(
                 movieId
             )
-        findNavController().navigate(action)    }
+        findNavController().navigate(action)
+    }
 
     override fun onCommentsButtonClick(movieId: Int) {
-
+        val action =
+            FavoriteMoviesFragmentDirections.actionFavoriteMoviesFragmentToReviewFragment(
+                movieId
+            )
+        findNavController().navigate(action)
     }
 
 }
