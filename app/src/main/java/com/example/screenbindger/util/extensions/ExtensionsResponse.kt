@@ -13,8 +13,3 @@ fun <T : Any> Response<T>.getErrorResponse(): ErrorResponse {
 
     return errorResponse
 }
-/*                val gson = Gson()
-                val type = object : TypeToken<ValidateRequestTokenResponseFail>() {}.type
-                val errorResponse: ValidateRequestTokenResponseFail? =
-                    gson.fromJson(response.errorBody()!!.charStream(), type)
-                val code = errorResponse!!.statusCode*/
