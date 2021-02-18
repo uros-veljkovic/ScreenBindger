@@ -77,15 +77,11 @@ class GenreMoviesFragment : DaggerFragment(),
     }
 
     override fun onCardItemClick(movieId: Int) {
-        val movieId = viewModel.list?.get(movieId)?.id
-
-        if (movieId != null) {
-            val action =
-                GenreMoviesFragmentDirections.actionGenreMoviesFragmentToMovieDetailsFragment(
-                    movieId
-                )
-            findNavController().navigate(action)
-        }
+        val action =
+            GenreMoviesFragmentDirections.actionGenreMoviesFragmentToMovieDetailsFragment(
+                movieId
+            )
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {
