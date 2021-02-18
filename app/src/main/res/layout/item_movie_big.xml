@@ -13,7 +13,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/large_100">
+        android:layout_marginVertical="@dimen/small_100"
+        android:layout_marginHorizontal="@dimen/large_100">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -40,40 +41,48 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@drawable/ic_fire_black_24" />
 
+                <ProgressBar
+                    android:id="@+id/pbRating"
+                    style="@style/Widget.ScreenBindger.RatingBar"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="@dimen/small_100"
+                    android:layout_marginEnd="@dimen/small_100"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivMoviePoster"
+                    tools:progress="80" />
+
                 <TextView
-                    android:id="@+id/ivMovieRating"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:background="@drawable/textview_circle"
-                    android:gravity="center"
-                    android:text="@{String.valueOf(movie.rating)}"
-                    android:textColor="@android:color/white"
-                    android:textSize="24sp"
-                    app:layout_constraintBottom_toBottomOf="@id/ivMoviePoster"
-                    app:layout_constraintEnd_toEndOf="@id/ivMoviePoster"
-                    tools:text="8.6" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/pbRating"
+                    app:layout_constraintEnd_toEndOf="@+id/pbRating"
+                    app:layout_constraintStart_toStartOf="@+id/pbRating"
+                    app:layout_constraintTop_toTopOf="@+id/pbRating"
+                    app:textPercentage="@{movie.rating}"
+                    tools:text="80%" />
 
                 <TextView
                     android:id="@+id/tvMovieTitle"
                     style="@style/TextAppearance.MaterialComponents.Headline4"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/normal_100"
                     android:layout_marginTop="@dimen/small_100"
                     android:fontFamily="@font/cardo"
                     android:text="@{movie.title}"
-                    android:textAlignment="center"
+                    android:textAlignment="textStart"
                     android:textIsSelectable="true"
                     app:fontFamily="@font/cardo"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/pbRating"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ivMoviePoster"
                     tools:text="Title" />
 
                 <TextView
                     android:id="@+id/tvMovieGenres"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="@dimen/small_100"
@@ -81,14 +90,14 @@
                     android:textIsSelectable="true"
                     android:textSize="18sp"
                     app:fontFamily="@font/cardo"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/pbRating"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvMovieTitle"
-                    tools:text="Title" />
+                    tools:text="Genre1, Genre2, Genre3..." />
 
                 <com.borjabravo.readmoretextview.ReadMoreTextView
                     android:id="@+id/tvMovieDescription"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="@dimen/small_100"
@@ -117,6 +126,7 @@
                     android:drawableLeft="@drawable/ic_comment_24"
                     android:text="Comments"
                     android:textAllCaps="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvMovieDescription" />

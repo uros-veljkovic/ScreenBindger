@@ -94,4 +94,9 @@
     <style name="Widget.ScreenBindger.Dialog.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/blue</item>
     </style>
+
+    <style name="Widget.ScreenBindger.RatingBar" parent="">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/rating_bar</item>
+    </style>
 </resources>

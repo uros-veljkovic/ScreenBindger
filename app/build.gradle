@@ -150,5 +150,9 @@ dependencies {
     //Firebase Firestore
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
+    // PercentageChartView
+    implementation 'com.ramijemli.percentagechartview:percentagechartview:0.3.0'
+
+
 
 }
