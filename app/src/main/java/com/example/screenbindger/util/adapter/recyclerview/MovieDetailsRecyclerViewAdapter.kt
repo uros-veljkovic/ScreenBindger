@@ -44,8 +44,6 @@ class MovieDetailsRecyclerViewAdapter(
             ItemType.MOVIE_DETAILS -> {
                 with(holder as MovieDetailsViewHolder) {
                     bind(item)
-
-                    val movie = item as MovieEntity
                 }
 
             }
