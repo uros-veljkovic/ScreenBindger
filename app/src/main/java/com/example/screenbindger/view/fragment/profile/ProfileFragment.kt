@@ -2,29 +2,24 @@ package com.example.screenbindger.view.fragment.profile
 
 import android.app.Activity
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentProfileBinding
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.constants.INTENT_REQUEST_CODE_IMAGE
 import com.example.screenbindger.util.extensions.hide
-import com.example.screenbindger.util.extensions.setUri
 import com.example.screenbindger.util.extensions.setIconAndColor
+import com.example.screenbindger.util.extensions.setUri
 import com.example.screenbindger.util.extensions.snack
 import com.example.screenbindger.view.activity.onboarding.OnboardingActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
-import java.lang.Error
 import javax.inject.Inject
 
 
@@ -34,7 +29,7 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
     private val binding get() = _binding!!
 
     @Inject
-    lateinit var viewModel: ProfileViewModel
+    lateinit var viewModel: ProfileFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -131,10 +126,10 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
     private fun observeFiledUpdate() {
         viewModel.fragmentStateObservable.state.observe(viewLifecycleOwner, Observer {
             when (it) {
-                is FragmentState.Editable -> {
+                is ProfileFragmentState.Editable -> {
                     setUiEditable()
                 }
-                is FragmentState.NotEditable -> {
+                is ProfileFragmentState.NotEditable -> {
                     setUiNotEditable()
                 }
             }

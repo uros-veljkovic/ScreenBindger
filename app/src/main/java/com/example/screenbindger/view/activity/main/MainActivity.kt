@@ -3,7 +3,6 @@ package com.example.screenbindger.view.activity.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -13,7 +12,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.ActivityMainBinding
-import com.example.screenbindger.view.fragment.profile.ProfileViewModel
+import com.example.screenbindger.view.fragment.profile.ProfileFragmentViewModel
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -23,7 +22,7 @@ class MainActivity : DaggerAppCompatActivity() {
     lateinit var viewModel: MainViewModel
 
     @Inject
-    lateinit var profileViewModel: ProfileViewModel
+    lateinit var profileViewModel: ProfileFragmentViewModel
 
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment

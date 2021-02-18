@@ -16,13 +16,13 @@ import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.service.user.UserService
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.util.event.Event
-import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesViewEvent
+import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewEvent
 import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewEvent
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewState
+import com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentViewEvent
+import com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentViewState
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewEvent
-import com.example.screenbindger.view.fragment.trending.TrendingViewState
-import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
+import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewState
+import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewState
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -56,11 +56,11 @@ class ScreenBindgerRemoteDataSource
         userService.create(userStateObservable)
     }
 
-    suspend fun getTrending(trendingViewState: MutableLiveData<TrendingViewState>) {
+    suspend fun getTrending(trendingViewState: MutableLiveData<TrendingFragmentViewState>) {
         movieService.getTrending(trendingViewState)
     }
 
-    suspend fun getUpcoming(upcomingViewState: MutableLiveData<UpcomingViewState>) {
+    suspend fun getUpcoming(upcomingViewState: MutableLiveData<UpcomingFragmentViewState>) {
         movieService.getUpcoming(upcomingViewState)
     }
 
@@ -70,14 +70,14 @@ class ScreenBindgerRemoteDataSource
 
     suspend fun getMovieDetails(
         movieId: Int,
-        viewState: MutableLiveData<MovieDetailsViewState>
+        viewState: MutableLiveData<MovieDetailsFragmentViewState>
     ) {
         movieService.getMovieDetails(movieId, viewState)
     }
 
     suspend fun getMovieCasts(
         movieId: Int,
-        viewState: MutableLiveData<MovieDetailsViewState>
+        viewState: MutableLiveData<MovieDetailsFragmentViewState>
     ) {
         movieService.getMovieCasts(movieId, viewState)
     }
@@ -137,20 +137,20 @@ class ScreenBindgerRemoteDataSource
 
     suspend fun markAsFavorite(
         requestBody: MarkAsFavoriteRequestBody,
-        viewEvent: MutableLiveData<Event<MovieDetailsViewEvent>>
+        viewEvent: MutableLiveData<Event<MovieDetailsFragmentViewEvent>>
     ) {
         movieService.postMovieAsFavorite(session, requestBody, viewEvent)
     }
 
     suspend fun getIsMovieFavorite(
         movieId: Int,
-        viewEvent: MutableLiveData<Event<MovieDetailsViewEvent>>
+        viewEvent: MutableLiveData<Event<MovieDetailsFragmentViewEvent>>
     ) {
         movieService.getIsMovieFavorite(movieId, session, viewEvent)
     }
 
     suspend fun getFavoriteMovieList(
-        viewEvent: MutableLiveData<Event<FavoriteMoviesViewEvent>>
+        viewEvent: MutableLiveData<Event<FavoriteMoviesFragmentViewEvent>>
     ) {
         movieService.getFavoriteMovieList(session, viewEvent)
     }

@@ -28,7 +28,7 @@ class UpcomingFragment : DaggerFragment(),
     val binding get() = _binding!!
 
     @Inject
-    lateinit var viewModel: UpcomingViewModel
+    lateinit var viewModel: UpcomingFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

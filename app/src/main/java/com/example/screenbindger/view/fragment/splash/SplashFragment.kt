@@ -10,26 +10,18 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.animation.doOnEnd
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentSplashBinding
 import com.example.screenbindger.view.activity.main.MainActivity
 import dagger.android.support.DaggerFragment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SplashFragment : DaggerFragment() {
 
     @Inject
-    lateinit var viewModel: SplashViewModel
+    lateinit var viewModel: SplashFragmentViewModel
 
     private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding!!

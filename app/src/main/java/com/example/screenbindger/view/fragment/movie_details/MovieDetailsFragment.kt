@@ -26,7 +26,7 @@ import javax.inject.Inject
 class MovieDetailsFragment : DaggerFragment() {
 
     @Inject
-    lateinit var viewModel: MovieDetailsViewModel
+    lateinit var viewModel: MovieDetailsFragmentViewModel
 
     private val navArgs: MovieDetailsFragmentArgs by navArgs()
     private val movieId: Int by lazy { navArgs.movieId }
@@ -86,8 +86,8 @@ class MovieDetailsFragment : DaggerFragment() {
             with(viewModel) {
                 val event = viewEvent.value?.peekContent()
                 if (event != null &&
-                    (event is MovieDetailsViewEvent.IsLoadedAsFavorite ||
-                            event is MovieDetailsViewEvent.AddedToFavorites)
+                    (event is MovieDetailsFragmentViewEvent.IsLoadedAsFavorite ||
+                            event is MovieDetailsFragmentViewEvent.AddedToFavorites)
 
                 )
                     markAsFavorite(false, movieId)
@@ -172,10 +172,10 @@ class MovieDetailsFragment : DaggerFragment() {
         viewModel.viewAction.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let { action ->
                 when (action) {
-                    is MovieDetailsViewAction.MarkAsFavorite -> {
+                    is MovieDetailsFragmentViewAction.MarkAsFavorite -> {
                         viewModel.markAsFavorite(true, action.movieID)
                     }
-                    is MovieDetailsViewAction.MarkAsNotFavorite -> {
+                    is MovieDetailsFragmentViewAction.MarkAsNotFavorite -> {
                         viewModel.markAsFavorite(false, action.movieID)
                     }
                 }
@@ -187,23 +187,23 @@ class MovieDetailsFragment : DaggerFragment() {
         viewModel.viewEvent.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
                 when (it) {
-                    MovieDetailsViewEvent.IsLoadedAsFavorite -> {
+                    MovieDetailsFragmentViewEvent.IsLoadedAsFavorite -> {
                         animateFabToFavorite()
                     }
-                    MovieDetailsViewEvent.IsLoadedAsNotFavorite -> {
+                    MovieDetailsFragmentViewEvent.IsLoadedAsNotFavorite -> {
                         animateFabToNotFavorite()
                     }
-                    is MovieDetailsViewEvent.AddedToFavorites -> {
+                    is MovieDetailsFragmentViewEvent.AddedToFavorites -> {
                         showMessage(it.message, R.color.green)
                         animateFabToFavorite()
                     }
-                    is MovieDetailsViewEvent.RemovedFromFavorites -> {
+                    is MovieDetailsFragmentViewEvent.RemovedFromFavorites -> {
                         animateFabToNotFavorite()
                     }
-                    is MovieDetailsViewEvent.Error -> {
+                    is MovieDetailsFragmentViewEvent.Error -> {
                         showError(it.message)
                     }
-                    is MovieDetailsViewEvent.Rest -> {
+                    is MovieDetailsFragmentViewEvent.Rest -> {
 
                     }
                 }

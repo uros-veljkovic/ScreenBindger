@@ -18,7 +18,7 @@ import javax.inject.Inject
 class GenresFragment : DaggerFragment(), OnCardItemClickListener {
 
     @Inject
-    lateinit var viewModel: GenresViewModel
+    lateinit var viewModel: GenresFragmentViewModel
 
     private var _binding: FragmentGenresBinding? = null
     private val binding get() = _binding!!

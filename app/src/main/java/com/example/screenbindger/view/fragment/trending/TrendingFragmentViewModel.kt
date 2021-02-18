@@ -8,10 +8,10 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class TrendingViewModel
+class TrendingFragmentViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val trendingViewState: MutableLiveData<TrendingViewState>
+    val trendingViewState: MutableLiveData<TrendingFragmentViewState>
 ) : ViewModel() {
 
     fun fetchData() {

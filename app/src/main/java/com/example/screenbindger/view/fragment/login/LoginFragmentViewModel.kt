@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class LoginViewModel @Inject constructor(
+class LoginFragmentViewModel @Inject constructor(
     val user: UserEntity,
     val remoteDataSource: ScreenBindgerRemoteDataSource,
     val authStateObservable: AuthorizationEventObservable

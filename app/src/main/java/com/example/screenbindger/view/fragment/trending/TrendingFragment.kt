@@ -24,7 +24,7 @@ class TrendingFragment : DaggerFragment(),
     OnCardItemClickListener {
 
     @Inject
-    lateinit var viewModel: TrendingViewModel
+    lateinit var viewModel: TrendingFragmentViewModel
 
     private var _binding: FragmentTrendingBinding? = null
     private val binding get() = _binding!!

@@ -4,7 +4,7 @@ import com.example.screenbindger.model.domain.cast.CastEntity
 import com.example.screenbindger.model.domain.movie.MovieEntity
 import com.example.screenbindger.util.event.Event
 
-data class MovieDetailsViewState(
+data class MovieDetailsFragmentViewState(
     val eventState: Event<MovieDetailsState?> = Event(null),
     val movie: MovieEntity? = null,
     val casts: List<CastEntity>? = null

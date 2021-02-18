@@ -4,20 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
-import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentFavoriteMoviesBinding
 import com.example.screenbindger.util.adapter.recyclerview.BigItemMovieRecyclerViewAdapter
-import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
-import com.example.screenbindger.view.activity.main.MainActivity
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -25,7 +19,7 @@ import javax.inject.Inject
 class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
 
     @Inject
-    lateinit var viewModel: FavoriteMoviesViewModel
+    lateinit var viewModel: FavoriteMoviesFragmentViewModel
 
     private var _binding: FragmentFavoriteMoviesBinding? = null
     private val binding get() = _binding!!
@@ -37,6 +31,7 @@ class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
         val view = bind(inflater, container)
 
         initRecyclerView()
+        observeViewActions()
         observeViewEvents()
         observeViewState()
 
@@ -57,19 +52,33 @@ class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
         }
     }
 
+    private fun observeViewActions() {
+        viewModel.apply {
+            viewAction.observe(viewLifecycleOwner, Observer {
+                it.getContentIfNotHandled()?.let { action ->
+                    when (action) {
+                        FavoriteMoviesFragmentViewAction.FetchMovies -> {
+                            viewModel.fetchFavorites()
+                        }
+                    }
+                }
+            })
+        }
+    }
+
     private fun observeViewEvents() {
         viewModel.apply {
             viewEvent.observe(viewLifecycleOwner, Observer {
                 it.getContentIfNotHandled()?.let { event ->
                     when (event) {
-                        is FavoriteMoviesViewEvent.MoviesLoaded -> {
-                            viewState.postValue(FavoriteMoviesViewState.MoviesLoaded(event.list))
+                        is FavoriteMoviesFragmentViewEvent.MoviesLoaded -> {
+                            viewState.postValue(FavoriteMoviesFragmentViewState.MoviesLoaded(event.list))
                         }
-                        is FavoriteMoviesViewEvent.EmptyList -> {
-                            viewState.postValue(FavoriteMoviesViewState.EmptyList)
+                        is FavoriteMoviesFragmentViewEvent.EmptyList -> {
+                            viewState.postValue(FavoriteMoviesFragmentViewState.EmptyList)
                         }
-                        is FavoriteMoviesViewEvent.Error -> {
-                            viewState.postValue(FavoriteMoviesViewState.EmptyList)
+                        is FavoriteMoviesFragmentViewEvent.Error -> {
+                            viewState.postValue(FavoriteMoviesFragmentViewState.EmptyList)
                         }
                     }
                 }
@@ -81,7 +90,7 @@ class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
         viewModel.apply {
             viewState.observe(viewLifecycleOwner, Observer { state ->
                 when (state) {
-                    is FavoriteMoviesViewState.MoviesLoaded -> {
+                    is FavoriteMoviesFragmentViewState.MoviesLoaded -> {
                         binding.rvFavoriteMovies.apply {
                             adapter = BigItemMovieRecyclerViewAdapter(
                                 listener = WeakReference(this@FavoriteMoviesFragment),
@@ -89,7 +98,7 @@ class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
                             )
                         }
                     }
-                    is FavoriteMoviesViewState.EmptyList -> {
+                    is FavoriteMoviesFragmentViewState.EmptyList -> {
 //                        setEmptyView()
                     }
                 }

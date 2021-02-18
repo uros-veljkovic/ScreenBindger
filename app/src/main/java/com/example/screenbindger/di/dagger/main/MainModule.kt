@@ -6,18 +6,18 @@ import com.example.screenbindger.model.domain.user.UserEntity
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.event.Event
-import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesViewAction
-import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesViewEvent
-import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesViewState
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewAction
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewEvent
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsViewState
+import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewAction
+import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewEvent
+import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewState
+import com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentViewAction
+import com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentViewEvent
+import com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentViewState
 import com.example.screenbindger.view.fragment.profile.FragmentStateObservable
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewAction
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewEvent
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewState
-import com.example.screenbindger.view.fragment.trending.TrendingViewState
-import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
+import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewState
+import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewState
 import dagger.Module
 import dagger.Provides
 
@@ -59,47 +59,47 @@ class MainModule {
 
     @MainScope
     @Provides
-    fun provideTrendingViewState(): MutableLiveData<TrendingViewState> =
-        MutableLiveData(TrendingViewState())
+    fun provideTrendingViewState(): MutableLiveData<TrendingFragmentViewState> =
+        MutableLiveData(TrendingFragmentViewState())
 
     @MainScope
     @Provides
-    fun provideUpcomingViewState(): MutableLiveData<UpcomingViewState> =
-        MutableLiveData(UpcomingViewState())
+    fun provideUpcomingViewState(): MutableLiveData<UpcomingFragmentViewState> =
+        MutableLiveData(UpcomingFragmentViewState())
 
     @MainScope
     @Provides
-    fun provideMovieDetailsViewState(): MutableLiveData<MovieDetailsViewState> {
+    fun provideMovieDetailsViewState(): MutableLiveData<MovieDetailsFragmentViewState> {
         return MutableLiveData()
     }
 
     @MainScope
     @Provides
-    fun provideMovieDetailsViewAction(): MutableLiveData<Event<MovieDetailsViewAction>> {
+    fun provideMovieDetailsViewAction(): MutableLiveData<Event<MovieDetailsFragmentViewAction>> {
         return MutableLiveData()
     }
 
     @MainScope
     @Provides
-    fun provideMovieDetailsViewEvent(): MutableLiveData<Event<MovieDetailsViewEvent>> {
+    fun provideMovieDetailsViewEvent(): MutableLiveData<Event<MovieDetailsFragmentViewEvent>> {
         return MutableLiveData()
     }
 
     @MainScope
     @Provides
-    fun provideFavoriteMoviesViewState(): MutableLiveData<FavoriteMoviesViewState> {
+    fun provideFavoriteMoviesViewState(): MutableLiveData<FavoriteMoviesFragmentViewState> {
         return MutableLiveData()
     }
 
     @MainScope
     @Provides
-    fun provideFavoriteMoviesViewAction(): MutableLiveData<Event<FavoriteMoviesViewAction>> {
+    fun provideFavoriteMoviesViewAction(): MutableLiveData<Event<FavoriteMoviesFragmentViewAction>> {
         return MutableLiveData()
     }
 
     @MainScope
     @Provides
-    fun provideFavoriteMoviesViewEvent(): MutableLiveData<Event<FavoriteMoviesViewEvent>> {
+    fun provideFavoriteMoviesViewEvent(): MutableLiveData<Event<FavoriteMoviesFragmentViewEvent>> {
         return MutableLiveData()
     }
 

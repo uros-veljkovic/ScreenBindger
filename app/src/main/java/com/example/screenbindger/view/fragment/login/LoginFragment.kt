@@ -32,7 +32,7 @@ class LoginFragment : DaggerFragment() {
     private val TAG = "LoginFragment"
 
     @Inject
-    lateinit var viewModel: LoginViewModel
+    lateinit var viewModel: LoginFragmentViewModel
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!

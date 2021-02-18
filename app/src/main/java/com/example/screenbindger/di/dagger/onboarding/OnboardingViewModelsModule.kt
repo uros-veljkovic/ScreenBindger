@@ -2,9 +2,9 @@ package com.example.screenbindger.di.dagger.onboarding
 
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.di.dagger.ViewModelKey
-import com.example.screenbindger.view.fragment.login.LoginViewModel
-import com.example.screenbindger.view.fragment.register.RegisterViewModel
-import com.example.screenbindger.view.fragment.splash.SplashViewModel
+import com.example.screenbindger.view.fragment.login.LoginFragmentViewModel
+import com.example.screenbindger.view.fragment.register.RegisterFragmentViewModel
+import com.example.screenbindger.view.fragment.splash.SplashFragmentViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -15,18 +15,18 @@ abstract class OnboardingViewModelsModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(RegisterViewModel::class)
-    abstract fun bindRegisterViewModel(viewModel: RegisterViewModel): ViewModel
+    @ViewModelKey(RegisterFragmentViewModel::class)
+    abstract fun bindRegisterViewModel(viewModel: RegisterFragmentViewModel): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(SplashViewModel::class)
-    abstract fun bindSplashViewModel(viewModel: SplashViewModel): ViewModel
+    @ViewModelKey(SplashFragmentViewModel::class)
+    abstract fun bindSplashViewModel(viewModel: SplashFragmentViewModel): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(LoginViewModel::class)
-    abstract fun bindLoginViewModel(viewModel: LoginViewModel): ViewModel
+    @ViewModelKey(LoginFragmentViewModel::class)
+    abstract fun bindLoginViewModel(viewModel: LoginFragmentViewModel): ViewModel
 
 
 }

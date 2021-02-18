@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import javax.inject.Inject
 
 
-class SplashViewModel
+class SplashFragmentViewModel
 @Inject
 constructor() : ViewModel() {
 

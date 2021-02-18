@@ -1,6 +1,5 @@
 package com.example.screenbindger.view.fragment.favorite_movies
 
-import android.util.EventLog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
@@ -10,19 +9,20 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class FavoriteMoviesViewModel
+class FavoriteMoviesFragmentViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val viewState: MutableLiveData<FavoriteMoviesViewState>,
-    val viewAction: MutableLiveData<Event<FavoriteMoviesViewAction>>,
-    val viewEvent: MutableLiveData<Event<FavoriteMoviesViewEvent>>
+    val viewState: MutableLiveData<FavoriteMoviesFragmentViewState>,
+    val viewAction: MutableLiveData<Event<FavoriteMoviesFragmentViewAction>>,
+    val viewEvent: MutableLiveData<Event<FavoriteMoviesFragmentViewEvent>>
 ) : ViewModel() {
 
     init {
-        loadFavorites()
+//        loadFavorites()
+        viewAction.postValue(Event(FavoriteMoviesFragmentViewAction.FetchMovies))
     }
 
-    private fun loadFavorites() {
+    fun fetchFavorites() {
         CoroutineScope(IO).launch {
             remoteDataSource.getFavoriteMovieList(viewEvent)
         }

@@ -28,7 +28,7 @@ import javax.inject.Inject
 class RegisterFragment : DaggerFragment() {
 
     @Inject
-    lateinit var viewModel: RegisterViewModel
+    lateinit var viewModel: RegisterFragmentViewModel
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!

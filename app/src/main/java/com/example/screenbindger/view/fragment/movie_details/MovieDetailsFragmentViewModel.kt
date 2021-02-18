@@ -10,12 +10,12 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MovieDetailsViewModel
+class MovieDetailsFragmentViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    var viewState: MutableLiveData<MovieDetailsViewState>,
-    var viewAction: MutableLiveData<Event<MovieDetailsViewAction>>,
-    var viewEvent: MutableLiveData<Event<MovieDetailsViewEvent>>
+    var viewState: MutableLiveData<MovieDetailsFragmentViewState>,
+    var viewAction: MutableLiveData<Event<MovieDetailsFragmentViewAction>>,
+    var viewEvent: MutableLiveData<Event<MovieDetailsFragmentViewEvent>>
 ) : ViewModel() {
 
     fun fetchData(movieId: Int) {
@@ -33,7 +33,7 @@ class MovieDetailsViewModel
 
     }
 
-    fun setAction(action: MovieDetailsViewAction) {
+    fun setAction(action: MovieDetailsFragmentViewAction) {
         viewAction.postValue(Event(action))
     }
 
