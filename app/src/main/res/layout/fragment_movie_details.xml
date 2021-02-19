@@ -22,7 +22,7 @@
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/normal_100"
             android:layout_marginBottom="@dimen/normal_100"
-            android:backgroundTint="@color/blue"
+            android:backgroundTint="@color/defaultButtonColor"
             android:scaleType="center"
             android:src="@drawable/ic_favorite_24"
             app:borderWidth="0dp"

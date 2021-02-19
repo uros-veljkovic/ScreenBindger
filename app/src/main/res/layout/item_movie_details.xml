@@ -33,12 +33,13 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvMovieTitle"
             style="@style/TextAppearance.MaterialComponents.Headline4"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/normal_100"
             android:layout_marginTop="@dimen/normal_100"
             android:text="@{movie.title}"
             app:fontFamily="@font/cardo"
+            app:layout_constraintEnd_toStartOf="@+id/btnWatchTrailer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivMoviePoster"
             tools:text="Movie Title" />
@@ -84,21 +85,22 @@
             android:id="@+id/btnWatchTrailer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="@dimen/normal_100"
-            android:layout_marginStart="@dimen/normal_100"
-            android:tint="@color/defaultBackground"
-            android:src="@drawable/ic_video_24"
             android:backgroundTint="@color/defaultButtonColor"
-            app:layout_constraintBottom_toBottomOf="@id/tvMovieRating"
-            app:layout_constraintStart_toEndOf="@id/tvMovieRating"
-            app:layout_constraintTop_toTopOf="@id/tvMovieRating" />
+            android:elevation="@dimen/normal_100"
+            android:layout_marginEnd="@dimen/normal_100"
+            android:padding="@dimen/normal_100"
+            android:src="@drawable/ic_video_24"
+            android:tint="@color/defaultBackground"
+            app:layout_constraintBottom_toBottomOf="@+id/tvMovieTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvMovieTitle" />
 
         <com.borjabravo.readmoretextview.ReadMoreTextView
             android:id="@+id/tvMovieDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="@dimen/small_100"
+            android:layout_marginTop="@dimen/normal_100"
             android:layout_marginBottom="@dimen/normal_100"
             android:justificationMode="inter_word"
             android:text="@{movie.description}"
@@ -116,6 +118,42 @@
             tools:text="@string/lorem" />
 
         <TextView
+            android:id="@+id/tvShareToPlaceholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/normal_100"
+            android:layout_marginTop="@dimen/large_100"
+            android:text="@string/share_to_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieDescription" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabInstagram"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/normal_100"
+            android:backgroundTint="@color/defaultButtonColor"
+            android:src="@drawable/ic_instagram"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@id/tvShareToPlaceholder"
+            app:layout_constraintStart_toEndOf="@id/tvShareToPlaceholder"
+            app:layout_constraintTop_toTopOf="@id/tvShareToPlaceholder" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabFacebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_100"
+            android:backgroundTint="@color/defaultButtonColor"
+            android:src="@drawable/ic_facebook"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@id/fabInstagram"
+            app:layout_constraintStart_toEndOf="@id/fabInstagram"
+            app:layout_constraintTop_toTopOf="@id/fabInstagram" />
+
+        <TextView
             android:id="@+id/tvCastPlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -125,7 +163,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvMovieDescription" />
+            app:layout_constraintTop_toBottomOf="@id/tvShareToPlaceholder" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
