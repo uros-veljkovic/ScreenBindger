@@ -44,8 +44,14 @@ class MovieDetailsRecyclerViewAdapter(
         when (item.getItemType()) {
             ItemType.MOVIE_DETAILS -> {
                 with(holder as MovieDetailsViewHolder) {
-                    holder.binding.btnWatchTrailer.setOnClickListener {
-                        listener.onButtonWatchTrailerClick()
+                    holder.binding.apply {
+                        btnWatchTrailer.setOnClickListener {
+                            listener.onBtnWatchTrailer()
+                        }
+                        fabInstagram.setOnClickListener {
+                            val movie = item as MovieEntity
+                            listener.onBtnShareToInstagram(movie)
+                        }
                     }
                     bind(item)
                 }
@@ -109,7 +115,8 @@ class MovieDetailsRecyclerViewAdapter(
     }
 
     interface OnClickListener {
-        fun onButtonWatchTrailerClick()
+        fun onBtnWatchTrailer()
+        fun onBtnShareToInstagram(movieEntity: MovieEntity)
     }
 
 }

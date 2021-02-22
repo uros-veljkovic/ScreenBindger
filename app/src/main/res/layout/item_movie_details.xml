@@ -140,19 +140,6 @@
             app:layout_constraintStart_toEndOf="@id/tvShareToPlaceholder"
             app:layout_constraintTop_toTopOf="@id/tvShareToPlaceholder" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabFacebook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/small_100"
-            android:backgroundTint="@color/defaultButtonColor"
-            android:src="@drawable/ic_facebook"
-            app:borderWidth="0dp"
-            app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="@id/fabInstagram"
-            app:layout_constraintStart_toEndOf="@id/fabInstagram"
-            app:layout_constraintTop_toTopOf="@id/fabInstagram" />
-
         <TextView
             android:id="@+id/tvCastPlaceholder"
             android:layout_width="wrap_content"
