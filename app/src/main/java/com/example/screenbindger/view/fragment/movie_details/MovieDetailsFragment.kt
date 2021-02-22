@@ -1,15 +1,19 @@
 package com.example.screenbindger.view.fragment.movie_details
 
+import android.Manifest
+import android.app.Activity.RESULT_OK
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContextCompat
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,14 +21,22 @@ import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentMovieDetailsBinding
 import com.example.screenbindger.db.remote.response.movie.trailer.MovieTrailerDetails
 import com.example.screenbindger.model.domain.Item
+import com.example.screenbindger.model.domain.movie.MovieEntity
+import com.example.screenbindger.util.MoviePosterUri
 import com.example.screenbindger.util.adapter.recyclerview.MovieDetailsRecyclerViewAdapter
+import com.example.screenbindger.util.constants.INTENT_ADD_TO_INSTA_STORY
+import com.example.screenbindger.util.constants.INTENT_REQUEST_CODE_INSTAGRAM
+import com.example.screenbindger.util.constants.POSTER_SIZE_ORIGINAL
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
-import com.example.screenbindger.util.extensions.snack
+import com.example.screenbindger.util.extensions.snackbar
+import com.example.screenbindger.util.image.ImageProvider
 import com.example.screenbindger.view.activity.main.MainActivity
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -49,7 +61,6 @@ class MovieDetailsFragment : DaggerFragment(),
         setHasOptionsMenu(true)
 
         modifyToolbarForFragment()
-        initOnClickListeners()
         initRecyclerView()
         fetchData()
         observeViewModelState()
@@ -58,49 +69,12 @@ class MovieDetailsFragment : DaggerFragment(),
 
     private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
         _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
         return binding.root
     }
 
     private fun modifyToolbarForFragment() {
-
-        val activity = (requireActivity() as MainActivity)
-        val transparentBackground =
-            ContextCompat.getDrawable(requireContext(), R.drawable.background_toolbar)
-        activity.toolbar.background = (transparentBackground)
-
-        val constraintLayout = activity.container
-
-        ConstraintSet().also {
-
-            it.clone(constraintLayout)
-
-            it.connect(
-                activity.nav_host_fragment_activity_main.id,
-                ConstraintSet.TOP,
-                activity.toolbar.id,
-                ConstraintSet.TOP,
-                0
-            )
-            it.applyTo(constraintLayout)
-        }
-
-    }
-
-    private fun initOnClickListeners() {
-        binding.btnAddOrRemoveAsFavorite.setOnClickListener {
-
-            with(viewModel) {
-                val event = viewEvent.value?.peekContent()
-                if (event != null &&
-                    (event is MovieDetailsFragmentViewEvent.IsLoadedAsFavorite ||
-                            event is MovieDetailsFragmentViewEvent.AddedToFavorites)
-
-                )
-                    markAsFavorite(false, movieId)
-                else
-                    markAsFavorite(true, movieId)
-            }
-        }
+        (activity as MainActivity).modifyToolbarForFragment()
     }
 
     private fun initRecyclerView() {
@@ -130,11 +104,8 @@ class MovieDetailsFragment : DaggerFragment(),
                         val list = it.casts
                         populateList(list as List<Item>)
                     }
-                    is MovieDetailsState.Error.MovieNotFetched -> {
-                        showError(state)
-                    }
-                    is MovieDetailsState.Error.CastsNotFetched -> {
-                        showError(state)
+                    is MovieDetailsState.Error -> {
+                        snackbar(state.message)
                     }
                 }
             }
@@ -149,14 +120,6 @@ class MovieDetailsFragment : DaggerFragment(),
             rvMovieDetails.startLayoutAnimation()
             invalidateAll()
         }
-    }
-
-    private fun showError(state: MovieDetailsState.Error) {
-        requireView().snack(state.message)
-    }
-
-    private fun showError(message: String) {
-        requireView().snack(message, R.color.logout_red)
     }
 
     private fun showProgressBar() {
@@ -211,11 +174,11 @@ class MovieDetailsFragment : DaggerFragment(),
                     }
                     is MovieDetailsFragmentViewEvent.TrailersNotFetched -> {
                         hideProgressBar()
-                        showMessage("No trailer found")
+                        snackbar("No trailer found")
                     }
                     is MovieDetailsFragmentViewEvent.AddedToFavorites -> {
                         hideProgressBar()
-                        showMessage(it.message, R.color.green)
+                        snackbar(it.message, R.color.green)
                         animateFabToFavorite()
                     }
                     is MovieDetailsFragmentViewEvent.RemovedFromFavorites -> {
@@ -224,8 +187,7 @@ class MovieDetailsFragment : DaggerFragment(),
                     }
                     is MovieDetailsFragmentViewEvent.Error -> {
                         hideProgressBar()
-                        showError(it.message)
-
+                        snackbar(it.message)
                     }
                     is MovieDetailsFragmentViewEvent.Rest -> {
                         hideProgressBar()
@@ -233,9 +195,40 @@ class MovieDetailsFragment : DaggerFragment(),
                     is MovieDetailsFragmentViewEvent.Loading -> {
                         showProgressBar()
                     }
+                    is MovieDetailsFragmentViewEvent.PosterSaved -> {
+                        val socialMediaCode = it.socialMediaRequestCode
+                        pickImageForShare(socialMediaCode)
+                    }
+                    is MovieDetailsFragmentViewEvent.PosterNotSaved -> {
+                        snackbar("not saved !", R.color.logout_red)
+                    }
                 }
             }
         })
+    }
+
+    private fun pickImageForShare(socialNetworkCode: Int) {
+        Intent(
+            Intent.ACTION_PICK,
+            MediaStore.Images.Media.INTERNAL_CONTENT_URI
+        ).apply {
+            startActivityForResult(this, socialNetworkCode)
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            data?.data?.let { uri ->
+                when (requestCode) {
+                    INTENT_REQUEST_CODE_INSTAGRAM -> {
+                        shareInstaStory(uri)
+                    }
+                }
+            }
+
+        }
     }
 
     private fun showTrailer(video: MovieTrailerDetails) {
@@ -283,18 +276,6 @@ class MovieDetailsFragment : DaggerFragment(),
         }
     }
 
-    private fun paintFabTo(message: String, colorRes: Int) {
-        requireView().snack(message, colorRes)
-    }
-
-    private fun showMessage(message: String) {
-        requireView().snack(message)
-    }
-
-    private fun showMessage(message: String, colorRes: Int = R.color.defaultBackground) {
-        requireView().snack(message, colorRes)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
 
@@ -305,31 +286,67 @@ class MovieDetailsFragment : DaggerFragment(),
     }
 
     private fun modifyToolbarForActivity() {
+        (activity as MainActivity).modifyToolbarForActivity()
+    }
 
-        val activity = (requireActivity() as MainActivity)
-        val transparentBackground =
-            ContextCompat.getColor(requireContext(), R.color.defaultBackground)
-        activity.toolbar.setBackgroundColor(transparentBackground)
+    override fun onBtnWatchTrailer() {
+        viewModel.viewAction.postValue(Event(MovieDetailsFragmentViewAction.FetchTrailers))
+    }
 
-        val constraintLayout = activity.container
-
-        ConstraintSet().also {
-
-            it.clone(constraintLayout)
-
-            it.connect(
-                activity.nav_host_fragment_activity_main.id,
-                ConstraintSet.TOP,
-                activity.toolbar.id,
-                ConstraintSet.BOTTOM,
-                0
-            )
-            it.applyTo(constraintLayout)
+    override fun onBtnShareToInstagram(movieEntity: MovieEntity) {
+        fetchPoster(movieEntity) { bitmap ->
+            viewModel.saveToGalleryForInstagram(bitmap, requireContext(), "Posters")
         }
     }
 
-    override fun onButtonWatchTrailerClick() {
-        viewModel.viewAction.postValue(Event(MovieDetailsFragmentViewAction.FetchTrailers))
+    private fun fetchPoster(movieEntity: MovieEntity, callback: (Bitmap) -> Unit) {
+        if (verifyPermissions().not()) {
+            return
+        }
+
+        val uri = MoviePosterUri.Builder
+            .withPosterPath(movieEntity.smallPosterUrl!!)
+            .withPosterSize(POSTER_SIZE_ORIGINAL)
+            .build()
+
+        CoroutineScope(IO).launch {
+            ImageProvider.download(uri, requireContext())?.also { bitmap ->
+                callback(bitmap)
+            }
+        }
+    }
+
+    private fun verifyPermissions(): Boolean {
+
+        val isGrantedPermission =
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+
+        if (isGrantedPermission != PackageManager.PERMISSION_GRANTED) {
+            val permissions =
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+            ActivityCompat.requestPermissions(requireActivity(), permissions, 1)
+            return false
+        }
+        return true
+    }
+
+    private fun shareInstaStory(uri: Uri) {
+
+        val intent = Intent(INTENT_ADD_TO_INSTA_STORY).apply {
+            setDataAndType(uri, "image/jpeg")
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+
+        requireActivity().let {
+            if (it.packageManager.resolveActivity(intent, 0) != null) {
+                it.startActivityForResult(intent, 0)
+            }
+        }
+
     }
 
 

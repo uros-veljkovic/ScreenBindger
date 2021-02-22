@@ -24,6 +24,9 @@ sealed class MovieDetailsFragmentViewEvent {
 
     object TrailersNotFetched : MovieDetailsFragmentViewEvent()
 
+    data class PosterSaved(val socialMediaRequestCode: Int) : MovieDetailsFragmentViewEvent()
+    object PosterNotSaved : MovieDetailsFragmentViewEvent()
+
     data class Error(
         val message: String
     ) : MovieDetailsFragmentViewEvent()

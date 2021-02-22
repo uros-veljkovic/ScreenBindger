@@ -9,6 +9,9 @@ const val POSTER_SIZE_SMALL = "w500"
 const val POSTER_SIZE_BIG = "w780"
 const val POSTER_SIZE_ORIGINAL = "original"
 
+const val INTENT_ADD_TO_INSTA_STORY = "com.instagram.share.ADD_TO_STORY"
+
 const val INTENT_REQUEST_CODE_IMAGE = 1
+const val INTENT_REQUEST_CODE_INSTAGRAM = 2
 
 const val REQUEST_CODE_TOKEN_AUTH = 1
