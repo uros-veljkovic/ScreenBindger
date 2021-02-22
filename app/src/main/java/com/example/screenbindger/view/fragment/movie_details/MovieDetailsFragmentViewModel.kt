@@ -35,10 +35,9 @@ class MovieDetailsFragmentViewModel
                 remoteDataSource.getMovieCasts(movieId, viewState)
             }
             launch {
-                checkIsFavorite(movieId)
+                remoteDataSource.getIsMovieFavorite(movieId, viewEvent)
             }
         }
-
     }
 
     fun setAction(action: MovieDetailsFragmentViewAction) {
@@ -67,12 +66,6 @@ class MovieDetailsFragmentViewModel
             MarkAsFavoriteRequestBody(mediaId = movieId, favorite = isFavorite).let { body ->
                 remoteDataSource.markAsFavorite(body, viewEvent)
             }
-        }
-    }
-
-    private fun checkIsFavorite(movieId: Int) {
-        CoroutineScope(IO).launch {
-            remoteDataSource.getIsMovieFavorite(movieId, viewEvent)
         }
     }
 
