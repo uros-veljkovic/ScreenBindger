@@ -3,6 +3,8 @@ package com.example.screenbindger.view.activity.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -14,6 +16,7 @@ import com.example.screenbindger.R
 import com.example.screenbindger.databinding.ActivityMainBinding
 import com.example.screenbindger.view.fragment.profile.ProfileFragmentViewModel
 import dagger.android.support.DaggerAppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity() {
@@ -78,6 +81,52 @@ class MainActivity : DaggerAppCompatActivity() {
 
     private fun fetchGenres() {
         viewModel.fetchGenres()
+    }
+
+    fun modifyToolbarForFragment() {
+
+        val transparentBackground =
+            ContextCompat.getDrawable(this, R.drawable.background_toolbar)
+        binding.toolbar.background = (transparentBackground)
+
+        val constraintLayout = this.container
+
+        ConstraintSet().also {
+
+            it.clone(constraintLayout)
+
+            it.connect(
+                nav_host_fragment_activity_main.id,
+                ConstraintSet.TOP,
+                binding.toolbar.id,
+                ConstraintSet.TOP,
+                0
+            )
+            it.applyTo(constraintLayout)
+        }
+    }
+
+    fun modifyToolbarForActivity() {
+
+        val transparentBackground =
+            ContextCompat.getColor(this, R.color.defaultBackground)
+        binding.toolbar.setBackgroundColor(transparentBackground)
+
+        val constraintLayout = binding.container
+
+        ConstraintSet().also {
+
+            it.clone(constraintLayout)
+
+            it.connect(
+                nav_host_fragment_activity_main.id,
+                ConstraintSet.TOP,
+                binding.toolbar.id,
+                ConstraintSet.BOTTOM,
+                0
+            )
+            it.applyTo(constraintLayout)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
