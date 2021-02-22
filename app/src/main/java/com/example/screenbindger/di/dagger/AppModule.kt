@@ -15,6 +15,7 @@ import com.example.screenbindger.db.remote.service.user.FirebaseUserService
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.user.UserEntity
 import com.example.screenbindger.util.constants.API_BASE_URL
+import com.example.screenbindger.util.image.GalleryManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -151,5 +152,9 @@ class AppModule {
     ): Session {
         return Session(user = userEntity)
     }
+
+    @Singleton
+    @Provides
+    fun provideGalleryManager() = GalleryManager()
 
 }
