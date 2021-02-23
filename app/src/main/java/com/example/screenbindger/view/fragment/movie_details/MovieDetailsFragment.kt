@@ -13,6 +13,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
@@ -89,23 +90,34 @@ class MovieDetailsFragment : DaggerFragment(),
     }
 
     private fun observeViewModelState() {
-        viewModel.viewState.observe(viewLifecycleOwner, Observer {
-            it.eventState.getContentIfNotHandled()?.let { state ->
+        viewModel.viewState.eventState.observe(viewLifecycleOwner, Observer {
+            it?.getContentIfNotHandled()?.let { state ->
                 when (state) {
-                    MovieDetailsState.Fetching -> {
+                    is MovieDetailsState.Fetching -> {
                         showProgressBar()
                     }
-                    MovieDetailsState.MovieFetched -> {
-                        val movie = it.movie
-                        populateList(listOf(movie as Item))
-                        hideProgressBar()
-                    }
-                    MovieDetailsState.CastsFetched -> {
-                        val list = it.casts
-                        populateList(list as List<Item>)
+                    is MovieDetailsState.FetchedAll -> {
+                        val movie = viewModel.viewState.movie as Item
+                        val casts = viewModel.viewState.casts as List<Item>
+                        val list = mutableListOf<Item>().apply {
+                            add(movie)
+                            addAll(casts)
+                        }
+                        populateList(list)
+
                     }
                     is MovieDetailsState.Error -> {
                         snackbar(state.message)
+                    }
+                    MovieDetailsState.NoDataAvailable -> {
+                        snackbar("No data available", R.color.logout_red)
+                    }
+                    MovieDetailsState.MovieProcessed -> {
+                        snackbar("MovieProcessed", R.color.green)
+                    }
+                    MovieDetailsState.CastsProcessed -> {
+                        Toast.makeText(requireActivity(), "CastsProcessed", Toast.LENGTH_LONG)
+                            .show()
                     }
                 }
             }
@@ -118,7 +130,8 @@ class MovieDetailsFragment : DaggerFragment(),
             val adapter = rvMovieDetails.adapter as MovieDetailsRecyclerViewAdapter
             adapter.addItems(list)
             rvMovieDetails.startLayoutAnimation()
-            invalidateAll()
+            executePendingBindings()
+            hideProgressBar()
         }
     }
 
@@ -215,7 +228,6 @@ class MovieDetailsFragment : DaggerFragment(),
             startActivityForResult(this, socialNetworkCode)
         }
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

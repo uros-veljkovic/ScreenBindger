@@ -69,8 +69,8 @@ class MainModule {
 
     @MainScope
     @Provides
-    fun provideMovieDetailsViewState(): MutableLiveData<MovieDetailsFragmentViewState> {
-        return MutableLiveData()
+    fun provideMovieDetailsViewState(): MovieDetailsFragmentViewState {
+        return MovieDetailsFragmentViewState()
     }
 
     @MainScope

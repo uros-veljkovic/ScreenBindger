@@ -17,7 +17,7 @@ import javax.inject.Inject
 class MovieDetailsFragmentViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    var viewState: MutableLiveData<MovieDetailsFragmentViewState>,
+    var viewState: MovieDetailsFragmentViewState,
     var viewAction: MutableLiveData<Event<MovieDetailsFragmentViewAction>>,
     var viewEvent: MutableLiveData<Event<MovieDetailsFragmentViewEvent>>,
     val galleryManager: GalleryManager
@@ -45,7 +45,7 @@ class MovieDetailsFragmentViewModel
     }
 
     fun reset() {
-        viewState = MutableLiveData()
+        viewState = MovieDetailsFragmentViewState()
         viewAction = MutableLiveData()
     }
 

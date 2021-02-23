@@ -76,47 +76,55 @@ constructor(
 
     suspend fun getMovieDetails(
         movieId: Int,
-        viewState: MutableLiveData<MovieDetailsFragmentViewState>
+        viewState: MovieDetailsFragmentViewState
     ) {
-        movieApi.getMovieDetails(movieId).let { response ->
+        movieApi.getMovieDetails(movieId).also { response ->
             if (response.isSuccessful) {
-                val movie: MovieEntity? = response.body()
-                val state =
-                    MovieDetailsFragmentViewState(
-                        Event(MovieDetailsState.MovieFetched),
-                        movie = movie
-                    )
-                viewState.postValue(state)
+                viewState.apply {
+                    movie = response.body()
+                    CoroutineScope(Dispatchers.Default).launch {
+                        movie?.generateGenreString()
+                    }
+                }
+
+                val isCastsProcessedOrNotFetched =
+                    (viewState.currentState() is MovieDetailsState.CastsProcessed)
+                        .or(viewState.currentState() is MovieDetailsState.Error.CastsNotFetched)
+
+                if (isCastsProcessedOrNotFetched) {
+                    viewState.prepareForFinalState()
+                } else {
+                    viewState.setState(MovieDetailsState.MovieProcessed)
+                }
             } else {
-                val message = "Error loading movie poster and description."
-                val state =
-                    MovieDetailsFragmentViewState(
-                        Event(MovieDetailsState.Error.MovieNotFetched(message))
-                    )
-                viewState.postValue(state)
+                val message = response.getErrorResponse().statusMessage
+                viewState.setState(MovieDetailsState.Error.MovieNotFetched(message))
             }
         }
     }
 
     suspend fun getMovieCasts(
         movieId: Int,
-        viewState: MutableLiveData<MovieDetailsFragmentViewState>
+        viewState: MovieDetailsFragmentViewState
     ) {
-        movieApi.getMovieCasts(movieId).let {
-            if (it.isSuccessful) {
-                val list: List<CastEntity>? = it.body()?.casts
-                val state =
-                    MovieDetailsFragmentViewState(
-                        Event(MovieDetailsState.CastsFetched),
-                        casts = list
-                    )
-                viewState.postValue(state)
+        movieApi.getMovieCasts(movieId).also { response ->
+            if (response.isSuccessful) {
+                viewState.casts = response.body()?.casts
+
+                val movieProcessedOrNotFetched: Boolean =
+                    (viewState.currentState() is MovieDetailsState.MovieProcessed)
+                        .or(viewState.currentState() is MovieDetailsState.Error.MovieNotFetched)
+
+
+                if (movieProcessedOrNotFetched) {
+                    viewState.prepareForFinalState()
+                } else {
+                    viewState.setState(MovieDetailsState.CastsProcessed)
+                }
+
             } else {
-                val message = "Failed to load cast for the movie."
-                val state = MovieDetailsFragmentViewState(
-                    Event(MovieDetailsState.Error.CastsNotFetched(message))
-                )
-                viewState.postValue(state)
+                val message = response.getErrorResponse().statusMessage
+                viewState.setState(MovieDetailsState.Error.CastsNotFetched(message))
             }
         }
     }

@@ -70,14 +70,14 @@ class ScreenBindgerRemoteDataSource
 
     suspend fun getMovieDetails(
         movieId: Int,
-        viewState: MutableLiveData<MovieDetailsFragmentViewState>
+        viewState: MovieDetailsFragmentViewState
     ) {
         movieService.getMovieDetails(movieId, viewState)
     }
 
     suspend fun getMovieCasts(
         movieId: Int,
-        viewState: MutableLiveData<MovieDetailsFragmentViewState>
+        viewState: MovieDetailsFragmentViewState
     ) {
         movieService.getMovieCasts(movieId, viewState)
     }

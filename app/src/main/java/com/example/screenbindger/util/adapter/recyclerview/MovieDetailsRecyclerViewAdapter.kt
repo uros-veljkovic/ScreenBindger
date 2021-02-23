@@ -16,6 +16,8 @@ class MovieDetailsRecyclerViewAdapter(
     val list: MutableList<Item> = mutableListOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    var containsMovieAndCast = false
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         var viewHolder: RecyclerView.ViewHolder? = null
@@ -70,32 +72,12 @@ class MovieDetailsRecyclerViewAdapter(
         return itemType.value
     }
 
-    /**
-     * Adapter notifies that data set is changed only when
-     * both types of items are in the list.
-     *
-     * For example, if either movie object or cast list is in the adapter list,
-     * when another object (cast list/movie) is inserted to list, only then
-     * adapter notifies change.
-     */
     fun addItems(items: List<Item>) {
-        val itemTypeOfFirstItem = items[0].getItemType()
-        val listContainedItem: Boolean = this.list.isEmpty().not()
-
-        when (itemTypeOfFirstItem) {
-            ItemType.MOVIE_DETAILS -> {
-                val movie = items[0] as MovieEntity
-                movie.generateGenreString()
-                list.add(0, movie)
-            }
-            ItemType.CAST -> {
-                list.addAll(items)
-            }
+        this.list.apply {
+            clear()
+            addAll(items)
         }
-
-        if (listContainedItem) {
-            notifyDataSetChanged()
-        }
+        notifyDataSetChanged()
     }
 
     inner class MovieDetailsViewHolder constructor(val binding: ItemMovieDetailsBinding) :

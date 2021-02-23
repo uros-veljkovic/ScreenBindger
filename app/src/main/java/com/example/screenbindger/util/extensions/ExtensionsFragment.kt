@@ -21,3 +21,7 @@ fun Fragment.startActivityWithDelay(activity: Activity, millis: Long) {
 fun Fragment.snackbar(message: String, colorResId: Int = R.color.design_default_color_background) {
     requireView().snack(message, colorResId)
 }
+
+fun Fragment.snackbar(stringResId: Int, colorResId: Int = R.color.design_default_color_background) {
+    requireView().snack(stringResId, colorResId)
+}

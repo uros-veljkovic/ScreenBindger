@@ -62,4 +62,5 @@
     <string name="choose_mail_client">Choose Email app to open</string>
     <string name="favorites_placeholder">Favorites</string>
     <string name="share_to_placeholder">Share to:</string>
+    <string name="no_details_available">No details available for this movie</string>
 </resources>
