@@ -3,6 +3,7 @@ package com.example.screenbindger.view.activity.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -136,8 +137,7 @@ class MainActivity : DaggerAppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return NavigationUI.onNavDestinationSelected(item, navController)
-                || super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onSupportNavigateUp(): Boolean {
