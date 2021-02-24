@@ -63,4 +63,6 @@
     <string name="favorites_placeholder">Favorites</string>
     <string name="share_to_placeholder">Share to:</string>
     <string name="no_details_available">No details available for this movie</string>
+    <string name="sort">Sort</string>
+    <string name="sort_by">Sort by</string>
 </resources>
