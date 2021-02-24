@@ -2,22 +2,27 @@ package com.example.screenbindger.view.fragment.trending
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentTrendingBinding
 import com.example.screenbindger.model.domain.movie.MovieEntity
 import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.adapter.recyclerview.SmallItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
+import com.example.screenbindger.util.dialog.SortBy
+import com.example.screenbindger.util.dialog.SortDialog
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snack
 import dagger.android.support.DaggerFragment
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class TrendingFragment : DaggerFragment(),
@@ -29,6 +34,10 @@ class TrendingFragment : DaggerFragment(),
     private var _binding: FragmentTrendingBinding? = null
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +49,7 @@ class TrendingFragment : DaggerFragment(),
         observeViewModel()
         return view
     }
+
     private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
         _binding = FragmentTrendingBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
@@ -78,7 +88,6 @@ class TrendingFragment : DaggerFragment(),
     private fun populateRecyclerView(list: List<MovieEntity>) {
         with(binding.rvTrending) {
             (adapter as SmallItemMovieRecyclerViewAdapter).setList(list)
-            startLayoutAnimation()
         }
     }
 
@@ -109,4 +118,23 @@ class TrendingFragment : DaggerFragment(),
     }
 
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.sort -> {
+                displaySortDialog()
+                true
+            }
+            else -> false
+        }
+    }
+
+    fun displaySortDialog() {
+        SortDialog(WeakReference(requireContext())).showDialog { sort ->
+            sortList(sort)
+        }
+    }
+
+    private fun sortList(sort: SortBy) {
+        (binding.rvTrending.adapter as SmallItemMovieRecyclerViewAdapter).sort(sort)
+    }
 }

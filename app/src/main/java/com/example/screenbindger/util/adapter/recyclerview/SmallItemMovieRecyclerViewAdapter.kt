@@ -11,6 +11,7 @@ import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemCl
 import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
 import com.example.screenbindger.util.constants.API_KEY
 import com.example.screenbindger.util.constants.POSTER_SIZE_SMALL
+import com.example.screenbindger.util.dialog.SortBy
 import kotlinx.android.synthetic.main.item_movie_small.view.*
 
 class SmallItemMovieRecyclerViewAdapter(
@@ -18,6 +19,14 @@ class SmallItemMovieRecyclerViewAdapter(
     private var list: MutableList<MovieEntity> = mutableListOf()
 ) :
     RecyclerView.Adapter<SmallItemMovieRecyclerViewAdapter.SmallItemMovieViewHolder>() {
+
+    private lateinit var recyclerView: RecyclerView
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+
+        this.recyclerView = recyclerView
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SmallItemMovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -60,6 +69,42 @@ class SmallItemMovieRecyclerViewAdapter(
     fun getList(): List<MovieEntity> {
         return list
     }
+
+    fun sort(sortType: SortBy) {
+        when (sortType) {
+            SortBy.RatingAsc -> sortRatingAsc()
+            SortBy.RatingDesc -> sortRatingDesc()
+            SortBy.TitleAsc -> sortTitleAsc()
+            SortBy.TitleDesc -> sortTitleDesc()
+        }
+    }
+
+    private fun sortRatingAsc() {
+        val sorted = list.sortedBy { it.rating }
+        setListAndStartAnimation(sorted)
+    }
+
+    private fun sortRatingDesc() {
+        val sorted = list.sortedByDescending { it.rating }
+        setListAndStartAnimation(sorted)
+    }
+
+    private fun sortTitleAsc() {
+        val sorted = list.sortedBy { it.title }
+        setListAndStartAnimation(sorted)
+    }
+
+    private fun sortTitleDesc() {
+        val sorted = list.sortedByDescending { it.title }
+        setListAndStartAnimation(sorted)
+    }
+
+    private fun setListAndStartAnimation(sorted: List<MovieEntity>) {
+        setList(sorted)
+        recyclerView.startLayoutAnimation()
+    }
+
+
 
     inner class SmallItemMovieViewHolder constructor(val binding: ItemMovieSmallBinding) :
         RecyclerView.ViewHolder(binding.root) {
