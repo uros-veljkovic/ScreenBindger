@@ -10,9 +10,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
@@ -53,13 +51,16 @@ class MovieDetailsFragment : DaggerFragment(),
     private var _binding: FragmentMovieDetailsBinding? = null
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = bind(inflater, container)
-
-        setHasOptionsMenu(true)
 
         modifyToolbarForFragment()
         initRecyclerView()
@@ -359,6 +360,10 @@ class MovieDetailsFragment : DaggerFragment(),
             }
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
     }
 
 

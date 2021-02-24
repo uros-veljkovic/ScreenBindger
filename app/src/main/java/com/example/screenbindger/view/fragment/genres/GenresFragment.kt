@@ -1,9 +1,7 @@
 package com.example.screenbindger.view.fragment.genres
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,6 +10,7 @@ import com.example.screenbindger.util.adapter.recyclerview.ItemGenreRecyclerView
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -22,6 +21,11 @@ class GenresFragment : DaggerFragment(), OnCardItemClickListener {
 
     private var _binding: FragmentGenresBinding? = null
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,6 +73,10 @@ class GenresFragment : DaggerFragment(), OnCardItemClickListener {
             )
             findNavController().navigate(action)
         }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.clear()
     }
 
     override fun onDestroyView() {

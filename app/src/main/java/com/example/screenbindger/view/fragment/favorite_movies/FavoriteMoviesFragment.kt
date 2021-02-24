@@ -1,9 +1,7 @@
 package com.example.screenbindger.view.fragment.favorite_movies
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +21,11 @@ class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
 
     private var _binding: FragmentFavoriteMoviesBinding? = null
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -104,6 +107,10 @@ class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
                 }
             })
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
     }
 
     override fun onDestroyView() {

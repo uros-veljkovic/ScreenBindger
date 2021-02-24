@@ -5,9 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.lifecycle.Observer
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentProfileBinding
@@ -30,6 +28,11 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
 
     @Inject
     lateinit var viewModel: ProfileFragmentViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -243,6 +246,10 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
                 viewModel.changePassword(newPassword)
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
     }
 
     fun showMessage(stringResId: Int, colorResId: Int) {
