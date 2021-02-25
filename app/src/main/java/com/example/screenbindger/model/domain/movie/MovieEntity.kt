@@ -29,7 +29,7 @@ class MovieEntity : BaseObservable(), Item {
             notifyPropertyChanged(BR.smallPosterUrl)
         }
 
-    @SerializedName("title")
+    @SerializedName(value = "show_title", alternate = ["title", "name"])
     @get: Bindable
     var title: String? = null
         set(value) {
