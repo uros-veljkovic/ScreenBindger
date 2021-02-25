@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
@@ -24,13 +25,35 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvUpcoming"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layoutAnimation="@anim/layout_anim_falldown"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabs"
             tools:listitem="@layout/item_movie_small" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabBackground="@drawable/tab_color_selector">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/btnMovies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Movies" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/btnTvShows"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TV Shows" />
+        </com.google.android.material.tabs.TabLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
