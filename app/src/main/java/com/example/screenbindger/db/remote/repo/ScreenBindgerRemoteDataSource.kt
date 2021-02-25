@@ -12,6 +12,7 @@ import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieService
 import com.example.screenbindger.db.remote.service.review.ReviewService
 import com.example.screenbindger.db.remote.service.storage.StorageService
+import com.example.screenbindger.db.remote.service.tv_show.TvShowService
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.service.user.UserService
 import com.example.screenbindger.db.remote.session.Session
@@ -30,6 +31,7 @@ class ScreenBindgerRemoteDataSource
 @Inject constructor(
     private val session: Session,
     private val movieService: MovieService,
+    private val tvShowService: TvShowService,
     private val genreService: GenreService,
     private val tmdbAuthService: TmdbAuthService,
     private val authService: AuthService,
@@ -60,8 +62,12 @@ class ScreenBindgerRemoteDataSource
         movieService.getTrending(trendingViewState)
     }
 
-    suspend fun getUpcoming(upcomingViewState: MutableLiveData<UpcomingFragmentViewState>) {
+    suspend fun getUpcomingMovies(upcomingViewState: MutableLiveData<UpcomingFragmentViewState>) {
         movieService.getUpcoming(upcomingViewState)
+    }
+
+    suspend fun getUpcomingTvShows(upcomingViewState: MutableLiveData<UpcomingFragmentViewState>) {
+        tvShowService.getUpcoming(upcomingViewState)
     }
 
     suspend fun getGenres(): Response<AllGenresResponse> {

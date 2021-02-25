@@ -11,6 +11,8 @@ import com.example.screenbindger.db.remote.service.movie.MovieService
 import com.example.screenbindger.db.remote.service.review.ReviewApi
 import com.example.screenbindger.db.remote.service.review.ReviewService
 import com.example.screenbindger.db.remote.service.storage.FirebaseStorageService
+import com.example.screenbindger.db.remote.service.tv_show.TvShowApi
+import com.example.screenbindger.db.remote.service.tv_show.TvShowService
 import com.example.screenbindger.db.remote.service.user.FirebaseUserService
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.user.UserEntity
@@ -38,6 +40,7 @@ class AppModule {
     fun provideRemoteDataSource(
         session: Session,
         movieService: MovieService,
+        tvShowService: TvShowService,
         genreService: GenreService,
         tmdbAuthService: TmdbAuthService,
         authService: FirebaseAuthService,
@@ -48,6 +51,7 @@ class AppModule {
         return ScreenBindgerRemoteDataSource(
             session,
             movieService,
+            tvShowService,
             genreService,
             tmdbAuthService,
             authService,
@@ -60,6 +64,15 @@ class AppModule {
     @Singleton
     @Provides
     fun provideMovieService(movieApi: MovieApi) = MovieService(movieApi)
+
+
+    @Singleton
+    @Provides
+    fun provideTvShowApi(retrofit: Retrofit): TvShowApi = retrofit.create(TvShowApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideTvShowService(api: TvShowApi) = TvShowService(api)
 
 
     @Singleton
