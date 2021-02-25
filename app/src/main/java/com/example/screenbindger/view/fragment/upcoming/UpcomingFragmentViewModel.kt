@@ -11,13 +11,26 @@ import javax.inject.Inject
 class UpcomingFragmentViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val upcomingViewState: MutableLiveData<UpcomingFragmentViewState>
+    val upcomingViewState: MutableLiveData<UpcomingFragmentViewState>,
+    val viewAction: MutableLiveData<UpcomingFragmentViewAction>
 ) : ViewModel() {
 
-    fun fetchData() {
+    fun fetchMovies() {
         CoroutineScope(IO).launch {
-            remoteDataSource.getUpcoming(upcomingViewState)
+            remoteDataSource.getUpcomingMovies(upcomingViewState)
         }
     }
+
+    fun fetchTvShows() {
+        CoroutineScope(IO).launch {
+            remoteDataSource.getUpcomingTvShows(upcomingViewState)
+        }
+    }
+
+    fun setAction(action: UpcomingFragmentViewAction) {
+        viewAction.postValue(action)
+    }
+
+
 
 }
