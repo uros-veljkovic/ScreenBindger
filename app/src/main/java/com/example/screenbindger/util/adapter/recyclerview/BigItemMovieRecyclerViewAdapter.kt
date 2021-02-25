@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.screenbindger.R
 import com.example.screenbindger.databinding.ItemMovieBigBinding
 import com.example.screenbindger.model.domain.movie.MovieEntity
 import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
@@ -67,7 +68,7 @@ class BigItemMovieRecyclerViewAdapter(
             Glide.with(imageView.context)
                 .load(field)
                 .centerCrop()
-                .placeholder(null)
+                .placeholder(R.drawable.video_player)
                 .into(imageView)
 
             imageView.refreshDrawableState()

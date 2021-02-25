@@ -19,16 +19,16 @@
 
         <ImageView
             android:id="@+id/ivMoviePoster"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
             android:contentDescription="@string/movie_poster"
-            android:scaleType="fitXY"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:posterPlaceholder="@{movie.backdropPathPlaceholder}"
             app:posterSize="@{ConstantsKt.POSTER_SIZE_ORIGINAL}"
             app:posterUrl="@{movie.bigPosterUrl}"
-            tools:src="@drawable/ic_star_black_24" />
+            tools:src="@drawable/video_player" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvMovieTitle"
@@ -81,19 +81,30 @@
             app:layout_constraintTop_toTopOf="@id/tvRatingPlaceholder"
             tools:text="7.4" />
 
-        <ImageButton
+        <TextView
+            android:id="@+id/tvWatchTrailerPlaceholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/small_100"
+            android:text="Watch trailer"
+            app:layout_constraintBottom_toBottomOf="@id/btnWatchTrailer"
+            app:layout_constraintEnd_toStartOf="@id/btnWatchTrailer"
+            app:layout_constraintTop_toTopOf="@id/btnWatchTrailer" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnWatchTrailer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/normal_100"
             android:backgroundTint="@color/defaultButtonColor"
             android:elevation="@dimen/normal_100"
-            android:layout_marginEnd="@dimen/normal_100"
-            android:padding="@dimen/normal_100"
-            android:src="@drawable/ic_video_24"
+            android:src="@drawable/youtube"
             android:tint="@color/defaultBackground"
-            app:layout_constraintBottom_toBottomOf="@+id/tvMovieTitle"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@+id/fabInstagram"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvMovieTitle" />
+            app:layout_constraintTop_toTopOf="@+id/fabInstagram" />
 
         <com.borjabravo.readmoretextview.ReadMoreTextView
             android:id="@+id/tvMovieDescription"

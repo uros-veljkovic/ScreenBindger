@@ -13,8 +13,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginVertical="@dimen/small_100"
-        android:layout_marginHorizontal="@dimen/small_100">
+        android:layout_marginHorizontal="@dimen/small_100"
+        android:layout_marginVertical="@dimen/small_100">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -34,8 +34,8 @@
                 <ImageView
                     android:id="@+id/ivMoviePoster"
                     android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:scaleType="centerCrop"
+                    android:layout_height="0dp"
+                    android:minHeight="520dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

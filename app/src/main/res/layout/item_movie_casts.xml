@@ -24,6 +24,7 @@
 
             <ImageView
                 android:id="@+id/ivCastImage"
+                posterPlaceholder="@{cast.imagePlaceholder}"
                 posterSize="@{ConstantsKt.POSTER_SIZE_ORIGINAL}"
                 posterUrl="@{cast.imageUrl}"
                 android:layout_width="@dimen/small_img_person"

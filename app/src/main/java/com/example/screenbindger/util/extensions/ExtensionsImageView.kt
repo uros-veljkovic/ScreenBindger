@@ -12,13 +12,14 @@ import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
 import com.example.screenbindger.util.constants.API_KEY
 import java.io.ByteArrayOutputStream
 
-@BindingAdapter(value = ["posterUrl", "posterSize"], requireAll = true)
-fun ImageView.setLoadFrom(url: String?, size: String) {
+@BindingAdapter(value = ["posterUrl", "posterPlaceholder", "posterSize"], requireAll = true)
+fun ImageView.setLoadFrom(url: String?, placeholderDrawableId: Int, size: String) {
     val field = "$API_IMAGE_BASE_URL/t/p/${size}${url}?api_key=$API_KEY"
 
     Glide.with(context)
         .load(field)
-        .placeholder(R.drawable.ic_fire_black_24)
+        .centerInside()
+        .placeholder(placeholderDrawableId)
         .into(this)
 
     refreshDrawableState()
