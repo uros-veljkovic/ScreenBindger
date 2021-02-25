@@ -110,13 +110,13 @@ class MovieDetailsFragment : DaggerFragment(),
                     is MovieDetailsState.Error -> {
                         snackbar(state.message)
                     }
-                    MovieDetailsState.NoDataAvailable -> {
+                    is MovieDetailsState.NoDataAvailable -> {
                         snackbar("No data available", R.color.logout_red)
                     }
-                    MovieDetailsState.MovieProcessed -> {
+                    is MovieDetailsState.MovieProcessed -> {
                         snackbar("MovieProcessed", R.color.green)
                     }
-                    MovieDetailsState.CastsProcessed -> {
+                    is MovieDetailsState.CastsProcessed -> {
                         Toast.makeText(requireActivity(), "CastsProcessed", Toast.LENGTH_LONG)
                             .show()
                     }
