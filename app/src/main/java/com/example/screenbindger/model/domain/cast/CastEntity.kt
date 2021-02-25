@@ -3,6 +3,7 @@ package com.example.screenbindger.model.domain.cast
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
+import com.example.screenbindger.R
 import com.example.screenbindger.model.domain.Item
 import com.example.screenbindger.model.enums.ItemType
 import com.google.gson.annotations.SerializedName
@@ -17,6 +18,8 @@ class CastEntity : BaseObservable(),
             field = value
             notifyPropertyChanged(BR.imageUrl)
         }
+
+    val imagePlaceholder = R.drawable.user
 
     @SerializedName("character")
     @get: Bindable

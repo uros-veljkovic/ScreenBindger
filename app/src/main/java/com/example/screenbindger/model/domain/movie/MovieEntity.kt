@@ -3,6 +3,7 @@ package com.example.screenbindger.model.domain.movie
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
+import com.example.screenbindger.R
 import com.example.screenbindger.model.domain.Item
 import com.example.screenbindger.model.domain.genre.GenreEntity
 import com.example.screenbindger.model.enums.ItemType
@@ -20,6 +21,8 @@ class MovieEntity : BaseObservable(), Item {
             field = value
             notifyPropertyChanged(BR.bigPosterUrl)
         }
+
+    val backdropPathPlaceholder = R.drawable.video_player
 
     @SerializedName("poster_path")
     @get: Bindable
