@@ -5,6 +5,6 @@ import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.view.ListViewState
 
 class UpcomingFragmentViewState(
-    s: ListState = ListState.Init,
-    l: List<MovieEntity>? = emptyList()
-) : ListViewState<MovieEntity>(s, l)
+    state: ListState = ListState.Init,
+    list: List<MovieEntity>? = emptyList()
+) : ListViewState<MovieEntity>(state, list)
