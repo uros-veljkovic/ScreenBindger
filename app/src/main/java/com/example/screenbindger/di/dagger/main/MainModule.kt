@@ -17,6 +17,7 @@ import com.example.screenbindger.view.fragment.review.ReviewFragmentViewAction
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewEvent
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewState
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewState
+import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewAction
 import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewState
 import dagger.Module
 import dagger.Provides
@@ -66,6 +67,10 @@ class MainModule {
     @Provides
     fun provideUpcomingViewState(): MutableLiveData<UpcomingFragmentViewState> =
         MutableLiveData(UpcomingFragmentViewState())
+
+    @MainScope
+    @Provides
+    fun provideUpcomingViewAction(): MutableLiveData<UpcomingFragmentViewAction> = MutableLiveData()
 
     @MainScope
     @Provides
