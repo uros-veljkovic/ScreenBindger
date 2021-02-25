@@ -7,7 +7,8 @@ import com.example.screenbindger.model.domain.Item
 import com.example.screenbindger.model.enums.ItemType
 import com.google.gson.annotations.SerializedName
 
-class CastEntity : BaseObservable(), Item {
+class CastEntity : BaseObservable(),
+    Item {
 
     @SerializedName("profile_path")
     @get: Bindable
