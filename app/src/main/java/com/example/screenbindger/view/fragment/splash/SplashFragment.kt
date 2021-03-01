@@ -70,7 +70,8 @@ class SplashFragment : DaggerFragment() {
 
     private fun gotoLoginFragment() {
         Handler(Looper.getMainLooper()).postDelayed({
-            findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+            val action = SplashFragmentDirections.actionSplashFragmentToLoginFragment()
+            findNavController().navigate(action)
         }, 1500)
     }
 

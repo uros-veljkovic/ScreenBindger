@@ -6,11 +6,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentTrendingBinding
-import com.example.screenbindger.model.domain.movie.MovieEntity
+import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.adapter.recyclerview.SmallItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
@@ -21,6 +22,8 @@ import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snack
+import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewAction
+import com.google.android.material.tabs.TabLayout
 import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -46,13 +49,20 @@ class TrendingFragment : DaggerFragment(),
 
         val view = bind(inflater, container)
         initRecyclerView()
-        observeViewModel()
+        initOnClickListeners()
+
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        observeFragmentActions()
+        observeFragmentState()
     }
 
     private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
         _binding = FragmentTrendingBinding.inflate(inflater, container, false)
-        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -64,12 +74,43 @@ class TrendingFragment : DaggerFragment(),
         }
     }
 
-    private fun observeViewModel() {
-        viewModel.trendingViewState.observe(viewLifecycleOwner, Observer { response ->
-            when (response.state) {
-                is ListState.Init -> {
-                    viewModel.fetchData()
+    private fun initOnClickListeners() {
+        binding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab!!.position == 0) {
+                    viewModel.setAction(TrendingFragmentViewAction.FetchMovies)
+                } else {
+                    viewModel.setAction(TrendingFragmentViewAction.FetchTvShows)
                 }
+            }
+
+        })
+    }
+
+    private fun fetchMovies() {
+        viewModel.setAction(TrendingFragmentViewAction.FetchMovies)
+    }
+
+    private fun observeFragmentActions() {
+        with(viewModel) {
+            viewAction.observe(viewLifecycleOwner, Observer { action ->
+                when (action) {
+                    TrendingFragmentViewAction.FetchMovies -> {
+                        fetchMovies()
+                    }
+                    TrendingFragmentViewAction.FetchTvShows -> {
+                        fetchTvShows()
+                    }
+                }
+            })
+        }
+    }
+
+    private fun observeFragmentState() {
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { response ->
+            when (response.state) {
                 is ListState.Fetching -> {
                     showProgressBar()
                 }
@@ -85,7 +126,7 @@ class TrendingFragment : DaggerFragment(),
         })
     }
 
-    private fun populateRecyclerView(list: List<MovieEntity>) {
+    private fun populateRecyclerView(list: List<ShowEntity>) {
         with(binding.rvTrending) {
             (adapter as SmallItemMovieRecyclerViewAdapter).setList(list)
         }
@@ -97,10 +138,19 @@ class TrendingFragment : DaggerFragment(),
         }
     }
 
-    override fun onCardItemClick(movieId: Int) {
-        val action =
-            TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(movieId)
-        findNavController().navigate(action)
+    override fun onCardItemClick(showId: Int) {
+        val lastAction = viewModel.peekLastAction()
+        var direction: NavDirections? = null
+
+        direction = when (lastAction) {
+            is TrendingFragmentViewAction.FetchMovies -> {
+                TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(showId)
+            }
+            is TrendingFragmentViewAction.FetchTvShows -> {
+                TrendingFragmentDirections.actionTrendingFragmentToTvShowDetailsFragment(showId)
+            }
+        }
+        findNavController().navigate(direction)
     }
 
     private fun showProgressBar() {
@@ -113,7 +163,7 @@ class TrendingFragment : DaggerFragment(),
 
     override fun onDestroyView() {
         super.onDestroyView()
-
+        viewModel.setAction(TrendingFragmentViewAction.FetchMovies)
         _binding = null
     }
 

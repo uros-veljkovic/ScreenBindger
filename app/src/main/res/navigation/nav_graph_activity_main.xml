@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/movieDetailsFragment"
-        android:name="com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragment"
+        android:name="com.example.screenbindger.view.fragment.details.movie.MovieDetailsFragment"
         android:label="Movie details"
         tools:layout="@layout/fragment_movie_details">
         <argument
@@ -42,6 +42,9 @@
         <action
             android:id="@+id/action_trendingFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
+        <action
+            android:id="@+id/action_trendingFragment_to_tvShowDetailsFragment"
+            app:destination="@id/tvShowDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/upcomingFragment"
@@ -51,6 +54,9 @@
         <action
             android:id="@+id/action_upcomingFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
+        <action
+            android:id="@+id/action_upcomingFragment_to_tvShowDetailsFragment"
+            app:destination="@id/tvShowDetailsFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_genresFragment"
@@ -100,6 +106,14 @@
         tools:layout="@layout/fragment_review">
         <argument
             android:name="movieId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/tvShowDetailsFragment"
+        android:name="com.example.screenbindger.view.fragment.details.tv_show.TvShowDetailsFragment"
+        android:label="Tv show details">
+        <argument
+            android:name="tvShowId"
             app:argType="integer" />
     </fragment>
 </navigation>

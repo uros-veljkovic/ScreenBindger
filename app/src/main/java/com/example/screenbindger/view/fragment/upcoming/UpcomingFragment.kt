@@ -3,6 +3,7 @@ package com.example.screenbindger.view.fragment.upcoming
 import android.os.Bundle
 import android.view.*
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.R
@@ -18,6 +19,7 @@ import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snack
+import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewAction
 import com.google.android.material.tabs.TabLayout
 import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference
@@ -45,9 +47,15 @@ class UpcomingFragment : DaggerFragment(),
 
         val view = bind(inflater, container)
         initRecyclerView()
+        initOnClickListeners()
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         observeFragmentActions()
         observeFragmentState()
-        return view
     }
 
     private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
@@ -61,6 +69,21 @@ class UpcomingFragment : DaggerFragment(),
             addItemDecoration(GridLayoutRecyclerViewDecorator(2, 16, true))
             adapter = SmallItemMovieRecyclerViewAdapter(this@UpcomingFragment)
         }
+    }
+
+    private fun initOnClickListeners() {
+        binding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab!!.position == 0) {
+                    viewModel.setAction(UpcomingFragmentViewAction.FetchMovies)
+                } else {
+                    viewModel.setAction(UpcomingFragmentViewAction.FetchTvShows)
+                }
+            }
+
+        })
     }
 
     private fun observeFragmentActions() {
@@ -81,9 +104,6 @@ class UpcomingFragment : DaggerFragment(),
     private fun observeFragmentState() {
         viewModel.upcomingViewState.observe(viewLifecycleOwner, Observer { response ->
             when (response.state) {
-                is ListState.Init -> {
-                    viewModel.fetchMovies()
-                }
                 is ListState.Fetching -> {
                     showProgressBar()
                 }
@@ -103,7 +123,6 @@ class UpcomingFragment : DaggerFragment(),
     private fun populateRecyclerView(list: List<ShowEntity>) {
         with(binding.rvUpcoming) {
             (adapter as SmallItemMovieRecyclerViewAdapter).setList(list)
-            startLayoutAnimation()
         }
     }
 
@@ -113,10 +132,19 @@ class UpcomingFragment : DaggerFragment(),
         }
     }
 
-    override fun onCardItemClick(movieId: Int) {
-        val action =
-            UpcomingFragmentDirections.actionUpcomingFragmentToMovieDetailsFragment(movieId)
-        findNavController().navigate(action)
+    override fun onCardItemClick(showId: Int) {
+        val lastAction = viewModel.peekLastAction()
+        var direction: NavDirections? = null
+
+        direction = when (lastAction) {
+            is UpcomingFragmentViewAction.FetchMovies -> {
+                UpcomingFragmentDirections.actionUpcomingFragmentToMovieDetailsFragment(showId)
+            }
+            UpcomingFragmentViewAction.FetchTvShows -> {
+                UpcomingFragmentDirections.actionUpcomingFragmentToTvShowDetailsFragment(showId)
+            }
+        }
+        findNavController().navigate(direction)
     }
 
     private fun showProgressBar() {
@@ -127,30 +155,9 @@ class UpcomingFragment : DaggerFragment(),
         binding.progressBar.hide()
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        initOnClickListeners()
-    }
-
-    private fun initOnClickListeners() {
-        binding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                if (tab!!.position == 0) {
-                    viewModel.fetchMovies()
-                } else {
-                    viewModel.fetchTvShows()
-                }
-            }
-
-        })
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
-
+        viewModel.setAction(UpcomingFragmentViewAction.FetchMovies)
         _binding = null
     }
 

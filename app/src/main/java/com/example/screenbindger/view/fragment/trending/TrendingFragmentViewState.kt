@@ -5,6 +5,6 @@ import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.view.ListViewState
 
 class TrendingFragmentViewState(
-    s: ListState = ListState.Init,
-    l: List<ShowEntity>? = emptyList()
-) : ListViewState<ShowEntity>(s, l)
+    state: ListState = ListState.Fetching,
+    list: List<ShowEntity>? = emptyList()
+) : ListViewState<ShowEntity>(state, list)
