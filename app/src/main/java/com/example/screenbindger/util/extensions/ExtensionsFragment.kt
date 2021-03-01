@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
 import com.example.screenbindger.R
 import com.example.screenbindger.view.activity.main.MainActivity
