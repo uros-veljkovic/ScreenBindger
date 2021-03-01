@@ -64,6 +64,7 @@ class SmallItemMovieRecyclerViewAdapter(
         this.list.clear()
         this.list = list?.toMutableList() ?: mutableListOf()
         notifyDataSetChanged()
+        recyclerView.startLayoutAnimation()
     }
 
     fun getList(): List<ShowEntity> {
