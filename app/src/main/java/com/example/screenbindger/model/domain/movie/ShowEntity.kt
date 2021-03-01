@@ -9,7 +9,7 @@ import com.example.screenbindger.model.domain.genre.GenreEntity
 import com.example.screenbindger.model.enums.ItemType
 import com.google.gson.annotations.SerializedName
 
-class MovieEntity : BaseObservable(), Item {
+class ShowEntity : BaseObservable(), Item {
 
     @SerializedName("id")
     var id: Int? = null
