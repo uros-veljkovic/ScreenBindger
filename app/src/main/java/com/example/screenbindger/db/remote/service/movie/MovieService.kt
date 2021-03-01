@@ -10,9 +10,9 @@ import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
 import com.example.screenbindger.util.extensions.ifLet
 import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewEvent
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsState
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentViewEvent
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentViewState
+import com.example.screenbindger.view.fragment.details.ShowDetailsState
+import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
+import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewState
 import kotlinx.coroutines.CoroutineScope
@@ -75,55 +75,55 @@ constructor(
 
     suspend fun getMovieDetails(
         movieId: Int,
-        viewState: MovieDetailsFragmentViewState
+        viewState: DetailsFragmentViewState
     ) {
         movieApi.getMovieDetails(movieId).also { response ->
             if (response.isSuccessful) {
                 viewState.apply {
-                    movie = response.body()
+                    show = response.body()
                     CoroutineScope(Dispatchers.Default).launch {
-                        movie?.generateGenreString()
+                        show?.generateGenreString()
                     }
                 }
 
                 val isCastsProcessedOrNotFetched =
-                    (viewState.currentState() is MovieDetailsState.CastsProcessed)
-                        .or(viewState.currentState() is MovieDetailsState.Error.CastsNotFetched)
+                    (viewState.currentState() is ShowDetailsState.CastsProcessed)
+                        .or(viewState.currentState() is ShowDetailsState.Error.CastsNotFetched)
 
                 if (isCastsProcessedOrNotFetched) {
                     viewState.prepareForFinalState()
                 } else {
-                    viewState.setState(MovieDetailsState.MovieProcessed)
+                    viewState.setState(ShowDetailsState.ShowProcessed)
                 }
             } else {
                 val message = response.getErrorResponse().statusMessage
-                viewState.setState(MovieDetailsState.Error.MovieNotFetched(message))
+                viewState.setState(ShowDetailsState.Error.ShowNotFetched(message))
             }
         }
     }
 
     suspend fun getMovieCasts(
         movieId: Int,
-        viewState: MovieDetailsFragmentViewState
+        viewState: DetailsFragmentViewState
     ) {
         movieApi.getMovieCasts(movieId).also { response ->
             if (response.isSuccessful) {
                 viewState.casts = response.body()?.casts
 
                 val movieProcessedOrNotFetched: Boolean =
-                    (viewState.currentState() is MovieDetailsState.MovieProcessed)
-                        .or(viewState.currentState() is MovieDetailsState.Error.MovieNotFetched)
+                    (viewState.currentState() is ShowDetailsState.ShowProcessed)
+                        .or(viewState.currentState() is ShowDetailsState.Error.ShowNotFetched)
 
 
                 if (movieProcessedOrNotFetched) {
                     viewState.prepareForFinalState()
                 } else {
-                    viewState.setState(MovieDetailsState.CastsProcessed)
+                    viewState.setState(ShowDetailsState.CastsProcessed)
                 }
 
             } else {
                 val message = response.getErrorResponse().statusMessage
-                viewState.setState(MovieDetailsState.Error.CastsNotFetched(message))
+                viewState.setState(ShowDetailsState.Error.CastsNotFetched(message))
             }
         }
     }
@@ -131,7 +131,7 @@ constructor(
     suspend fun postMovieAsFavorite(
         session: Session,
         body: MarkAsFavoriteRequestBody,
-        viewEffect: MutableLiveData<Event<MovieDetailsFragmentViewEvent>>
+        viewEffect: MutableLiveData<Event<DetailsFragmentViewEvent>>
     ) {
         ifLet(session.id, session.accountId) {
             movieApi.postMarkAsFavorite(
@@ -141,12 +141,12 @@ constructor(
             ).let {
                 if (it.isSuccessful) {
                     if (body.favorite)
-                        viewEffect.postValue(Event(MovieDetailsFragmentViewEvent.AddedToFavorites()))
+                        viewEffect.postValue(Event(DetailsFragmentViewEvent.AddedToFavorites()))
                     else
-                        viewEffect.postValue(Event(MovieDetailsFragmentViewEvent.RemovedFromFavorites()))
+                        viewEffect.postValue(Event(DetailsFragmentViewEvent.RemovedFromFavorites()))
                 } else {
                     val error = it.getErrorResponse().statusMessage
-                    viewEffect.postValue(Event(MovieDetailsFragmentViewEvent.Error(error)))
+                    viewEffect.postValue(Event(DetailsFragmentViewEvent.Error(error)))
                 }
             }
         }
@@ -155,7 +155,7 @@ constructor(
     suspend fun getIsMovieFavorite(
         movieId: Int,
         session: Session,
-        viewEvent: MutableLiveData<Event<MovieDetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
     ) {
         ifLet(session.id, session.accountId) {
             movieApi.getFavoriteMovieList(
@@ -165,15 +165,15 @@ constructor(
                 if (response.isSuccessful) {
                     response.body()?.list?.forEach { movie ->
                         if (movie.id!! == movieId) {
-                            viewEvent.postValue(Event(MovieDetailsFragmentViewEvent.IsLoadedAsFavorite))
+                            viewEvent.postValue(Event(DetailsFragmentViewEvent.IsLoadedAsFavorite))
                             return
                         }
                     }
-                    viewEvent.postValue(Event(MovieDetailsFragmentViewEvent.IsLoadedAsNotFavorite))
+                    viewEvent.postValue(Event(DetailsFragmentViewEvent.IsLoadedAsNotFavorite))
                 } else {
                     viewEvent.postValue(
                         Event(
-                            MovieDetailsFragmentViewEvent.Error(
+                            DetailsFragmentViewEvent.Error(
                                 "Error finding out if this is you favorite movie :("
                             )
                         )
@@ -210,19 +210,19 @@ constructor(
 
     suspend fun getMovieTrailersInfo(
         movieId: Int,
-        viewEvent: MutableLiveData<Event<MovieDetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
     ) {
         movieApi.getMovieTrailers(movieId).let { response ->
             if (response.isSuccessful) {
                 response.body()?.list?.let { list ->
                     if (list.isNotEmpty()) {
-                        viewEvent.postValue(Event(MovieDetailsFragmentViewEvent.TrailersFetched(list)))
+                        viewEvent.postValue(Event(DetailsFragmentViewEvent.TrailersFetched(list)))
                     } else {
-                        viewEvent.postValue(Event(MovieDetailsFragmentViewEvent.TrailersNotFetched))
+                        viewEvent.postValue(Event(DetailsFragmentViewEvent.TrailersNotFetched))
                     }
                 }
             } else {
-                viewEvent.postValue(Event(MovieDetailsFragmentViewEvent.Error("Error loading trailer.")))
+                viewEvent.postValue(Event(DetailsFragmentViewEvent.Error("Error loading trailer.")))
             }
         }
     }
