@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.model.domain.user.UserEntity
 import com.example.screenbindger.db.remote.response.genre.AllGenresResponse
-import com.example.screenbindger.db.remote.response.movie.MoviesByGenreResponse
+import com.example.screenbindger.db.remote.response.movie.MoviesResponse
 import com.example.screenbindger.db.remote.service.auth.firebase.AuthService
 import com.example.screenbindger.db.remote.service.auth.tmdb.TmdbAuthService
 import com.example.screenbindger.db.remote.service.genre.GenreService
@@ -19,8 +19,8 @@ import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewEvent
 import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentViewEvent
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentViewState
+import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
+import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewEvent
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewState
@@ -58,8 +58,12 @@ class ScreenBindgerRemoteDataSource
         userService.create(userStateObservable)
     }
 
-    suspend fun getTrending(trendingViewState: MutableLiveData<TrendingFragmentViewState>) {
+    suspend fun getTrendingMovies(trendingViewState: MutableLiveData<TrendingFragmentViewState>) {
         movieService.getTrending(trendingViewState)
+    }
+
+    suspend fun getTrendingTvShows(trendingViewState: MutableLiveData<TrendingFragmentViewState>) {
+        tvShowService.getTrending(trendingViewState)
     }
 
     suspend fun getUpcomingMovies(upcomingViewState: MutableLiveData<UpcomingFragmentViewState>) {
@@ -75,20 +79,34 @@ class ScreenBindgerRemoteDataSource
     }
 
     suspend fun getMovieDetails(
-        movieId: Int,
-        viewState: MovieDetailsFragmentViewState
+        showId: Int,
+        viewState: DetailsFragmentViewState
     ) {
-        movieService.getMovieDetails(movieId, viewState)
+        movieService.getMovieDetails(showId, viewState)
     }
 
     suspend fun getMovieCasts(
-        movieId: Int,
-        viewState: MovieDetailsFragmentViewState
+        showId: Int,
+        viewState: DetailsFragmentViewState
     ) {
-        movieService.getMovieCasts(movieId, viewState)
+        movieService.getMovieCasts(showId, viewState)
     }
 
-    suspend fun getMoviesByGenre(id: String): Response<MoviesByGenreResponse> {
+    suspend fun getTvShowDetails(
+        showId: Int,
+        viewState: DetailsFragmentViewState
+    ) {
+        tvShowService.getDetails(showId, viewState)
+    }
+
+    suspend fun getTvShowCasts(
+        showId: Int,
+        viewState: DetailsFragmentViewState
+    ) {
+        tvShowService.getCasts(showId, viewState)
+    }
+
+    suspend fun getMoviesByGenre(id: String): Response<MoviesResponse> {
         return genreService.getMoviesByGenre(id)
     }
 
@@ -143,14 +161,14 @@ class ScreenBindgerRemoteDataSource
 
     suspend fun markAsFavorite(
         requestBody: MarkAsFavoriteRequestBody,
-        viewEvent: MutableLiveData<Event<MovieDetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
     ) {
         movieService.postMovieAsFavorite(session, requestBody, viewEvent)
     }
 
     suspend fun getIsMovieFavorite(
         movieId: Int,
-        viewEvent: MutableLiveData<Event<MovieDetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
     ) {
         movieService.getIsMovieFavorite(movieId, session, viewEvent)
     }
@@ -170,7 +188,7 @@ class ScreenBindgerRemoteDataSource
 
     suspend fun getMovieTrailersInfo(
         movieId: Int,
-        viewEvent: MutableLiveData<Event<MovieDetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
     ) {
         movieService.getMovieTrailersInfo(movieId, viewEvent)
     }
