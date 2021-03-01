@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentViewModel" />
+            type="com.example.screenbindger.view.fragment.details.movie.MovieDetailsFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="false"
-        tools:context=".view.fragment.movie_details.MovieDetailsFragment">
+        tools:context=".view.fragment.details.movie.MovieDetailsFragment">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnAddOrRemoveAsFavorite"

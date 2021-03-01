@@ -11,7 +11,7 @@ import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.model.enums.ItemType
 
 
-class MovieDetailsRecyclerViewAdapter(
+class ShowDetailsRecyclerViewAdapter(
     val listener: OnClickListener,
     val list: MutableList<Item> = mutableListOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
