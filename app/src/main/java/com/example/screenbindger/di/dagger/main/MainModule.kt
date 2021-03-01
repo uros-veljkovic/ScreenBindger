@@ -9,18 +9,21 @@ import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewAction
 import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewEvent
 import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewState
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentViewAction
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentViewEvent
-import com.example.screenbindger.view.fragment.movie_details.MovieDetailsFragmentViewState
+import com.example.screenbindger.view.fragment.details.DetailsFragmentViewAction
+import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
+import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import com.example.screenbindger.view.fragment.profile.FragmentStateObservable
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewAction
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewEvent
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewState
+import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewAction
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewAction
 import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewState
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
 
 @Module
 class MainModule {
@@ -65,28 +68,35 @@ class MainModule {
 
     @MainScope
     @Provides
+    fun provideTrendingViewAction(): MutableLiveData<TrendingFragmentViewAction> =
+        MutableLiveData(TrendingFragmentViewAction.FetchMovies)
+
+
+    @MainScope
+    @Provides
     fun provideUpcomingViewState(): MutableLiveData<UpcomingFragmentViewState> =
         MutableLiveData(UpcomingFragmentViewState())
 
     @MainScope
     @Provides
-    fun provideUpcomingViewAction(): MutableLiveData<UpcomingFragmentViewAction> = MutableLiveData()
+    fun provideUpcomingViewAction(): MutableLiveData<UpcomingFragmentViewAction> =
+        MutableLiveData(UpcomingFragmentViewAction.FetchMovies)
 
     @MainScope
     @Provides
-    fun provideMovieDetailsViewState(): MovieDetailsFragmentViewState {
-        return MovieDetailsFragmentViewState()
+    fun provideMovieDetailsViewState(): DetailsFragmentViewState {
+        return DetailsFragmentViewState()
     }
 
     @MainScope
     @Provides
-    fun provideMovieDetailsViewAction(): MutableLiveData<Event<MovieDetailsFragmentViewAction>> {
+    fun provideMovieDetailsViewAction(): MutableLiveData<Event<DetailsFragmentViewAction>> {
         return MutableLiveData()
     }
 
     @MainScope
     @Provides
-    fun provideMovieDetailsViewEvent(): MutableLiveData<Event<MovieDetailsFragmentViewEvent>> {
+    fun provideMovieDetailsViewEvent(): MutableLiveData<Event<DetailsFragmentViewEvent>> {
         return MutableLiveData()
     }
 
@@ -125,6 +135,10 @@ class MainModule {
     fun provideReviewFragmentViewEvent(): MutableLiveData<Event<ReviewFragmentViewEvent>> {
         return MutableLiveData()
     }
+
+    @MainScope
+    @Provides
+    fun provideCoroutineIo() = CoroutineScope(IO)
 
 
 }
