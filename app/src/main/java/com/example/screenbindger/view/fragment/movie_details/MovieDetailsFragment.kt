@@ -6,7 +6,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -18,17 +17,15 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentMovieDetailsBinding
-import com.example.screenbindger.db.remote.response.movie.trailer.MovieTrailerDetails
+import com.example.screenbindger.db.remote.response.movie.trailer.TrailerDetails
 import com.example.screenbindger.model.domain.Item
-import com.example.screenbindger.model.domain.movie.MovieEntity
+import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.util.MoviePosterUri
 import com.example.screenbindger.util.adapter.recyclerview.MovieDetailsRecyclerViewAdapter
 import com.example.screenbindger.util.constants.INTENT_ADD_TO_INSTA_STORY
 import com.example.screenbindger.util.constants.INTENT_REQUEST_CODE_INSTAGRAM
 import com.example.screenbindger.util.constants.POSTER_SIZE_ORIGINAL
 import com.example.screenbindger.util.event.Event
-import com.example.screenbindger.util.extensions.hide
-import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snackbar
 import com.example.screenbindger.util.image.ImageProvider
 import com.example.screenbindger.view.activity.main.MainActivity
@@ -244,7 +241,7 @@ class MovieDetailsFragment : DaggerFragment(),
         }
     }
 
-    private fun showTrailer(video: MovieTrailerDetails) {
+    private fun showTrailer(video: TrailerDetails) {
         val videoKey = video.key
         val url = "https://youtube.com/watch?v=$videoKey"
 
@@ -306,13 +303,13 @@ class MovieDetailsFragment : DaggerFragment(),
         viewModel.viewAction.postValue(Event(MovieDetailsFragmentViewAction.FetchTrailers))
     }
 
-    override fun onBtnShareToInstagram(movieEntity: MovieEntity) {
+    override fun onBtnShareToInstagram(movieEntity: ShowEntity) {
         fetchPoster(movieEntity) { bitmap ->
             viewModel.saveToGalleryForInstagram(bitmap, requireContext(), "Posters")
         }
     }
 
-    private fun fetchPoster(movieEntity: MovieEntity, callback: (Bitmap) -> Unit) {
+    private fun fetchPoster(movieEntity: ShowEntity, callback: (Bitmap) -> Unit) {
         if (verifyPermissions().not()) {
             return
         }

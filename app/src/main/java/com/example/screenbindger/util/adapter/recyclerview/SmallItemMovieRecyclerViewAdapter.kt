@@ -6,7 +6,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.screenbindger.databinding.ItemMovieSmallBinding
-import com.example.screenbindger.model.domain.movie.MovieEntity
+import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
 import com.example.screenbindger.util.constants.API_KEY
@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.item_movie_small.view.*
 
 class SmallItemMovieRecyclerViewAdapter(
     val listener: OnCardItemClickListener,
-    private var list: MutableList<MovieEntity> = mutableListOf()
+    private var list: MutableList<ShowEntity> = mutableListOf()
 ) :
     RecyclerView.Adapter<SmallItemMovieRecyclerViewAdapter.SmallItemMovieViewHolder>() {
 
@@ -60,13 +60,13 @@ class SmallItemMovieRecyclerViewAdapter(
         return list.size
     }
 
-    fun setList(list: List<MovieEntity>?) {
+    fun setList(list: List<ShowEntity>?) {
         this.list.clear()
         this.list = list?.toMutableList() ?: mutableListOf()
         notifyDataSetChanged()
     }
 
-    fun getList(): List<MovieEntity> {
+    fun getList(): List<ShowEntity> {
         return list
     }
 
@@ -99,7 +99,7 @@ class SmallItemMovieRecyclerViewAdapter(
         setListAndStartAnimation(sorted)
     }
 
-    private fun setListAndStartAnimation(sorted: List<MovieEntity>) {
+    private fun setListAndStartAnimation(sorted: List<ShowEntity>) {
         setList(sorted)
         recyclerView.startLayoutAnimation()
     }
@@ -109,7 +109,7 @@ class SmallItemMovieRecyclerViewAdapter(
     inner class SmallItemMovieViewHolder constructor(val binding: ItemMovieSmallBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(movie: MovieEntity) {
+        fun bind(movie: ShowEntity) {
             binding.movie = movie
         }
     }

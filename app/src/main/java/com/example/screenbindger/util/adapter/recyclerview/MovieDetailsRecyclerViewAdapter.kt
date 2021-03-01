@@ -7,7 +7,7 @@ import com.example.screenbindger.databinding.ItemMovieCastsBinding
 import com.example.screenbindger.databinding.ItemMovieDetailsBinding
 import com.example.screenbindger.model.domain.cast.CastEntity
 import com.example.screenbindger.model.domain.Item
-import com.example.screenbindger.model.domain.movie.MovieEntity
+import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.model.enums.ItemType
 
 
@@ -51,7 +51,7 @@ class MovieDetailsRecyclerViewAdapter(
                             listener.onBtnWatchTrailer()
                         }
                         fabInstagram.setOnClickListener {
-                            val movie = item as MovieEntity
+                            val movie = item as ShowEntity
                             listener.onBtnShareToInstagram(movie)
                         }
                     }
@@ -84,7 +84,7 @@ class MovieDetailsRecyclerViewAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Item) {
-            binding.movie = item as MovieEntity?
+            binding.movie = item as ShowEntity?
         }
     }
 
@@ -98,7 +98,7 @@ class MovieDetailsRecyclerViewAdapter(
 
     interface OnClickListener {
         fun onBtnWatchTrailer()
-        fun onBtnShareToInstagram(movieEntity: MovieEntity)
+        fun onBtnShareToInstagram(movieEntity: ShowEntity)
     }
 
 }

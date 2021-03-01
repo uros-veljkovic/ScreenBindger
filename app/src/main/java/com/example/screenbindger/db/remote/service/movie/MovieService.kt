@@ -3,8 +3,7 @@ package com.example.screenbindger.db.remote.service.movie
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.db.remote.session.Session
-import com.example.screenbindger.model.domain.cast.CastEntity
-import com.example.screenbindger.model.domain.movie.MovieEntity
+import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.model.global.Genres
 import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.event.Event
@@ -29,7 +28,7 @@ constructor(
 
     suspend fun getTrending(trendingViewState: MutableLiveData<TrendingFragmentViewState>) {
         movieApi.getTrendingMovies().let { response ->
-            val list = response.body()?.list ?: emptyList()
+            val list = response.body()?.list?.sortedByDescending { it.rating } ?: emptyList()
             val state: TrendingFragmentViewState
             state = if (response.isSuccessful) {
                 generateGenres(list)
@@ -44,7 +43,7 @@ constructor(
 
     suspend fun getUpcoming(upcomingViewState: MutableLiveData<UpcomingFragmentViewState>) {
         movieApi.getUpcomingMovies().let { response ->
-            val list = response.body()?.list ?: emptyList()
+            val list = response.body()?.list?.sortedByDescending { it.rating } ?: emptyList()
             val state: UpcomingFragmentViewState
             state = if (response.isSuccessful) {
                 generateGenres(list)
@@ -57,7 +56,7 @@ constructor(
         }
     }
 
-    private fun generateGenres(list: List<MovieEntity>) {
+    private fun generateGenres(list: List<ShowEntity>) {
         CoroutineScope(Dispatchers.Default).launch {
             list.forEach { movie ->
                 movie.genreIds?.forEach { generId ->

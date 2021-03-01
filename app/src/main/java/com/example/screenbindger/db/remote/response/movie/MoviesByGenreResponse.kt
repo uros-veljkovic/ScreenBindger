@@ -1,10 +1,10 @@
 package com.example.screenbindger.db.remote.response.movie
 
-import com.example.screenbindger.model.domain.movie.MovieEntity
+import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.google.gson.annotations.SerializedName
 
 class MoviesByGenreResponse (
     @SerializedName("results")
-    val list: List<MovieEntity>
+    val list: List<ShowEntity>
 )
 

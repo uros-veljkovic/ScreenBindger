@@ -1,6 +1,6 @@
 package com.example.screenbindger.view.fragment.movie_details
 
-import com.example.screenbindger.db.remote.response.movie.trailer.MovieTrailerDetails
+import com.example.screenbindger.db.remote.response.movie.trailer.TrailerDetails
 
 sealed class MovieDetailsFragmentViewEvent {
 
@@ -19,7 +19,7 @@ sealed class MovieDetailsFragmentViewEvent {
     ) : MovieDetailsFragmentViewEvent()
 
     data class TrailersFetched(
-        val trailers: List<MovieTrailerDetails>
+        val trailers: List<TrailerDetails>
     ) : MovieDetailsFragmentViewEvent()
 
     object TrailersNotFetched : MovieDetailsFragmentViewEvent()

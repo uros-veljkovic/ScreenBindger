@@ -2,12 +2,12 @@ package com.example.screenbindger.view.fragment.movie_details
 
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.model.domain.cast.CastEntity
-import com.example.screenbindger.model.domain.movie.MovieEntity
+import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.util.event.Event
 
 data class MovieDetailsFragmentViewState(
     val eventState: MutableLiveData<Event<MovieDetailsState>?> = MutableLiveData(null),
-    var movie: MovieEntity? = null,
+    var movie: ShowEntity? = null,
     var casts: List<CastEntity>? = null
 ) {
 

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="movie"
-            type="com.example.screenbindger.model.domain.movie.MovieEntity" />
+            type="com.example.screenbindger.model.domain.movie.ShowEntity" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

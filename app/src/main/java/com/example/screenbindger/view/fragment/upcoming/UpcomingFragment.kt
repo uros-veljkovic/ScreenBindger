@@ -7,7 +7,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentUpcomingBinding
-import com.example.screenbindger.model.domain.movie.MovieEntity
+import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.adapter.recyclerview.SmallItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
@@ -100,7 +100,7 @@ class UpcomingFragment : DaggerFragment(),
 
     }
 
-    private fun populateRecyclerView(list: List<MovieEntity>) {
+    private fun populateRecyclerView(list: List<ShowEntity>) {
         with(binding.rvUpcoming) {
             (adapter as SmallItemMovieRecyclerViewAdapter).setList(list)
             startLayoutAnimation()

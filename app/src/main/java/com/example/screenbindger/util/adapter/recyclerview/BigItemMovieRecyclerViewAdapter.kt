@@ -7,19 +7,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.ItemMovieBigBinding
-import com.example.screenbindger.model.domain.movie.MovieEntity
+import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.util.constants.API_IMAGE_BASE_URL
 import com.example.screenbindger.util.constants.API_KEY
 import com.example.screenbindger.util.constants.POSTER_SIZE_ORIGINAL
-import com.example.screenbindger.util.extensions.setProgress
-import com.example.screenbindger.util.extensions.setProgressBarColor
 import com.example.screenbindger.view.fragment.favorite_movies.OnFavoriteItemClickListener
-import kotlinx.android.synthetic.main.item_movie_big.view.*
 import java.lang.ref.WeakReference
 
 class BigItemMovieRecyclerViewAdapter(
     val listener: WeakReference<OnFavoriteItemClickListener>,
-    private var list: List<MovieEntity> = mutableListOf()
+    private var list: List<ShowEntity> = mutableListOf()
 ) :
     RecyclerView.Adapter<BigItemMovieRecyclerViewAdapter.BigItemMovieViewHolder>() {
 
@@ -39,7 +36,7 @@ class BigItemMovieRecyclerViewAdapter(
         return list.size
     }
 
-    fun setList(list: List<MovieEntity>?) {
+    fun setList(list: List<ShowEntity>?) {
         this.list = list ?: emptyList()
         notifyDataSetChanged()
     }
@@ -50,14 +47,14 @@ class BigItemMovieRecyclerViewAdapter(
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(movie: MovieEntity) {
+        fun bind(movie: ShowEntity) {
             binding.movie = movie
             setRating(movie)
             setOnClickListeners(movie)
             bindPoster(binding.ivMoviePoster, movie.smallPosterUrl)
         }
 
-        private fun setRating(movie: MovieEntity) {
+        private fun setRating(movie: ShowEntity) {
             val rating = movie.rating?.times(10)?.toInt() ?: 0
             binding.pbRating.progress = rating
         }
@@ -75,7 +72,7 @@ class BigItemMovieRecyclerViewAdapter(
         }
 
         private fun setOnClickListeners(
-            movie: MovieEntity
+            movie: ShowEntity
         ) {
             binding.also {
                 it.container.setOnClickListener {
