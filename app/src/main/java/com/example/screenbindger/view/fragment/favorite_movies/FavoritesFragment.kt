@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.example.screenbindger.databinding.FragmentFavoriteMoviesBinding
 import com.example.screenbindger.util.adapter.recyclerview.BigItemMovieRecyclerViewAdapter
+import com.example.screenbindger.util.event.EventObserver
+import com.example.screenbindger.view.fragment.favorite.movies.FavoriteMoviesFragmentDirections
 import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -56,44 +58,35 @@ class FavoritesFragment : DaggerFragment(), OnFavoriteItemClickListener {
     }
 
     private fun observeViewActions() {
-        viewModel.apply {
-            viewAction.observe(viewLifecycleOwner, Observer {
-                it.getContentIfNotHandled()?.let { action ->
-                    when (action) {
-                        FavoritesViewAction.FetchMovies -> {
-                            viewModel.fetchFavorites()
-                        }
-                    }
+        viewModel.viewAction.observe(viewLifecycleOwner, EventObserver { action ->
+            when (action) {
+                FavoritesViewAction.FetchMovies -> {
+                    viewModel.fetchFavorites()
                 }
-            })
-        }
+                FavoritesViewAction.FetchTvShows -> {}
+            }
+        })
     }
 
     private fun observeViewEvents() {
-        viewModel.apply {
-            viewEvent.observe(viewLifecycleOwner, Observer {
-                it.getContentIfNotHandled()?.let { event ->
-                    when (event) {
-                        is FavoritesViewEvent.MoviesLoaded -> {
-                            viewState.postValue(FavoritesViewState.MoviesLoaded(event.list))
-                        }
-                        is FavoritesViewEvent.EmptyList -> {
-                            viewState.postValue(FavoritesViewState.EmptyList)
-                        }
-                        is FavoritesViewEvent.Error -> {
-                            viewState.postValue(FavoritesViewState.EmptyList)
-                        }
-                    }
+        viewModel.viewEvent.observe(viewLifecycleOwner, EventObserver { event ->
+            when (event) {
+                is FavoritesViewEvent.ListLoaded -> {
+                    viewModel.setState(FavoritesViewState.ListLoaded(event.list))
                 }
-            })
-        }
+                is FavoritesViewEvent.EmptyList,
+                is FavoritesViewEvent.Error -> {
+                    viewModel.setState(FavoritesViewState.EmptyList)
+                }
+            }
+        })
     }
 
     private fun observeViewState() {
         viewModel.apply {
             viewState.observe(viewLifecycleOwner, Observer { state ->
                 when (state) {
-                    is FavoritesViewState.MoviesLoaded -> {
+                    is FavoritesViewState.ListLoaded -> {
                         binding.rvFavoriteMovies.apply {
                             adapter = BigItemMovieRecyclerViewAdapter(
                                 listener = WeakReference(this@FavoritesFragment),
