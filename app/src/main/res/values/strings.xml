@@ -65,4 +65,6 @@
     <string name="no_details_available">No details available for this movie</string>
     <string name="sort">Sort</string>
     <string name="sort_by">Sort by</string>
+    <string name="movies">Movies</string>
+    <string name="tv_shows">TV Shows</string>
 </resources>

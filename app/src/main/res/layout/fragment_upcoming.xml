@@ -12,6 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include
+            android:id="@+id/tabContainer"
+            layout="@layout/show_tabs"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -31,29 +37,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tabs"
+            app:layout_constraintTop_toBottomOf="@id/tabContainer"
             tools:listitem="@layout/item_movie_small" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tabBackground="@drawable/tab_color_selector">
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/btnMovies"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Movies" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/btnTvShows"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TV Shows" />
-        </com.google.android.material.tabs.TabLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
