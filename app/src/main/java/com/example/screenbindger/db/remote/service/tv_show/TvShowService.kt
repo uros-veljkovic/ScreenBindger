@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.movie.ShowEntity
+import com.example.screenbindger.model.domain.movie.generateGenres
 import com.example.screenbindger.model.global.Genres
 import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.event.Event
@@ -29,7 +30,7 @@ class TvShowService @Inject constructor(
                 val list = response.body()?.list?.sortedByDescending { it.rating } ?: emptyList()
 
                 state = if (response.isSuccessful) {
-                    generateGenres(list)
+                    list.generateGenres()
                     UpcomingFragmentViewState(ListState.Fetched, list)
                 } else {
                     val message = response.getErrorResponse().statusMessage
@@ -50,7 +51,7 @@ class TvShowService @Inject constructor(
                 val list = response.body()?.list?.sortedByDescending { it.rating } ?: emptyList()
 
                 state = if (response.isSuccessful) {
-                    generateGenres(list)
+                    list.generateGenres()
                     TrendingFragmentViewState(ListState.Fetched, list)
                 } else {
                     val message = response.getErrorResponse().statusMessage
@@ -61,23 +62,6 @@ class TvShowService @Inject constructor(
                 TrendingFragmentViewState(ListState.NotFetched(Event(message)), null)
             }
             viewState.postValue(state)
-        }
-    }
-
-    private fun generateGenres(list: List<ShowEntity>) {
-        CoroutineScope(Dispatchers.Default).launch {
-            list.forEach { tvShow ->
-                tvShow.genreIds?.forEach { generId ->
-                    Genres.list.forEach { concreteGenre ->
-                        if (concreteGenre.id == generId &&
-                            tvShow.genresString.contains(concreteGenre.name!!).not()
-                        ) {
-                            tvShow.genresString += "${concreteGenre.name}, "
-                        }
-                    }
-                }
-                tvShow.genresString = tvShow.genresString.dropLast(2)
-            }
         }
     }
 

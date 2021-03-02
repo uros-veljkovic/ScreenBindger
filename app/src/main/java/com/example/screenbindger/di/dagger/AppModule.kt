@@ -4,6 +4,8 @@ import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.service.auth.firebase.FirebaseAuthService
 import com.example.screenbindger.db.remote.service.auth.tmdb.TmdbAuthApi
 import com.example.screenbindger.db.remote.service.auth.tmdb.TmdbAuthService
+import com.example.screenbindger.db.remote.service.favorites.FavoritesApi
+import com.example.screenbindger.db.remote.service.favorites.FavoritesService
 import com.example.screenbindger.db.remote.service.genre.GenreApi
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieApi
@@ -46,7 +48,8 @@ class AppModule {
         authService: FirebaseAuthService,
         userService: FirebaseUserService,
         storageService: FirebaseStorageService,
-        reviewService: ReviewService
+        reviewService: ReviewService,
+        favoritesService: FavoritesService
     ): ScreenBindgerRemoteDataSource {
         return ScreenBindgerRemoteDataSource(
             session,
@@ -57,7 +60,8 @@ class AppModule {
             authService,
             userService,
             storageService,
-            reviewService
+            reviewService,
+            favoritesService
         )
     }
 
@@ -107,6 +111,15 @@ class AppModule {
     @Provides
     fun provideReviewApi(retrofit: Retrofit): ReviewApi =
         retrofit.create(ReviewApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideFavoritesService(api: FavoritesApi): FavoritesService = FavoritesService(api)
+
+    @Singleton
+    @Provides
+    fun provideFavoritesApi(retrofit: Retrofit): FavoritesApi =
+        retrofit.create(FavoritesApi::class.java)
 
     @Singleton
     @Provides

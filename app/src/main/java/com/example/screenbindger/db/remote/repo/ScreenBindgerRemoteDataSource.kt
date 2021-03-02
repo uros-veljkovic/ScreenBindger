@@ -8,6 +8,7 @@ import com.example.screenbindger.db.remote.response.genre.AllGenresResponse
 import com.example.screenbindger.db.remote.response.movie.MoviesResponse
 import com.example.screenbindger.db.remote.service.auth.firebase.AuthService
 import com.example.screenbindger.db.remote.service.auth.tmdb.TmdbAuthService
+import com.example.screenbindger.db.remote.service.favorites.FavoritesService
 import com.example.screenbindger.db.remote.service.genre.GenreService
 import com.example.screenbindger.db.remote.service.movie.MovieService
 import com.example.screenbindger.db.remote.service.review.ReviewService
@@ -37,7 +38,8 @@ class ScreenBindgerRemoteDataSource
     private val authService: AuthService,
     private val userService: UserService,
     private val storageService: StorageService,
-    private val reviewService: ReviewService
+    private val reviewService: ReviewService,
+    private val favoritesService: FavoritesService
 ) {
 
     suspend fun login(
@@ -159,39 +161,32 @@ class ScreenBindgerRemoteDataSource
         return "SessionID: $session.id\n AccountID: ${session.accountId}"
     }
 
-    suspend fun markAsFavorite(
+    suspend fun postMarkAsFavorite(
         requestBody: MarkAsFavoriteRequestBody,
         viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
     ) {
-        movieService.postMovieAsFavorite(session, requestBody, viewEvent)
+        favoritesService.postMarkAsFavorite(session, requestBody, viewEvent)
     }
 
-    suspend fun markTvShowAsFavorite(
-        body: MarkAsFavoriteRequestBody,
-        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
-    ) {
-        tvShowService.postMovieAsFavorite(session, body, viewEvent)
-    }
-
-    suspend fun getIsMovieFavorite(
+    suspend fun getPeekIsFavoriteMovie(
         movieId: Int,
         viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
     ) {
-        movieService.getIsMovieFavorite(movieId, session, viewEvent)
+        favoritesService.getPeekIsFavoriteMovie(movieId, session, viewEvent)
     }
 
-    suspend fun getIsTvShowFavorite(
+    suspend fun getPeekIsFavoriteTvShow(
         showId: Int,
         viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
     ) {
-        tvShowService.getIsTvShowFavorite(showId, session, viewEvent)
+        favoritesService.getPeekIsFavoriteTvShow(showId, session, viewEvent)
     }
 
 
     suspend fun getFavoriteMovieList(
         viewEvent: MutableLiveData<Event<FavoriteMoviesFragmentViewEvent>>
     ) {
-        movieService.getFavoriteMovieList(session, viewEvent)
+        favoritesService.getFavoriteMovieList(session, viewEvent)
     }
 
     suspend fun getMovieReviews(

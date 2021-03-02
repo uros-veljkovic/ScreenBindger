@@ -40,7 +40,7 @@ class TvShowDetailsViewModel
                 remoteDataSource.getTvShowCasts(showId, viewState)
             }
             launch {
-                remoteDataSource.getIsTvShowFavorite(showId, viewEvent)
+                remoteDataSource.getPeekIsFavoriteTvShow(showId, viewEvent)
             }
         }
     }
@@ -78,7 +78,7 @@ class TvShowDetailsViewModel
                 mediaId = movieId,
                 favorite = isFavorite
             ).let { body ->
-                remoteDataSource.markTvShowAsFavorite(body, viewEvent)
+                remoteDataSource.postMarkAsFavorite(body, viewEvent)
             }
         }
     }

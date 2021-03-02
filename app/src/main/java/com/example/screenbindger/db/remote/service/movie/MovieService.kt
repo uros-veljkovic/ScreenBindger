@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.movie.ShowEntity
+import com.example.screenbindger.model.domain.movie.generateGenres
 import com.example.screenbindger.model.global.Genres
 import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.event.Event
@@ -31,7 +32,7 @@ constructor(
             val list = response.body()?.list?.sortedByDescending { it.rating } ?: emptyList()
             val state: TrendingFragmentViewState
             state = if (response.isSuccessful) {
-                generateGenres(list)
+                list.generateGenres()
                 TrendingFragmentViewState(ListState.Fetched, list)
             } else {
                 val message = response.getErrorResponse().statusMessage
@@ -46,30 +47,13 @@ constructor(
             val list = response.body()?.list?.sortedByDescending { it.rating } ?: emptyList()
             val state: UpcomingFragmentViewState
             state = if (response.isSuccessful) {
-                generateGenres(list)
+                list.generateGenres()
                 UpcomingFragmentViewState(ListState.Fetched, list)
             } else {
                 val message = response.getErrorResponse().statusMessage
                 UpcomingFragmentViewState(ListState.NotFetched(Event(message)), null)
             }
             upcomingViewState.postValue(state)
-        }
-    }
-
-    private fun generateGenres(list: List<ShowEntity>) {
-        CoroutineScope(Dispatchers.Default).launch {
-            list.forEach { movie ->
-                movie.genreIds?.forEach { generId ->
-                    Genres.list.forEach { concreteGenre ->
-                        if (concreteGenre.id == generId &&
-                            movie.genresString.contains(concreteGenre.name!!).not()
-                        ) {
-                            movie.genresString += "${concreteGenre.name}, "
-                        }
-                    }
-                }
-                movie.genresString = movie.genresString.dropLast(2)
-            }
         }
     }
 
@@ -198,7 +182,7 @@ constructor(
                     message = "No favorite movies added so far."
                     viewEvent.postValue(Event(FavoriteMoviesFragmentViewEvent.EmptyList(message)))
                 } else {
-                    generateGenres(list)
+                    list.generateGenres()
                     viewEvent.postValue(Event(FavoriteMoviesFragmentViewEvent.MoviesLoaded(list)))
                 }
             } else {

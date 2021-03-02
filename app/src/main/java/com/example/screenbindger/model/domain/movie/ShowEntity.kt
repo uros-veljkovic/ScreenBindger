@@ -7,7 +7,11 @@ import com.example.screenbindger.R
 import com.example.screenbindger.model.domain.Item
 import com.example.screenbindger.model.domain.genre.GenreEntity
 import com.example.screenbindger.model.enums.ItemType
+import com.example.screenbindger.model.global.Genres
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ShowEntity : BaseObservable(), Item {
 
@@ -86,4 +90,21 @@ class ShowEntity : BaseObservable(), Item {
 
     override fun getItemType(): ItemType = ItemType.MOVIE_DETAILS
 
+}
+
+fun List<ShowEntity>.generateGenres() {
+    CoroutineScope(Dispatchers.Default).launch {
+        forEach { movie ->
+            movie.genreIds?.forEach { generId ->
+                Genres.list.forEach { concreteGenre ->
+                    if (concreteGenre.id == generId &&
+                        movie.genresString.contains(concreteGenre.name!!).not()
+                    ) {
+                        movie.genresString += "${concreteGenre.name}, "
+                    }
+                }
+            }
+            movie.genresString = movie.genresString.dropLast(2)
+        }
+    }
 }

@@ -16,6 +16,13 @@ interface FavoritesApi {
         @Query("api_key") apiKey: String = API_KEY
     ): Response<MoviesResponse>
 
+    @GET("account/{account_id}/favorite/tv")
+    suspend fun getFavoriteTvShowList(
+        @Path("account_id") accountId: Int,
+        @Query("session_id") sessionId: String,
+        @Query("api_key") apiKey: String = API_KEY
+    ): Response<MoviesResponse>
+
     @Headers("Content-type: application/json;charset=utf-8")
     @POST("account/{account_id}/favorite")
     suspend fun postMarkAsFavorite(
