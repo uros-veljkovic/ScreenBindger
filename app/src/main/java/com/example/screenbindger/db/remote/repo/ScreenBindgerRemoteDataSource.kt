@@ -166,12 +166,27 @@ class ScreenBindgerRemoteDataSource
         movieService.postMovieAsFavorite(session, requestBody, viewEvent)
     }
 
+    suspend fun markTvShowAsFavorite(
+        body: MarkAsFavoriteRequestBody,
+        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
+    ) {
+        tvShowService.postMovieAsFavorite(session, body, viewEvent)
+    }
+
     suspend fun getIsMovieFavorite(
         movieId: Int,
         viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
     ) {
         movieService.getIsMovieFavorite(movieId, session, viewEvent)
     }
+
+    suspend fun getIsTvShowFavorite(
+        showId: Int,
+        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
+    ) {
+        tvShowService.getIsTvShowFavorite(showId, session, viewEvent)
+    }
+
 
     suspend fun getFavoriteMovieList(
         viewEvent: MutableLiveData<Event<FavoriteMoviesFragmentViewEvent>>

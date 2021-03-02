@@ -40,7 +40,7 @@ class TvShowDetailsViewModel
                 remoteDataSource.getTvShowCasts(showId, viewState)
             }
             launch {
-                remoteDataSource.getIsMovieFavorite(showId, viewEvent)
+                remoteDataSource.getIsTvShowFavorite(showId, viewEvent)
             }
         }
     }
@@ -73,8 +73,12 @@ class TvShowDetailsViewModel
 
     fun markAsFavorite(isFavorite: Boolean, movieId: Int) {
         CoroutineScope(Dispatchers.IO).launch {
-            MarkAsFavoriteRequestBody(mediaId = movieId, favorite = isFavorite).let { body ->
-                remoteDataSource.markAsFavorite(body, viewEvent)
+            MarkAsFavoriteRequestBody(
+                mediaType = "tv",
+                mediaId = movieId,
+                favorite = isFavorite
+            ).let { body ->
+                remoteDataSource.markTvShowAsFavorite(body, viewEvent)
             }
         }
     }

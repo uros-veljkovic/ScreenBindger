@@ -123,7 +123,7 @@ class TvShowDetailsFragment : DaggerFragment(),
         })
     }
 
-    fun populateList(list: List<Item>) {
+    private fun populateList(list: List<Item>) {
         with(binding) {
             val adapter = rvMovieDetails.adapter as ShowDetailsRecyclerViewAdapter
             adapter.addItems(list)
