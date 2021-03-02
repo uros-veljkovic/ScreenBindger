@@ -27,4 +27,8 @@ class FavoritesViewModel
             remoteDataSource.getFavoriteMovieList(viewEvent)
         }
     }
+
+    fun setState(state: FavoritesViewState) {
+        viewState.postValue(state)
+    }
 }
