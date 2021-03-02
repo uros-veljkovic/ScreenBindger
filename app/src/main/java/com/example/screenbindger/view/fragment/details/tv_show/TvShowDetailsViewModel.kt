@@ -15,6 +15,7 @@ import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,15 +33,18 @@ class TvShowDetailsViewModel
 
     fun fetchData(showId: Int) {
         this.showId = showId
-        CoroutineScope(Dispatchers.IO).launch {
-            launch {
-                remoteDataSource.getTvShowDetails(showId, viewState)
-            }
-            launch {
-                remoteDataSource.getTvShowCasts(showId, viewState)
-            }
-            launch {
-                remoteDataSource.getPeekIsFavoriteTvShow(showId, viewEvent)
+
+        CoroutineScope(IO).launch {
+            with(remoteDataSource) {
+                launch {
+                    getTvShowDetails(showId, viewState)
+                }
+                launch {
+                    getTvShowCasts(showId, viewState)
+                }
+                launch {
+                    getPeekIsFavoriteTvShow(showId, viewEvent)
+                }
             }
         }
     }
@@ -72,7 +76,7 @@ class TvShowDetailsViewModel
     }
 
     fun markAsFavorite(isFavorite: Boolean, movieId: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(IO).launch {
             MarkAsFavoriteRequestBody(
                 mediaType = "tv",
                 mediaId = movieId,
@@ -84,7 +88,7 @@ class TvShowDetailsViewModel
     }
 
     fun fetchTrailers(showId: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(IO).launch {
             viewEvent.postValue(Event(DetailsFragmentViewEvent.Loading))
             remoteDataSource.getTvShowTrailers(showId, viewEvent)
         }
