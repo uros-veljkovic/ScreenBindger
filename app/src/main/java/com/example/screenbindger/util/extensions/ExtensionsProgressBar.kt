@@ -8,14 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.example.screenbindger.R
 
-fun ProgressBar.show() {
-    this.visibility = View.VISIBLE
-}
-
-fun ProgressBar.hide() {
-    this.visibility = View.GONE
-}
-
 @BindingAdapter("app:progressFromDouble")
 fun ProgressBar.setProgress(value: Double?) {
     val v = (value?.times(10))?.toInt() ?: 0
