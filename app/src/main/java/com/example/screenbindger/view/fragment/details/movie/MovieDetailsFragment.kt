@@ -191,7 +191,7 @@ class MovieDetailsFragment : DaggerFragment(),
                     is DetailsFragmentViewEvent.TrailersFetched -> {
                         hideProgressBar()
                         val firstVideo = it.trailers[0]
-                        showTrailer(firstVideo)
+                        viewModel.trailer = firstVideo
                     }
                     is DetailsFragmentViewEvent.TrailersNotFetched -> {
                         hideProgressBar()
@@ -320,7 +320,7 @@ class MovieDetailsFragment : DaggerFragment(),
     }
 
     override fun onBtnWatchTrailer() {
-        viewModel.viewAction.postValue(Event(DetailsFragmentViewAction.FetchTrailers))
+        viewModel.viewAction.postValue(Event(DetailsFragmentViewAction.WatchTrailer))
     }
 
     override fun onBtnShareToInstagram(movieEntity: ShowEntity) {
