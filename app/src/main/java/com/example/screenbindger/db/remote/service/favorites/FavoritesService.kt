@@ -32,7 +32,7 @@ class FavoritesService
                     viewEvent.postValue(Event(FavoritesViewEvent.EmptyList(message)))
                 } else {
                     list.generateGenres()
-                    viewEvent.postValue(Event(FavoritesViewEvent.MoviesLoaded(list)))
+                    viewEvent.postValue(Event(FavoritesViewEvent.ListLoaded(list)))
                 }
             } else {
                 message = "Error loading favorite movies :("
@@ -57,7 +57,7 @@ class FavoritesService
                     viewEvent.postValue(Event(FavoritesViewEvent.EmptyList(message)))
                 } else {
                     list.generateGenres()
-                    viewEvent.postValue(Event(FavoritesViewEvent.MoviesLoaded(list)))
+                    viewEvent.postValue(Event(FavoritesViewEvent.ListLoaded(list)))
                 }
             } else {
                 message = "Error loading favorite movies :("
