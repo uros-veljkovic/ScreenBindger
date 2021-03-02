@@ -8,7 +8,7 @@ import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
 import com.example.screenbindger.util.extensions.ifLet
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
-import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewEvent
+import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEvent
 import javax.inject.Inject
 
 class FavoritesService
@@ -18,7 +18,7 @@ class FavoritesService
 
     suspend fun getFavoriteMovieList(
         session: Session,
-        viewEvent: MutableLiveData<Event<FavoriteMoviesFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<FavoritesViewEvent>>
     ) {
         api.getFavoriteMovieList(
             sessionId = session.id!!,
@@ -29,21 +29,21 @@ class FavoritesService
                 val list = response.body()?.list
                 if (list.isNullOrEmpty()) {
                     message = "No favorite movies added so far."
-                    viewEvent.postValue(Event(FavoriteMoviesFragmentViewEvent.EmptyList(message)))
+                    viewEvent.postValue(Event(FavoritesViewEvent.EmptyList(message)))
                 } else {
                     list.generateGenres()
-                    viewEvent.postValue(Event(FavoriteMoviesFragmentViewEvent.MoviesLoaded(list)))
+                    viewEvent.postValue(Event(FavoritesViewEvent.MoviesLoaded(list)))
                 }
             } else {
                 message = "Error loading favorite movies :("
-                viewEvent.postValue(Event(FavoriteMoviesFragmentViewEvent.Error(message)))
+                viewEvent.postValue(Event(FavoritesViewEvent.Error(message)))
             }
         }
     }
 
     suspend fun getFavoriteTvShowList(
         session: Session,
-        viewEvent: MutableLiveData<Event<FavoriteMoviesFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<FavoritesViewEvent>>
     ) {
         api.getFavoriteTvShowList(
             sessionId = session.id!!,
@@ -54,14 +54,14 @@ class FavoritesService
                 val list = response.body()?.list
                 if (list.isNullOrEmpty()) {
                     message = "No favorite movies added so far."
-                    viewEvent.postValue(Event(FavoriteMoviesFragmentViewEvent.EmptyList(message)))
+                    viewEvent.postValue(Event(FavoritesViewEvent.EmptyList(message)))
                 } else {
                     list.generateGenres()
-                    viewEvent.postValue(Event(FavoriteMoviesFragmentViewEvent.MoviesLoaded(list)))
+                    viewEvent.postValue(Event(FavoritesViewEvent.MoviesLoaded(list)))
                 }
             } else {
                 message = "Error loading favorite movies :("
-                viewEvent.postValue(Event(FavoriteMoviesFragmentViewEvent.Error(message)))
+                viewEvent.postValue(Event(FavoritesViewEvent.Error(message)))
             }
         }
     }

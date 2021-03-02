@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.favorite_movies.FavoriteMoviesFragment">
+    tools:context=".view.fragment.favorite_movies.FavoritesFragment">
 
     <include
         android:id="@+id/tabContainer"

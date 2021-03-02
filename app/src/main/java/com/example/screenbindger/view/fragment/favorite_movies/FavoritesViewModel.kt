@@ -9,17 +9,17 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class FavoriteMoviesFragmentViewModel
+class FavoritesViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val viewState: MutableLiveData<FavoriteMoviesFragmentViewState>,
-    val viewAction: MutableLiveData<Event<FavoriteMoviesFragmentViewAction>>,
-    val viewEvent: MutableLiveData<Event<FavoriteMoviesFragmentViewEvent>>
+    val viewState: MutableLiveData<FavoritesViewState>,
+    val viewAction: MutableLiveData<Event<FavoritesViewAction>>,
+    val viewEvent: MutableLiveData<Event<FavoritesViewEvent>>
 ) : ViewModel() {
 
     init {
 //        loadFavorites()
-        viewAction.postValue(Event(FavoriteMoviesFragmentViewAction.FetchMovies))
+        viewAction.postValue(Event(FavoritesViewAction.FetchMovies))
     }
 
     fun fetchFavorites() {

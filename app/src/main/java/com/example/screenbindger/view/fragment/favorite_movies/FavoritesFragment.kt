@@ -14,10 +14,10 @@ import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 
-class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
+class FavoritesFragment : DaggerFragment(), OnFavoriteItemClickListener {
 
     @Inject
-    lateinit var viewModel: FavoriteMoviesFragmentViewModel
+    lateinit var viewModel: FavoritesViewModel
 
     private var _binding: FragmentFavoriteMoviesBinding? = null
     private val binding get() = _binding!!
@@ -60,7 +60,7 @@ class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
             viewAction.observe(viewLifecycleOwner, Observer {
                 it.getContentIfNotHandled()?.let { action ->
                     when (action) {
-                        FavoriteMoviesFragmentViewAction.FetchMovies -> {
+                        FavoritesViewAction.FetchMovies -> {
                             viewModel.fetchFavorites()
                         }
                     }
@@ -74,14 +74,14 @@ class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
             viewEvent.observe(viewLifecycleOwner, Observer {
                 it.getContentIfNotHandled()?.let { event ->
                     when (event) {
-                        is FavoriteMoviesFragmentViewEvent.MoviesLoaded -> {
-                            viewState.postValue(FavoriteMoviesFragmentViewState.MoviesLoaded(event.list))
+                        is FavoritesViewEvent.MoviesLoaded -> {
+                            viewState.postValue(FavoritesViewState.MoviesLoaded(event.list))
                         }
-                        is FavoriteMoviesFragmentViewEvent.EmptyList -> {
-                            viewState.postValue(FavoriteMoviesFragmentViewState.EmptyList)
+                        is FavoritesViewEvent.EmptyList -> {
+                            viewState.postValue(FavoritesViewState.EmptyList)
                         }
-                        is FavoriteMoviesFragmentViewEvent.Error -> {
-                            viewState.postValue(FavoriteMoviesFragmentViewState.EmptyList)
+                        is FavoritesViewEvent.Error -> {
+                            viewState.postValue(FavoritesViewState.EmptyList)
                         }
                     }
                 }
@@ -93,15 +93,15 @@ class FavoriteMoviesFragment : DaggerFragment(), OnFavoriteItemClickListener {
         viewModel.apply {
             viewState.observe(viewLifecycleOwner, Observer { state ->
                 when (state) {
-                    is FavoriteMoviesFragmentViewState.MoviesLoaded -> {
+                    is FavoritesViewState.MoviesLoaded -> {
                         binding.rvFavoriteMovies.apply {
                             adapter = BigItemMovieRecyclerViewAdapter(
-                                listener = WeakReference(this@FavoriteMoviesFragment),
+                                listener = WeakReference(this@FavoritesFragment),
                                 list = state.list
                             )
                         }
                     }
-                    is FavoriteMoviesFragmentViewState.EmptyList -> {
+                    is FavoritesViewState.EmptyList -> {
 //                        setEmptyView()
                     }
                 }

@@ -6,9 +6,9 @@ import com.example.screenbindger.model.domain.user.UserEntity
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.event.Event
-import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewAction
-import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewEvent
-import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewState
+import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewAction
+import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEvent
+import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewState
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewAction
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
@@ -102,19 +102,19 @@ class MainModule {
 
     @MainScope
     @Provides
-    fun provideFavoriteMoviesViewState(): MutableLiveData<FavoriteMoviesFragmentViewState> {
+    fun provideFavoriteMoviesViewState(): MutableLiveData<FavoritesViewState> {
         return MutableLiveData()
     }
 
     @MainScope
     @Provides
-    fun provideFavoriteMoviesViewAction(): MutableLiveData<Event<FavoriteMoviesFragmentViewAction>> {
+    fun provideFavoriteMoviesViewAction(): MutableLiveData<Event<FavoritesViewAction>> {
         return MutableLiveData()
     }
 
     @MainScope
     @Provides
-    fun provideFavoriteMoviesViewEvent(): MutableLiveData<Event<FavoriteMoviesFragmentViewEvent>> {
+    fun provideFavoriteMoviesViewEvent(): MutableLiveData<Event<FavoritesViewEvent>> {
         return MutableLiveData()
     }
 

@@ -3,14 +3,12 @@ package com.example.screenbindger.db.remote.service.movie
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.db.remote.session.Session
-import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.model.domain.movie.generateGenres
-import com.example.screenbindger.model.global.Genres
 import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
 import com.example.screenbindger.util.extensions.ifLet
-import com.example.screenbindger.view.fragment.favorite_movies.FavoriteMoviesFragmentViewEvent
+import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEvent
 import com.example.screenbindger.view.fragment.details.ShowDetailsState
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
@@ -169,7 +167,7 @@ constructor(
 
     suspend fun getFavoriteMovieList(
         session: Session,
-        viewEvent: MutableLiveData<Event<FavoriteMoviesFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<FavoritesViewEvent>>
     ) {
         movieApi.getFavoriteMovieList(
             sessionId = session.id!!,
@@ -180,14 +178,14 @@ constructor(
                 val list = response.body()?.list
                 if (list.isNullOrEmpty()) {
                     message = "No favorite movies added so far."
-                    viewEvent.postValue(Event(FavoriteMoviesFragmentViewEvent.EmptyList(message)))
+                    viewEvent.postValue(Event(FavoritesViewEvent.EmptyList(message)))
                 } else {
                     list.generateGenres()
-                    viewEvent.postValue(Event(FavoriteMoviesFragmentViewEvent.MoviesLoaded(list)))
+                    viewEvent.postValue(Event(FavoritesViewEvent.MoviesLoaded(list)))
                 }
             } else {
                 message = "Error loading favorite movies :("
-                viewEvent.postValue(Event(FavoriteMoviesFragmentViewEvent.Error(message)))
+                viewEvent.postValue(Event(FavoritesViewEvent.Error(message)))
             }
         }
     }
