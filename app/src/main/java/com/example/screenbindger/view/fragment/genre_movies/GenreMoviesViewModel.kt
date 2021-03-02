@@ -36,7 +36,7 @@ class GenreMoviesViewModel
         }
     }
 
-    private fun generateStringGenresFor(entity: ShowEntity) {
+    private fun generateStringGenresFor(entity: ShowEntity) = CoroutineScope(Default).launch {
         entity.genreIds?.forEach { singleEntityGenreId ->
             Genres.list.forEach {
                 if (it.id == singleEntityGenreId) {
