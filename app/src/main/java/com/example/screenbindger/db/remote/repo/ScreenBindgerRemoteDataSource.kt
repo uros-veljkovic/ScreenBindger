@@ -189,6 +189,10 @@ class ScreenBindgerRemoteDataSource
         favoritesService.getFavoriteMovieList(session, viewEvent)
     }
 
+    suspend fun getFavoriteTvShowList(viewEvent: MutableLiveData<Event<FavoritesViewEvent>>) {
+        favoritesService.getFavoriteTvShowList(session, viewEvent)
+    }
+
     suspend fun getMovieReviews(
         movieId: Int,
         viewEvent: MutableLiveData<Event<ReviewFragmentViewEvent>>
@@ -209,5 +213,6 @@ class ScreenBindgerRemoteDataSource
     ) {
         tvShowService.getTvShowTrailers(showId, viewEvent)
     }
+
 
 }

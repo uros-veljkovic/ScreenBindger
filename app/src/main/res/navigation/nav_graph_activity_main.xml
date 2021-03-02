@@ -97,6 +97,9 @@
         <action
             android:id="@+id/action_favoriteMoviesFragment_to_reviewFragment"
             app:destination="@id/reviewFragment" />
+        <action
+            android:id="@+id/action_favoriteMoviesFragment_to_tvShowDetailsFragment"
+            app:destination="@id/tvShowDetailsFragment" />
     </fragment>
     <action android:id="@+id/action_global_favoriteMoviesFragment" app:destination="@id/favoriteMoviesFragment" />
     <fragment

@@ -3,6 +3,7 @@ package com.example.screenbindger.view.fragment.favorite_movies
 import android.os.Bundle
 import android.view.*
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -10,7 +11,9 @@ import androidx.recyclerview.widget.SnapHelper
 import com.example.screenbindger.databinding.FragmentFavoriteMoviesBinding
 import com.example.screenbindger.util.adapter.recyclerview.BigItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.event.EventObserver
-import com.example.screenbindger.view.fragment.favorite.movies.FavoriteMoviesFragmentDirections
+import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentDirections
+import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewAction
+import com.google.android.material.tabs.TabLayout
 import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -36,6 +39,7 @@ class FavoritesFragment : DaggerFragment(), OnFavoriteItemClickListener {
         val view = bind(inflater, container)
 
         initRecyclerView()
+        initOnClickListeners()
         observeViewActions()
         observeViewEvents()
         observeViewState()
@@ -57,13 +61,31 @@ class FavoritesFragment : DaggerFragment(), OnFavoriteItemClickListener {
         }
     }
 
+    private fun initOnClickListeners() {
+        binding.tabContainer.tabs.addOnTabSelectedListener(object :
+            TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab!!.position == 0) {
+                    viewModel.setAction(FavoritesViewAction.FetchMovies)
+                } else {
+                    viewModel.setAction(FavoritesViewAction.FetchTvShows)
+                }
+            }
+
+        })
+    }
+
     private fun observeViewActions() {
         viewModel.viewAction.observe(viewLifecycleOwner, EventObserver { action ->
             when (action) {
                 FavoritesViewAction.FetchMovies -> {
-                    viewModel.fetchFavorites()
+                    viewModel.fetchFavoriteMovies()
                 }
-                FavoritesViewAction.FetchTvShows -> {}
+                FavoritesViewAction.FetchTvShows -> {
+                    viewModel.fetchFavoriteTvShows()
+                }
             }
         })
     }
@@ -108,21 +130,32 @@ class FavoritesFragment : DaggerFragment(), OnFavoriteItemClickListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
+        viewModel.setAction(FavoritesViewAction.FetchMovies)
         _binding = null
     }
 
     override fun onContainerClick(movieId: Int) {
-        val action =
-            FavoriteMoviesFragmentDirections.actionFavoriteMoviesFragmentToMovieDetailsFragment(
-                movieId
-            )
-        findNavController().navigate(action)
+        val lastAction = viewModel.peekLastAction()
+        var direction: NavDirections? = null
+
+        direction = when (lastAction) {
+            is FavoritesViewAction.FetchMovies -> {
+                FavoritesFragmentDirections.actionFavoriteMoviesFragmentToMovieDetailsFragment(
+                    movieId
+                )
+            }
+            is FavoritesViewAction.FetchTvShows -> {
+                FavoritesFragmentDirections.actionFavoriteMoviesFragmentToTvShowDetailsFragment(
+                    movieId
+                )
+            }
+        }
+        findNavController().navigate(direction)
     }
 
     override fun onCommentsButtonClick(movieId: Int) {
         val action =
-            FavoriteMoviesFragmentDirections.actionFavoriteMoviesFragmentToReviewFragment(
+            FavoritesFragmentDirections.actionFavoriteMoviesFragmentToReviewFragment(
                 movieId
             )
         findNavController().navigate(action)

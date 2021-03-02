@@ -22,13 +22,27 @@ class FavoritesViewModel
         viewAction.postValue(Event(FavoritesViewAction.FetchMovies))
     }
 
-    fun fetchFavorites() {
+    fun fetchFavoriteMovies() {
         CoroutineScope(IO).launch {
             remoteDataSource.getFavoriteMovieList(viewEvent)
         }
     }
 
+    fun fetchFavoriteTvShows() {
+        CoroutineScope(IO).launch {
+            remoteDataSource.getFavoriteTvShowList(viewEvent)
+        }
+    }
+
     fun setState(state: FavoritesViewState) {
         viewState.postValue(state)
+    }
+
+    fun setAction(action: FavoritesViewAction) {
+        viewAction.postValue(Event(action))
+    }
+
+    fun peekLastAction(): FavoritesViewAction {
+        return viewAction.value!!.peekContent()
     }
 }
