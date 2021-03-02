@@ -136,7 +136,7 @@ class TvShowService @Inject constructor(
     suspend fun getTvShowTrailers(
         tvShowId: Int,
         viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
-    ){
+    ) {
         api.getTrailers(tvShowId).let { response ->
             if (response.isSuccessful) {
                 response.body()?.list?.let { list ->
@@ -147,7 +147,7 @@ class TvShowService @Inject constructor(
                     }
                 }
             } else {
-                viewEvent.postValue(Event(DetailsFragmentViewEvent.Error("Error loading trailer.")))
+                viewEvent.postValue(Event(DetailsFragmentViewEvent.TrailersNotFetched))
             }
         }
     }

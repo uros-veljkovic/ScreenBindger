@@ -222,7 +222,7 @@ constructor(
                     }
                 }
             } else {
-                viewEvent.postValue(Event(DetailsFragmentViewEvent.Error("Error loading trailer.")))
+                viewEvent.postValue(Event(DetailsFragmentViewEvent.TrailersNotFetched))
             }
         }
     }
