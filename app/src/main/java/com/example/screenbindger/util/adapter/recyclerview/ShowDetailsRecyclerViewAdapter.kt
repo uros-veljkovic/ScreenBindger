@@ -9,6 +9,7 @@ import com.example.screenbindger.model.domain.cast.CastEntity
 import com.example.screenbindger.model.domain.Item
 import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.model.enums.ItemType
+import com.example.screenbindger.util.extensions.hide
 
 
 class ShowDetailsRecyclerViewAdapter(
@@ -17,6 +18,13 @@ class ShowDetailsRecyclerViewAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var containsMovieAndCast = false
+    private lateinit var recyclerView: RecyclerView
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+
+        this.recyclerView = recyclerView
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -78,6 +86,17 @@ class ShowDetailsRecyclerViewAdapter(
             addAll(items)
         }
         notifyDataSetChanged()
+    }
+
+    fun hideTrailerIcon() {
+        val holder = recyclerView.findViewHolderForAdapterPosition(0)
+        holder as ShowDetailsRecyclerViewAdapter.MovieDetailsViewHolder
+
+        holder.binding.apply {
+            btnWatchTrailer.hide()
+            tvWatchTrailerPlaceholder.hide()
+            invalidateAll()
+        }
     }
 
     inner class MovieDetailsViewHolder constructor(val binding: ItemMovieDetailsBinding) :

@@ -107,7 +107,7 @@ class TvShowDetailsFragment : DaggerFragment(),
                             addAll(casts)
                         }
                         populateList(list)
-
+                        fetchTrailers()
                     }
                     is ShowDetailsState.Error -> {
                         snackbar(state.message)
@@ -115,7 +115,8 @@ class TvShowDetailsFragment : DaggerFragment(),
                     is ShowDetailsState.NoDataAvailable -> {
                         snackbar("No data available", R.color.design_default_color_error)
                     }
-                    else -> {}
+                    else -> {
+                    }
                 }
             }
 
@@ -140,6 +141,10 @@ class TvShowDetailsFragment : DaggerFragment(),
         binding.progressBar.hide()
     }
 
+    private fun fetchTrailers() {
+        viewModel.setAction(DetailsFragmentViewAction.FetchTrailers)
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -159,6 +164,9 @@ class TvShowDetailsFragment : DaggerFragment(),
                 is DetailsFragmentViewAction.FetchTrailers -> {
                     viewModel.fetchTrailers(showId)
                 }
+                is DetailsFragmentViewAction.WatchTrailer -> {
+                    showTrailer(viewModel.trailer)
+                }
             }
         })
     }
@@ -166,22 +174,22 @@ class TvShowDetailsFragment : DaggerFragment(),
     private fun observeViewModelEvents() {
         viewModel.viewEvent.observe(viewLifecycleOwner, EventObserver { event ->
             when (event) {
-                DetailsFragmentViewEvent.IsLoadedAsFavorite -> {
+                is DetailsFragmentViewEvent.IsLoadedAsFavorite -> {
                     hideProgressBar()
                     animateFabToFavorite()
                 }
-                DetailsFragmentViewEvent.IsLoadedAsNotFavorite -> {
+                is DetailsFragmentViewEvent.IsLoadedAsNotFavorite -> {
                     hideProgressBar()
                     animateFabToNotFavorite()
                 }
                 is DetailsFragmentViewEvent.TrailersFetched -> {
                     hideProgressBar()
                     val firstVideo = event.trailers[0]
-                    showTrailer(firstVideo)
+                    viewModel.trailer = firstVideo
                 }
                 is DetailsFragmentViewEvent.TrailersNotFetched -> {
                     hideProgressBar()
-                    snackbar("No trailer found")
+                    hideTrailerButton()
                 }
                 is DetailsFragmentViewEvent.AddedToFavorites -> {
                     hideProgressBar()
@@ -213,6 +221,11 @@ class TvShowDetailsFragment : DaggerFragment(),
         })
     }
 
+    private fun hideTrailerButton() {
+        val adapter = binding.rvMovieDetails.adapter as ShowDetailsRecyclerViewAdapter
+        adapter.hideTrailerIcon()
+    }
+
     private fun pickImageForShare(socialNetworkCode: Int) {
         Intent(
             Intent.ACTION_PICK,
@@ -236,21 +249,23 @@ class TvShowDetailsFragment : DaggerFragment(),
         }
     }
 
-    private fun showTrailer(video: TrailerDetails) {
-        val videoKey = video.key
-        val url = "https://youtube.com/watch?v=$videoKey"
+    private fun showTrailer(video: TrailerDetails?) {
+        video?.let {
+            val videoKey = video.key
+            val url = "https://youtube.com/watch?v=$videoKey"
 
-        val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$videoKey"))
-        val webIntent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse(url)
-        )
+            val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$videoKey"))
+            val webIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(url)
+            )
 
-        try {
-            startActivity(appIntent)
-        } catch (ex: ActivityNotFoundException) {
-            startActivity(webIntent)
-        }
+            try {
+                startActivity(appIntent)
+            } catch (ex: ActivityNotFoundException) {
+                startActivity(webIntent)
+            }
+        }?:viewModel.setEvent(DetailsFragmentViewEvent.Error("Error loading trailer"))
     }
 
     private fun animateFabToFavorite() {
@@ -295,7 +310,7 @@ class TvShowDetailsFragment : DaggerFragment(),
     }
 
     override fun onBtnWatchTrailer() {
-        viewModel.viewAction.postValue(Event(DetailsFragmentViewAction.FetchTrailers))
+        viewModel.setAction(DetailsFragmentViewAction.WatchTrailer)
     }
 
     override fun onBtnShareToInstagram(movieEntity: ShowEntity) {
@@ -320,7 +335,6 @@ class TvShowDetailsFragment : DaggerFragment(),
             }
         }
     }
-
     private fun verifyPermissions(): Boolean {
 
         val isGrantedPermission =

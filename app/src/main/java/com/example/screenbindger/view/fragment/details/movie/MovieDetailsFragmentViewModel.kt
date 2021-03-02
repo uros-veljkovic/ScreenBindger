@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
+import com.example.screenbindger.db.remote.response.movie.trailer.TrailerDetails
 import com.example.screenbindger.util.constants.INTENT_REQUEST_CODE_INSTAGRAM
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.image.GalleryManager
@@ -26,6 +27,7 @@ class MovieDetailsFragmentViewModel
     val galleryManager: GalleryManager
 ) : ViewModel() {
 
+    var trailer: TrailerDetails? = null
     private var movieId: Int? = null
 
     fun fetchData(movieId: Int) {
@@ -45,6 +47,10 @@ class MovieDetailsFragmentViewModel
 
     fun setAction(action: DetailsFragmentViewAction) {
         viewAction.postValue(Event(action))
+    }
+
+    fun setEvent(event: DetailsFragmentViewEvent) {
+        viewEvent.postValue(Event(event))
     }
 
     fun reset() {

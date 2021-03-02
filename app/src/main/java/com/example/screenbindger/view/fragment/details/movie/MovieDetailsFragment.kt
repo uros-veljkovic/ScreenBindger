@@ -108,6 +108,7 @@ class MovieDetailsFragment : DaggerFragment(),
                             addAll(casts)
                         }
                         populateList(list)
+                        fetchTrailers()
 
                     }
                     is ShowDetailsState.Error -> {
@@ -133,6 +134,10 @@ class MovieDetailsFragment : DaggerFragment(),
             executePendingBindings()
             hideProgressBar()
         }
+    }
+
+    private fun fetchTrailers() {
+        viewModel.setAction(DetailsFragmentViewAction.FetchTrailers)
     }
 
     private fun showProgressBar() {
@@ -163,6 +168,9 @@ class MovieDetailsFragment : DaggerFragment(),
                     is DetailsFragmentViewAction.FetchTrailers -> {
                         viewModel.fetchTrailers(movieId)
                     }
+                    DetailsFragmentViewAction.WatchTrailer -> {
+                        showTrailer(viewModel.trailer)
+                    }
                 }
             }
         })
@@ -187,7 +195,8 @@ class MovieDetailsFragment : DaggerFragment(),
                     }
                     is DetailsFragmentViewEvent.TrailersNotFetched -> {
                         hideProgressBar()
-                        snackbar("No trailer found")
+                        snackbar("SHIT")
+                        hideTrailerButton()
                     }
                     is DetailsFragmentViewEvent.AddedToFavorites -> {
                         hideProgressBar()
@@ -220,6 +229,12 @@ class MovieDetailsFragment : DaggerFragment(),
         })
     }
 
+    private fun hideTrailerButton() {
+        val adapter = binding.rvMovieDetails.adapter as ShowDetailsRecyclerViewAdapter
+        adapter.hideTrailerIcon()
+
+    }
+
     private fun pickImageForShare(socialNetworkCode: Int) {
         Intent(
             Intent.ACTION_PICK,
@@ -243,21 +258,24 @@ class MovieDetailsFragment : DaggerFragment(),
         }
     }
 
-    private fun showTrailer(video: TrailerDetails) {
-        val videoKey = video.key
-        val url = "https://youtube.com/watch?v=$videoKey"
+    private fun showTrailer(video: TrailerDetails?) {
 
-        val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$videoKey"))
-        val webIntent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse(url)
-        )
+        video?.let {
+            val videoKey = video.key
+            val url = "https://youtube.com/watch?v=$videoKey"
 
-        try {
-            startActivity(appIntent)
-        } catch (ex: ActivityNotFoundException) {
-            startActivity(webIntent)
-        }
+            val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$videoKey"))
+            val webIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(url)
+            )
+
+            try {
+                startActivity(appIntent)
+            } catch (ex: ActivityNotFoundException) {
+                startActivity(webIntent)
+            }
+        }?:viewModel.setEvent(DetailsFragmentViewEvent.Error("Error loading trailer"))
     }
 
     private fun animateFabToFavorite() {

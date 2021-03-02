@@ -193,4 +193,11 @@ class ScreenBindgerRemoteDataSource
         movieService.getMovieTrailersInfo(movieId, viewEvent)
     }
 
+    suspend fun getTvShowTrailers(
+        showId: Int,
+        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
+    ) {
+        tvShowService.getTvShowTrailers(showId, viewEvent)
+    }
+
 }
