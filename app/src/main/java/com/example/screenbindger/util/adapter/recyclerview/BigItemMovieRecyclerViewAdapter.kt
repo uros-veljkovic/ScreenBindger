@@ -20,6 +20,15 @@ class BigItemMovieRecyclerViewAdapter(
 ) :
     RecyclerView.Adapter<BigItemMovieRecyclerViewAdapter.BigItemMovieViewHolder>() {
 
+    private lateinit var recyclerView: RecyclerView
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+
+        this.recyclerView = recyclerView
+        this.recyclerView.startLayoutAnimation()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BigItemMovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemMovieBigBinding.inflate(inflater, parent, false)
