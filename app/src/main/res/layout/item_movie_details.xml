@@ -33,26 +33,27 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvMovieTitle"
             style="@style/TextAppearance.MaterialComponents.Headline4"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_100"
+            android:layout_marginHorizontal="@dimen/normal_100"
             android:layout_marginTop="@dimen/normal_100"
             android:text="@{movie.title}"
             app:fontFamily="@font/cardo"
-            app:layout_constraintEnd_toStartOf="@+id/btnWatchTrailer"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivMoviePoster"
             tools:text="Movie Title" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvMovieGenres"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_100"
+            android:layout_marginHorizontal="@dimen/normal_100"
             android:layout_marginTop="@dimen/small_50"
             android:text="@{movie.genresString}"
             android:textSize="18sp"
             android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvMovieTitle"
             tools:text="Genre 1, Genre 2, Genre 3" />
