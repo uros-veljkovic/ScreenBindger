@@ -11,6 +11,7 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabInlineLabel="true"
         app:tabBackground="@drawable/tab_color_selector">
 
         <com.google.android.material.tabs.TabItem
