@@ -17,12 +17,14 @@
             android:id="@+id/btnMovies"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:icon="@drawable/ic_movie_24"
             android:text="@string/movies" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/btnTvShows"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:icon="@drawable/ic_tv_24"
             android:text="@string/tv_shows" />
     </com.google.android.material.tabs.TabLayout>
 </layout>
