@@ -13,7 +13,7 @@ import com.example.screenbindger.view.fragment.details.ShowDetailsState
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewState
-import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewState
+import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,16 +40,16 @@ constructor(
         }
     }
 
-    suspend fun getUpcoming(upcomingViewState: MutableLiveData<UpcomingFragmentViewState>) {
+    suspend fun getUpcoming(upcomingViewState: MutableLiveData<UpcomingViewState>) {
         movieApi.getUpcomingMovies().let { response ->
             val list = response.body()?.list?.sortedByDescending { it.rating } ?: emptyList()
-            val state: UpcomingFragmentViewState
+            val state: UpcomingViewState
             state = if (response.isSuccessful) {
                 list.generateGenres()
-                UpcomingFragmentViewState(ListState.Fetched, list)
+                UpcomingViewState(ListState.Fetched, list)
             } else {
                 val message = response.getErrorResponse().statusMessage
-                UpcomingFragmentViewState(ListState.NotFetched(Event(message)), null)
+                UpcomingViewState(ListState.NotFetched(Event(message)), null)
             }
             upcomingViewState.postValue(state)
         }

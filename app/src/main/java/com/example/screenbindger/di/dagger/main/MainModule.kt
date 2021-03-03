@@ -18,8 +18,8 @@ import com.example.screenbindger.view.fragment.review.ReviewFragmentViewEvent
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewState
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewAction
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewState
-import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewAction
-import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewState
+import com.example.screenbindger.view.fragment.upcoming.UpcomingViewAction
+import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
@@ -74,13 +74,13 @@ class MainModule {
 
     @MainScope
     @Provides
-    fun provideUpcomingViewState(): MutableLiveData<UpcomingFragmentViewState> =
-        MutableLiveData(UpcomingFragmentViewState())
+    fun provideUpcomingViewState(): MutableLiveData<UpcomingViewState> =
+        MutableLiveData(UpcomingViewState())
 
     @MainScope
     @Provides
-    fun provideUpcomingViewAction(): MutableLiveData<UpcomingFragmentViewAction> =
-        MutableLiveData(UpcomingFragmentViewAction.FetchMovies)
+    fun provideUpcomingViewAction(): MutableLiveData<UpcomingViewAction> =
+        MutableLiveData(UpcomingViewAction.FetchMovies)
 
     @MainScope
     @Provides

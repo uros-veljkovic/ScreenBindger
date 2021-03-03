@@ -24,7 +24,7 @@ import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewEvent
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewState
-import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewState
+import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -68,11 +68,11 @@ class ScreenBindgerRemoteDataSource
         tvShowService.getTrending(trendingViewState)
     }
 
-    suspend fun getUpcomingMovies(upcomingViewState: MutableLiveData<UpcomingFragmentViewState>) {
+    suspend fun getUpcomingMovies(upcomingViewState: MutableLiveData<UpcomingViewState>) {
         movieService.getUpcoming(upcomingViewState)
     }
 
-    suspend fun getUpcomingTvShows(upcomingViewState: MutableLiveData<UpcomingFragmentViewState>) {
+    suspend fun getUpcomingTvShows(upcomingViewState: MutableLiveData<UpcomingViewState>) {
         tvShowService.getUpcoming(upcomingViewState)
     }
 

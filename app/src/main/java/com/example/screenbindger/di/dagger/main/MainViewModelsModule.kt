@@ -10,7 +10,7 @@ import com.example.screenbindger.view.fragment.details.tv_show.TvShowDetailsView
 import com.example.screenbindger.view.fragment.profile.ProfileFragmentViewModel
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewModel
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewModel
-import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewModel
+import com.example.screenbindger.view.fragment.upcoming.UpcomingViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -51,8 +51,8 @@ abstract class MainViewModelsModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(UpcomingFragmentViewModel::class)
-    abstract fun bindUpcomingViewModel(viewModel: UpcomingFragmentViewModel): ViewModel
+    @ViewModelKey(UpcomingViewModel::class)
+    abstract fun bindUpcomingViewModel(viewModel: UpcomingViewModel): ViewModel
 
     @Binds
     @IntoMap

@@ -2,35 +2,32 @@ package com.example.screenbindger.view.fragment.upcoming
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
-import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewAction
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class UpcomingFragmentViewModel
+class UpcomingViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val upcomingViewState: MutableLiveData<UpcomingFragmentViewState>,
-    val viewAction: MutableLiveData<UpcomingFragmentViewAction>,
+    val viewState: MutableLiveData<UpcomingViewState>,
+    val viewAction: MutableLiveData<UpcomingViewAction>,
     private val coroutineIo: CoroutineScope
 ) : ViewModel() {
 
     fun fetchMovies() = coroutineIo.launch {
-        remoteDataSource.getUpcomingMovies(upcomingViewState)
+        remoteDataSource.getUpcomingMovies(viewState)
     }
 
     fun fetchTvShows() = coroutineIo.launch {
-        remoteDataSource.getUpcomingTvShows(upcomingViewState)
+        remoteDataSource.getUpcomingTvShows(viewState)
     }
 
-    fun peekLastAction(): UpcomingFragmentViewAction {
+    fun peekLastAction(): UpcomingViewAction {
         return viewAction.value!!
     }
 
-    fun setAction(action: UpcomingFragmentViewAction) {
+    fun setAction(action: UpcomingViewAction) {
         viewAction.postValue(action)
     }
 

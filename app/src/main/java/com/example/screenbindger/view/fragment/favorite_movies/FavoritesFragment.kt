@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.SnapHelper
 import com.example.screenbindger.databinding.FragmentFavoriteMoviesBinding
 import com.example.screenbindger.util.adapter.recyclerview.BigItemMovieRecyclerViewAdapter
 import com.example.screenbindger.util.event.EventObserver
-import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentDirections
-import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewAction
 import com.google.android.material.tabs.TabLayout
 import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference

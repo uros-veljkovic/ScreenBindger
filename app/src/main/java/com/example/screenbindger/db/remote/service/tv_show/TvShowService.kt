@@ -3,9 +3,7 @@ package com.example.screenbindger.db.remote.service.tv_show
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.db.remote.session.Session
-import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.model.domain.movie.generateGenres
-import com.example.screenbindger.model.global.Genres
 import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
@@ -14,7 +12,7 @@ import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import com.example.screenbindger.view.fragment.details.ShowDetailsState
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewState
-import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentViewState
+import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,22 +21,22 @@ import javax.inject.Inject
 class TvShowService @Inject constructor(
     private val api: TvShowApi
 ) {
-    suspend fun getUpcoming(viewState: MutableLiveData<UpcomingFragmentViewState>) {
+    suspend fun getUpcoming(viewState: MutableLiveData<UpcomingViewState>) {
         api.getUpcoming().let { response ->
-            var state: UpcomingFragmentViewState? = null
+            var state: UpcomingViewState? = null
             if (response.isSuccessful) {
                 val list = response.body()?.list?.sortedByDescending { it.rating } ?: emptyList()
 
                 state = if (response.isSuccessful) {
                     list.generateGenres()
-                    UpcomingFragmentViewState(ListState.Fetched, list)
+                    UpcomingViewState(ListState.Fetched, list)
                 } else {
                     val message = response.getErrorResponse().statusMessage
-                    UpcomingFragmentViewState(ListState.NotFetched(Event(message)), null)
+                    UpcomingViewState(ListState.NotFetched(Event(message)), null)
                 }
             } else {
                 val message = response.getErrorResponse().statusMessage
-                UpcomingFragmentViewState(ListState.NotFetched(Event(message)), null)
+                UpcomingViewState(ListState.NotFetched(Event(message)), null)
             }
             viewState.postValue(state)
         }

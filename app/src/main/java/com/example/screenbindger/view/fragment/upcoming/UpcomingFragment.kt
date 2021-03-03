@@ -19,7 +19,6 @@ import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snack
-import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewAction
 import com.google.android.material.tabs.TabLayout
 import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference
@@ -33,7 +32,7 @@ class UpcomingFragment : DaggerFragment(),
     val binding get() = _binding!!
 
     @Inject
-    lateinit var viewModel: UpcomingFragmentViewModel
+    lateinit var viewModel: UpcomingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -78,9 +77,9 @@ class UpcomingFragment : DaggerFragment(),
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab!!.position == 0) {
-                    viewModel.setAction(UpcomingFragmentViewAction.FetchMovies)
+                    viewModel.setAction(UpcomingViewAction.FetchMovies)
                 } else {
-                    viewModel.setAction(UpcomingFragmentViewAction.FetchTvShows)
+                    viewModel.setAction(UpcomingViewAction.FetchTvShows)
                 }
             }
 
@@ -91,10 +90,10 @@ class UpcomingFragment : DaggerFragment(),
         with(viewModel) {
             viewAction.observe(viewLifecycleOwner, Observer { action ->
                 when (action) {
-                    UpcomingFragmentViewAction.FetchMovies -> {
+                    UpcomingViewAction.FetchMovies -> {
                         fetchMovies()
                     }
-                    UpcomingFragmentViewAction.FetchTvShows -> {
+                    UpcomingViewAction.FetchTvShows -> {
                         fetchTvShows()
                     }
                 }
@@ -103,7 +102,7 @@ class UpcomingFragment : DaggerFragment(),
     }
 
     private fun observeFragmentState() {
-        viewModel.upcomingViewState.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { response ->
             when (response.state) {
                 is ListState.Fetching -> {
                     showProgressBar()
@@ -138,10 +137,10 @@ class UpcomingFragment : DaggerFragment(),
         var direction: NavDirections? = null
 
         direction = when (lastAction) {
-            is UpcomingFragmentViewAction.FetchMovies -> {
+            is UpcomingViewAction.FetchMovies -> {
                 UpcomingFragmentDirections.actionUpcomingFragmentToMovieDetailsFragment(showId)
             }
-            UpcomingFragmentViewAction.FetchTvShows -> {
+            UpcomingViewAction.FetchTvShows -> {
                 UpcomingFragmentDirections.actionUpcomingFragmentToTvShowDetailsFragment(showId)
             }
         }
@@ -158,7 +157,7 @@ class UpcomingFragment : DaggerFragment(),
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.setAction(UpcomingFragmentViewAction.FetchMovies)
+        viewModel.setAction(UpcomingViewAction.FetchMovies)
         _binding = null
     }
 
