@@ -30,7 +30,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvUpcoming"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:layoutAnimation="@anim/layout_anim_falldown"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -39,6 +39,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tabContainer"
             tools:listitem="@layout/item_movie_small" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_50"
+            android:backgroundTint="@color/blue"
+            android:drawableStart="@drawable/ic_arrow_left_24"
+            android:src="@drawable/ic_arrow_left_24"
+            android:text="@string/previous"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_50"
+            android:backgroundTint="@color/blue"
+            android:src="@drawable/ic_arror_right_24"
+            android:text="@string/previous"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

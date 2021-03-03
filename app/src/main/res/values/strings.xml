@@ -67,4 +67,7 @@
     <string name="sort_by">Sort by</string>
     <string name="movies">Movies</string>
     <string name="tv_shows">TV Shows</string>
+    <string name="previous">Previous</string>
+    <string name="page">Page</string>
+    <string name="next">Next</string>
 </resources>
