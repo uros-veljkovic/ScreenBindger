@@ -16,7 +16,9 @@ interface MovieApi {
     suspend fun getTrendingMovies(): Response<MoviesResponse>
 
     @GET("movie/upcoming?api_key=$API_KEY")
-    suspend fun getUpcomingMovies(): Response<MoviesResponse>
+    suspend fun getUpcomingMovies(
+        @Query("page") page: Int
+    ): Response<MoviesResponse>
 
     @GET("movie/{movie_id}?api_key=$API_KEY")
     suspend fun getMovieDetails(@Path("movie_id") movieId: Int): Response<ShowEntity>
