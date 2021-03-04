@@ -75,7 +75,7 @@ class MainModule {
     @MainScope
     @Provides
     fun provideUpcomingViewState(): MutableLiveData<UpcomingViewState> =
-        MutableLiveData(UpcomingViewState())
+        MutableLiveData(UpcomingViewState.Fetching)
 
     @MainScope
     @Provides
