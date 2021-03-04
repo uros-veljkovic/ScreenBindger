@@ -6,7 +6,6 @@ import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.view.ListViewState
 
 sealed class UpcomingViewState {
-    object Init: UpcomingViewState()
     object Fetching : UpcomingViewState()
 
     sealed class Fetched(
