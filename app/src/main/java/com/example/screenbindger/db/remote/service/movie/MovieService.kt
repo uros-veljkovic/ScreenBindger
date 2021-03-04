@@ -31,7 +31,7 @@ constructor(
             val state: TrendingFragmentViewState
             state = if (response.isSuccessful) {
                 list.generateGenres()
-                TrendingFragmentViewState(ListState.Fetched, list)
+                TrendingFragmentViewState(ListState.Fetched.Movies, list)
             } else {
                 val message = response.getErrorResponse().statusMessage
                 TrendingFragmentViewState(ListState.NotFetched(Event(message)), null)
@@ -40,16 +40,25 @@ constructor(
         }
     }
 
-    suspend fun getUpcoming(upcomingViewState: MutableLiveData<UpcomingViewState>) {
-        movieApi.getUpcomingMovies().let { response ->
-            val list = response.body()?.list?.sortedByDescending { it.rating } ?: emptyList()
-            val state: UpcomingViewState
-            state = if (response.isSuccessful) {
-                list.generateGenres()
-                UpcomingViewState(ListState.Fetched, list)
+    suspend fun getUpcoming(
+        page: Int,
+        upcomingViewState: MutableLiveData<UpcomingViewState>
+    ) {
+        movieApi.getUpcomingMovies(page).let { response ->
+            val state = if (response.isSuccessful) {
+                val body = response.body()!!
+
+                val totalPages = body.totalPages
+                val currentPage = body.page
+
+                val list = body.list.apply {
+                    generateGenres()
+                }
+
+                UpcomingViewState.Fetched.Movies(list, currentPage, totalPages)
             } else {
                 val message = response.getErrorResponse().statusMessage
-                UpcomingViewState(ListState.NotFetched(Event(message)), null)
+                UpcomingViewState.NotFetched(Event(message))
             }
             upcomingViewState.postValue(state)
         }

@@ -21,22 +21,23 @@ import javax.inject.Inject
 class TvShowService @Inject constructor(
     private val api: TvShowApi
 ) {
-    suspend fun getUpcoming(viewState: MutableLiveData<UpcomingViewState>) {
-        api.getUpcoming().let { response ->
-            var state: UpcomingViewState? = null
-            if (response.isSuccessful) {
-                val list = response.body()?.list?.sortedByDescending { it.rating } ?: emptyList()
+    suspend fun getUpcoming(
+        page: Int,
+        viewState: MutableLiveData<UpcomingViewState>
+    ) {
+        api.getUpcoming(page = page).let { response ->
 
-                state = if (response.isSuccessful) {
-                    list.generateGenres()
-                    UpcomingViewState(ListState.Fetched, list)
-                } else {
-                    val message = response.getErrorResponse().statusMessage
-                    UpcomingViewState(ListState.NotFetched(Event(message)), null)
-                }
+            val state = if (response.isSuccessful) {
+                val body = response.body()!!
+
+                val list = body.list?.sortedByDescending { it.rating } ?: emptyList()
+                val page = body.page
+                val totalPages = body.totalPages
+
+                UpcomingViewState.Fetched.TvShows(list, page, totalPages)
             } else {
                 val message = response.getErrorResponse().statusMessage
-                UpcomingViewState(ListState.NotFetched(Event(message)), null)
+                UpcomingViewState.NotFetched(Event(message))
             }
             viewState.postValue(state)
         }
@@ -50,7 +51,7 @@ class TvShowService @Inject constructor(
 
                 state = if (response.isSuccessful) {
                     list.generateGenres()
-                    TrendingFragmentViewState(ListState.Fetched, list)
+                    TrendingFragmentViewState(ListState.Fetched.TvShows, list)
                 } else {
                     val message = response.getErrorResponse().statusMessage
                     TrendingFragmentViewState(ListState.NotFetched(Event(message)), null)

@@ -15,21 +15,41 @@ class UpcomingViewModel
     private val coroutineIo: CoroutineScope
 ) : ViewModel() {
 
+    var currentPage: Int = 1
+
     fun fetchMovies() = coroutineIo.launch {
-        remoteDataSource.getUpcomingMovies(viewState)
+        remoteDataSource.getUpcomingMovies(currentPage, viewState)
     }
 
     fun fetchTvShows() = coroutineIo.launch {
-        remoteDataSource.getUpcomingTvShows(viewState)
+        remoteDataSource.getUpcomingTvShows(currentPage, viewState)
     }
 
-    fun peekLastAction(): UpcomingViewAction {
-        return viewAction.value!!
+    fun nextPageMovies() {
+        currentPage++
+        fetchMovies()
+    }
+
+    fun previousPageMovies() {
+        currentPage--
+        fetchMovies()
+    }
+
+    fun nextPageTvShows() {
+        currentPage++
+        fetchTvShows()
+    }
+
+    fun previousPageTvShows() {
+        currentPage--
+        fetchTvShows()
     }
 
     fun setAction(action: UpcomingViewAction) {
         viewAction.postValue(action)
     }
 
+    fun getState(): UpcomingViewState = viewState.value!!
 
 }
+
