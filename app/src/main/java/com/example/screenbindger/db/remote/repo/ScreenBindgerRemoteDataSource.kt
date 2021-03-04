@@ -68,12 +68,18 @@ class ScreenBindgerRemoteDataSource
         tvShowService.getTrending(trendingViewState)
     }
 
-    suspend fun getUpcomingMovies(upcomingViewState: MutableLiveData<UpcomingViewState>) {
-        movieService.getUpcoming(upcomingViewState)
+    suspend fun getUpcomingMovies(
+        page: Int,
+        upcomingViewState: MutableLiveData<UpcomingViewState>
+    ) {
+        movieService.getUpcoming(page, upcomingViewState)
     }
 
-    suspend fun getUpcomingTvShows(upcomingViewState: MutableLiveData<UpcomingViewState>) {
-        tvShowService.getUpcoming(upcomingViewState)
+    suspend fun getUpcomingTvShows(
+        page: Int,
+        upcomingViewState: MutableLiveData<UpcomingViewState>
+    ) {
+        tvShowService.getUpcoming(page, upcomingViewState)
     }
 
     suspend fun getGenres(): Response<AllGenresResponse> {
