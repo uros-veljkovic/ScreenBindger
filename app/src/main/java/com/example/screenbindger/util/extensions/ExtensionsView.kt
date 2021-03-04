@@ -9,3 +9,18 @@ fun View.show() {
 fun View.hide() {
     this.visibility = View.GONE
 }
+
+fun disable(vararg views: View) {
+    views.forEach {
+        it.isEnabled = false
+        it.isClickable = false
+    }
+}
+
+
+fun enable(vararg views: View) {
+    views.forEach {
+        it.isEnabled = true
+        it.isClickable = true
+    }
+}
