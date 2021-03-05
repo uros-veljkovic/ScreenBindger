@@ -25,15 +25,14 @@ import com.example.screenbindger.util.adapter.recyclerview.ShowDetailsRecyclerVi
 import com.example.screenbindger.util.constants.INTENT_ADD_TO_INSTA_STORY
 import com.example.screenbindger.util.constants.INTENT_REQUEST_CODE_INSTAGRAM
 import com.example.screenbindger.util.constants.POSTER_SIZE_ORIGINAL
-import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.event.EventObserver
 import com.example.screenbindger.util.extensions.hide
 import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snackbar
 import com.example.screenbindger.util.image.ImageProvider
 import com.example.screenbindger.view.activity.main.MainActivity
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewAction
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
+import com.example.screenbindger.view.fragment.details.DetailsViewAction
+import com.example.screenbindger.view.fragment.details.DetailsViewEvent
 import com.example.screenbindger.view.fragment.details.ShowDetailsState
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.CoroutineScope
@@ -142,7 +141,7 @@ class TvShowDetailsFragment : DaggerFragment(),
     }
 
     private fun fetchTrailers() {
-        viewModel.setAction(DetailsFragmentViewAction.FetchTrailers)
+        viewModel.setAction(DetailsViewAction.FetchTrailers)
     }
 
     override fun onResume() {
@@ -155,16 +154,16 @@ class TvShowDetailsFragment : DaggerFragment(),
     private fun observeViewModelAction() {
         viewModel.viewAction.observe(viewLifecycleOwner, EventObserver { action ->
             when (action) {
-                is DetailsFragmentViewAction.MarkAsFavorite -> {
+                is DetailsViewAction.MarkAsFavorite -> {
                     viewModel.markAsFavorite(true, action.id)
                 }
-                is DetailsFragmentViewAction.MarkAsNotFavorite -> {
+                is DetailsViewAction.MarkAsNotFavorite -> {
                     viewModel.markAsFavorite(false, action.id)
                 }
-                is DetailsFragmentViewAction.FetchTrailers -> {
+                is DetailsViewAction.FetchTrailers -> {
                     viewModel.fetchTrailers(showId)
                 }
-                is DetailsFragmentViewAction.WatchTrailer -> {
+                is DetailsViewAction.WatchTrailer -> {
                     showTrailer(viewModel.trailer)
                 }
             }
@@ -174,47 +173,47 @@ class TvShowDetailsFragment : DaggerFragment(),
     private fun observeViewModelEvents() {
         viewModel.viewEvent.observe(viewLifecycleOwner, EventObserver { event ->
             when (event) {
-                is DetailsFragmentViewEvent.IsLoadedAsFavorite -> {
+                is DetailsViewEvent.IsLoadedAsFavorite -> {
                     hideProgressBar()
                     animateFabToFavorite()
                 }
-                is DetailsFragmentViewEvent.IsLoadedAsNotFavorite -> {
+                is DetailsViewEvent.IsLoadedAsNotFavorite -> {
                     hideProgressBar()
                     animateFabToNotFavorite()
                 }
-                is DetailsFragmentViewEvent.TrailersFetched -> {
+                is DetailsViewEvent.TrailersFetched -> {
                     hideProgressBar()
                     val firstVideo = event.trailers[0]
                     viewModel.trailer = firstVideo
                 }
-                is DetailsFragmentViewEvent.TrailersNotFetched -> {
+                is DetailsViewEvent.TrailersNotFetched -> {
                     hideProgressBar()
                     hideTrailerButton()
                 }
-                is DetailsFragmentViewEvent.AddedToFavorites -> {
+                is DetailsViewEvent.AddedToFavorites -> {
                     hideProgressBar()
                     snackbar(event.message, R.color.green)
                     animateFabToFavorite()
                 }
-                is DetailsFragmentViewEvent.RemovedFromFavorites -> {
+                is DetailsViewEvent.RemovedFromFavorites -> {
                     hideProgressBar()
                     animateFabToNotFavorite()
                 }
-                is DetailsFragmentViewEvent.Error -> {
+                is DetailsViewEvent.Error -> {
                     hideProgressBar()
                     snackbar(event.message)
                 }
-                is DetailsFragmentViewEvent.Rest -> {
+                is DetailsViewEvent.Rest -> {
                     hideProgressBar()
                 }
-                is DetailsFragmentViewEvent.Loading -> {
+                is DetailsViewEvent.Loading -> {
                     showProgressBar()
                 }
-                is DetailsFragmentViewEvent.PosterSaved -> {
+                is DetailsViewEvent.PosterSaved -> {
                     val socialMediaCode = event.socialMediaRequestCode
                     pickImageForShare(socialMediaCode)
                 }
-                is DetailsFragmentViewEvent.PosterNotSaved -> {
+                is DetailsViewEvent.PosterNotSaved -> {
                     snackbar("not saved !", R.color.logout_red)
                 }
             }
@@ -265,7 +264,7 @@ class TvShowDetailsFragment : DaggerFragment(),
             } catch (ex: ActivityNotFoundException) {
                 startActivity(webIntent)
             }
-        }?:viewModel.setEvent(DetailsFragmentViewEvent.Error("Error loading trailer"))
+        }?:viewModel.setEvent(DetailsViewEvent.Error("Error loading trailer"))
     }
 
     private fun animateFabToFavorite() {
@@ -310,7 +309,7 @@ class TvShowDetailsFragment : DaggerFragment(),
     }
 
     override fun onBtnWatchTrailer() {
-        viewModel.setAction(DetailsFragmentViewAction.WatchTrailer)
+        viewModel.setAction(DetailsViewAction.WatchTrailer)
     }
 
     override fun onBtnShareToInstagram(movieEntity: ShowEntity) {

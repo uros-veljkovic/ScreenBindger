@@ -7,7 +7,7 @@ import com.example.screenbindger.model.domain.movie.generateGenres
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
 import com.example.screenbindger.util.extensions.ifLet
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
+import com.example.screenbindger.view.fragment.details.DetailsViewEvent
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEvent
 import javax.inject.Inject
 
@@ -69,7 +69,7 @@ class FavoritesService
     suspend fun postMarkAsFavorite(
         session: Session,
         body: MarkAsFavoriteRequestBody,
-        viewEffect: MutableLiveData<Event<DetailsFragmentViewEvent>>
+        viewEffect: MutableLiveData<Event<DetailsViewEvent>>
     ) {
         ifLet(session.id, session.accountId) {
             api.postMarkAsFavorite(
@@ -79,12 +79,12 @@ class FavoritesService
             ).let {
                 if (it.isSuccessful) {
                     if (body.favorite)
-                        viewEffect.postValue(Event(DetailsFragmentViewEvent.AddedToFavorites()))
+                        viewEffect.postValue(Event(DetailsViewEvent.AddedToFavorites()))
                     else
-                        viewEffect.postValue(Event(DetailsFragmentViewEvent.RemovedFromFavorites()))
+                        viewEffect.postValue(Event(DetailsViewEvent.RemovedFromFavorites()))
                 } else {
                     val error = it.getErrorResponse().statusMessage
-                    viewEffect.postValue(Event(DetailsFragmentViewEvent.Error(error)))
+                    viewEffect.postValue(Event(DetailsViewEvent.Error(error)))
                 }
             }
         }
@@ -93,7 +93,7 @@ class FavoritesService
     suspend fun getPeekIsFavoriteMovie(
         showId: Int,
         session: Session,
-        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
     ) {
         ifLet(session.id, session.accountId) {
             api.getFavoriteMovieList(
@@ -103,15 +103,15 @@ class FavoritesService
                 if (response.isSuccessful) {
                     response.body()?.list?.forEach { show ->
                         if (show.id!! == showId) {
-                            viewEvent.postValue(Event(DetailsFragmentViewEvent.IsLoadedAsFavorite))
+                            viewEvent.postValue(Event(DetailsViewEvent.IsLoadedAsFavorite))
                             return
                         }
                     }
-                    viewEvent.postValue(Event(DetailsFragmentViewEvent.IsLoadedAsNotFavorite))
+                    viewEvent.postValue(Event(DetailsViewEvent.IsLoadedAsNotFavorite))
                 } else {
                     viewEvent.postValue(
                         Event(
-                            DetailsFragmentViewEvent.Error(
+                            DetailsViewEvent.Error(
                                 "Error finding out if this is you favorite movie :("
                             )
                         )
@@ -124,7 +124,7 @@ class FavoritesService
     suspend fun getPeekIsFavoriteTvShow(
         showId: Int,
         session: Session,
-        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
     ) {
         ifLet(session.id, session.accountId) {
             api.getFavoriteTvShowList(
@@ -134,15 +134,15 @@ class FavoritesService
                 if (response.isSuccessful) {
                     response.body()?.list?.forEach { show ->
                         if (show.id!! == showId) {
-                            viewEvent.postValue(Event(DetailsFragmentViewEvent.IsLoadedAsFavorite))
+                            viewEvent.postValue(Event(DetailsViewEvent.IsLoadedAsFavorite))
                             return
                         }
                     }
-                    viewEvent.postValue(Event(DetailsFragmentViewEvent.IsLoadedAsNotFavorite))
+                    viewEvent.postValue(Event(DetailsViewEvent.IsLoadedAsNotFavorite))
                 } else {
                     viewEvent.postValue(
                         Event(
-                            DetailsFragmentViewEvent.Error(
+                            DetailsViewEvent.Error(
                                 "Error finding out if this is you favorite movie :("
                             )
                         )

@@ -10,8 +10,8 @@ import com.example.screenbindger.db.remote.response.movie.trailer.TrailerDetails
 import com.example.screenbindger.util.constants.INTENT_REQUEST_CODE_INSTAGRAM
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.image.GalleryManager
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewAction
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
+import com.example.screenbindger.view.fragment.details.DetailsViewAction
+import com.example.screenbindger.view.fragment.details.DetailsViewEvent
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -22,8 +22,8 @@ class MovieDetailsFragmentViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
     var viewState: DetailsFragmentViewState,
-    var viewAction: MutableLiveData<Event<DetailsFragmentViewAction>>,
-    var viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>,
+    var viewAction: MutableLiveData<Event<DetailsViewAction>>,
+    var viewEvent: MutableLiveData<Event<DetailsViewEvent>>,
     val galleryManager: GalleryManager
 ) : ViewModel() {
 
@@ -45,11 +45,11 @@ class MovieDetailsFragmentViewModel
         }
     }
 
-    fun setAction(action: DetailsFragmentViewAction) {
+    fun setAction(action: DetailsViewAction) {
         viewAction.postValue(Event(action))
     }
 
-    fun setEvent(event: DetailsFragmentViewEvent) {
+    fun setEvent(event: DetailsViewEvent) {
         viewEvent.postValue(Event(event))
     }
 
@@ -62,8 +62,8 @@ class MovieDetailsFragmentViewModel
     fun manageFavorite() {
         val event = viewEvent.value?.peekContent()
         if (event != null &&
-            (event is DetailsFragmentViewEvent.IsLoadedAsFavorite ||
-                    event is DetailsFragmentViewEvent.AddedToFavorites)
+            (event is DetailsViewEvent.IsLoadedAsFavorite ||
+                    event is DetailsViewEvent.AddedToFavorites)
 
         )
             markAsFavorite(false, movieId!!)
@@ -81,13 +81,13 @@ class MovieDetailsFragmentViewModel
 
     fun fetchTrailers(movieId: Int) {
         CoroutineScope(IO).launch {
-            viewEvent.postValue(Event(DetailsFragmentViewEvent.Loading))
+            viewEvent.postValue(Event(DetailsViewEvent.Loading))
             remoteDataSource.getMovieTrailersInfo(movieId, viewEvent)
         }
     }
 
     fun saveToGalleryForInstagram(bitmap: Bitmap, context: Context, folderName: String) {
-        viewEvent.postValue(Event(DetailsFragmentViewEvent.Loading))
+        viewEvent.postValue(Event(DetailsViewEvent.Loading))
         saveToGallery(
             INTENT_REQUEST_CODE_INSTAGRAM,
             bitmap,
@@ -104,9 +104,9 @@ class MovieDetailsFragmentViewModel
     ) {
         galleryManager.saveImage(bitmap, context, folderName).let { isSaved ->
             if (isSaved) {
-                viewEvent.postValue(Event(DetailsFragmentViewEvent.PosterSaved(socialMediaCode)))
+                viewEvent.postValue(Event(DetailsViewEvent.PosterSaved(socialMediaCode)))
             } else {
-                viewEvent.postValue(Event(DetailsFragmentViewEvent.PosterNotSaved))
+                viewEvent.postValue(Event(DetailsViewEvent.PosterNotSaved))
             }
         }
     }

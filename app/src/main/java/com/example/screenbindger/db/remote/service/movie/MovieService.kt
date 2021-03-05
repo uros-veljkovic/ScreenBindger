@@ -4,13 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.movie.generateGenres
-import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
 import com.example.screenbindger.util.extensions.ifLet
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEvent
 import com.example.screenbindger.view.fragment.details.ShowDetailsState
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
+import com.example.screenbindger.view.fragment.details.DetailsViewEvent
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
@@ -128,7 +127,7 @@ constructor(
     suspend fun postMovieAsFavorite(
         session: Session,
         body: MarkAsFavoriteRequestBody,
-        viewEffect: MutableLiveData<Event<DetailsFragmentViewEvent>>
+        viewEffect: MutableLiveData<Event<DetailsViewEvent>>
     ) {
         ifLet(session.id, session.accountId) {
             movieApi.postMarkAsFavorite(
@@ -138,12 +137,12 @@ constructor(
             ).let {
                 if (it.isSuccessful) {
                     if (body.favorite)
-                        viewEffect.postValue(Event(DetailsFragmentViewEvent.AddedToFavorites()))
+                        viewEffect.postValue(Event(DetailsViewEvent.AddedToFavorites()))
                     else
-                        viewEffect.postValue(Event(DetailsFragmentViewEvent.RemovedFromFavorites()))
+                        viewEffect.postValue(Event(DetailsViewEvent.RemovedFromFavorites()))
                 } else {
                     val error = it.getErrorResponse().statusMessage
-                    viewEffect.postValue(Event(DetailsFragmentViewEvent.Error(error)))
+                    viewEffect.postValue(Event(DetailsViewEvent.Error(error)))
                 }
             }
         }
@@ -152,7 +151,7 @@ constructor(
     suspend fun getIsMovieFavorite(
         movieId: Int,
         session: Session,
-        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
     ) {
         ifLet(session.id, session.accountId) {
             movieApi.getFavoriteMovieList(
@@ -162,15 +161,15 @@ constructor(
                 if (response.isSuccessful) {
                     response.body()?.list?.forEach { movie ->
                         if (movie.id!! == movieId) {
-                            viewEvent.postValue(Event(DetailsFragmentViewEvent.IsLoadedAsFavorite))
+                            viewEvent.postValue(Event(DetailsViewEvent.IsLoadedAsFavorite))
                             return
                         }
                     }
-                    viewEvent.postValue(Event(DetailsFragmentViewEvent.IsLoadedAsNotFavorite))
+                    viewEvent.postValue(Event(DetailsViewEvent.IsLoadedAsNotFavorite))
                 } else {
                     viewEvent.postValue(
                         Event(
-                            DetailsFragmentViewEvent.Error(
+                            DetailsViewEvent.Error(
                                 "Error finding out if this is you favorite movie :("
                             )
                         )
@@ -207,19 +206,19 @@ constructor(
 
     suspend fun getMovieTrailersInfo(
         movieId: Int,
-        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
     ) {
         movieApi.getMovieTrailers(movieId).let { response ->
             if (response.isSuccessful) {
                 response.body()?.list?.let { list ->
                     if (list.isNotEmpty()) {
-                        viewEvent.postValue(Event(DetailsFragmentViewEvent.TrailersFetched(list)))
+                        viewEvent.postValue(Event(DetailsViewEvent.TrailersFetched(list)))
                     } else {
-                        viewEvent.postValue(Event(DetailsFragmentViewEvent.TrailersNotFetched))
+                        viewEvent.postValue(Event(DetailsViewEvent.TrailersNotFetched))
                     }
                 }
             } else {
-                viewEvent.postValue(Event(DetailsFragmentViewEvent.TrailersNotFetched))
+                viewEvent.postValue(Event(DetailsViewEvent.TrailersNotFetched))
             }
         }
     }

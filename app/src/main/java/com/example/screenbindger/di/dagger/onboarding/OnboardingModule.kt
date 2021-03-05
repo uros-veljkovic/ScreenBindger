@@ -7,7 +7,7 @@ import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
-import com.example.screenbindger.view.fragment.register.RegisterEventObservable
+import com.example.screenbindger.view.fragment.register.RegisterViewState
 import dagger.Module
 import dagger.Provides
 
@@ -29,8 +29,8 @@ object OnboardingModule {
 
     @OnboardingScope
     @Provides
-    fun provideRegisterStateObservable(): RegisterEventObservable {
-        return RegisterEventObservable()
+    fun provideRegisterStateObservable(): RegisterViewState {
+        return RegisterViewState()
     }
 
     @OnboardingScope

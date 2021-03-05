@@ -9,16 +9,16 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ReviewFragmentViewModel
+class ReviewViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val viewState: MutableLiveData<ReviewFragmentViewState>,
-    val viewAction: MutableLiveData<Event<ReviewFragmentViewAction>>,
-    val viewEvent: MutableLiveData<Event<ReviewFragmentViewEvent>>
+    val viewState: MutableLiveData<ReviewViewState>,
+    val viewAction: MutableLiveData<Event<ReviewViewAction>>,
+    val viewEvent: MutableLiveData<Event<ReviewViewEvent>>
 ) : ViewModel(){
 
     fun fetchReviews(movieId: Int) {
-        viewEvent.postValue(Event(ReviewFragmentViewEvent.Loading))
+        viewEvent.postValue(Event(ReviewViewEvent.Loading))
         CoroutineScope(IO).launch {
             remoteDataSource.getMovieReviews(movieId, viewEvent)
         }

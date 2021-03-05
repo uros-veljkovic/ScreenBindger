@@ -9,13 +9,13 @@ import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewAction
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEvent
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewState
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewAction
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
+import com.example.screenbindger.view.fragment.details.DetailsViewAction
+import com.example.screenbindger.view.fragment.details.DetailsViewEvent
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import com.example.screenbindger.view.fragment.profile.FragmentStateObservable
-import com.example.screenbindger.view.fragment.review.ReviewFragmentViewAction
-import com.example.screenbindger.view.fragment.review.ReviewFragmentViewEvent
-import com.example.screenbindger.view.fragment.review.ReviewFragmentViewState
+import com.example.screenbindger.view.fragment.review.ReviewViewAction
+import com.example.screenbindger.view.fragment.review.ReviewViewEvent
+import com.example.screenbindger.view.fragment.review.ReviewViewState
 import com.example.screenbindger.view.fragment.trending.TrendingViewAction
 import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingViewAction
@@ -90,13 +90,13 @@ class MainModule {
 
     @MainScope
     @Provides
-    fun provideMovieDetailsViewAction(): MutableLiveData<Event<DetailsFragmentViewAction>> {
+    fun provideMovieDetailsViewAction(): MutableLiveData<Event<DetailsViewAction>> {
         return MutableLiveData()
     }
 
     @MainScope
     @Provides
-    fun provideMovieDetailsViewEvent(): MutableLiveData<Event<DetailsFragmentViewEvent>> {
+    fun provideMovieDetailsViewEvent(): MutableLiveData<Event<DetailsViewEvent>> {
         return MutableLiveData()
     }
 
@@ -120,19 +120,19 @@ class MainModule {
 
     @MainScope
     @Provides
-    fun provideReviewFragmentViewState(): MutableLiveData<ReviewFragmentViewState> {
+    fun provideReviewFragmentViewState(): MutableLiveData<ReviewViewState> {
         return MutableLiveData()
     }
 
     @MainScope
     @Provides
-    fun provideReviewFragmentViewAction(): MutableLiveData<Event<ReviewFragmentViewAction>> {
+    fun provideReviewFragmentViewAction(): MutableLiveData<Event<ReviewViewAction>> {
         return MutableLiveData()
     }
 
     @MainScope
     @Provides
-    fun provideReviewFragmentViewEvent(): MutableLiveData<Event<ReviewFragmentViewEvent>> {
+    fun provideReviewFragmentViewEvent(): MutableLiveData<Event<ReviewViewEvent>> {
         return MutableLiveData()
     }
 

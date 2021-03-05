@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ProfileFragmentViewModel
+class ProfileViewModel
 @Inject constructor(
     private val remoteDataSource: ScreenBindgerRemoteDataSource,
     var userStateObservable: UserStateObservable,
@@ -27,12 +27,12 @@ class ProfileFragmentViewModel
 
     fun changeUiMode() {
         when (fragmentStateObservable.state.value) {
-            ProfileFragmentState.Editable -> {
-                fragmentStateObservable.setState(ProfileFragmentState.NotEditable)
+            ProfileViewState.Editable -> {
+                fragmentStateObservable.setState(ProfileViewState.NotEditable)
                 updateUser()
             }
-            ProfileFragmentState.NotEditable -> {
-                fragmentStateObservable.setState(ProfileFragmentState.Editable)
+            ProfileViewState.NotEditable -> {
+                fragmentStateObservable.setState(ProfileViewState.Editable)
             }
             else -> {
             }

@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.screenbindger.view.fragment.login.LoginFragmentViewModel" />
+            type="com.example.screenbindger.view.fragment.login.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

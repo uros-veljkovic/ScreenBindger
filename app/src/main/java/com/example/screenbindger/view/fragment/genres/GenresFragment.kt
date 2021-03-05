@@ -10,14 +10,13 @@ import com.example.screenbindger.util.adapter.recyclerview.ItemGenreRecyclerView
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class GenresFragment : DaggerFragment(), OnCardItemClickListener {
 
     @Inject
-    lateinit var viewModel: GenresFragmentViewModel
+    lateinit var viewModel: GenresViewModel
 
     private var _binding: FragmentGenresBinding? = null
     private val binding get() = _binding!!

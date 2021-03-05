@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.screenbindger.databinding.FragmentReviewBinding
 import com.example.screenbindger.util.adapter.recyclerview.ReviewRecyclerViewAdapter
@@ -22,7 +20,7 @@ import javax.inject.Inject
 class ReviewFragment : DaggerFragment() {
 
     @Inject
-    lateinit var viewModel: ReviewFragmentViewModel
+    lateinit var viewModel: ReviewViewModel
 
     private var _binding: FragmentReviewBinding? = null
     private val binding get() = _binding!!
@@ -61,18 +59,18 @@ class ReviewFragment : DaggerFragment() {
     }
 
     private fun fetchReviews() {
-        viewModel.viewAction.postValue(Event(ReviewFragmentViewAction.FetchReviews))
+        viewModel.viewAction.postValue(Event(ReviewViewAction.FetchReviews))
     }
 
     private fun observeViewState() {
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
-                is ReviewFragmentViewState.ReviewsFetched -> {
+                is ReviewViewState.ReviewsFetched -> {
                     binding.rvReviews.apply {
                         adapter = ReviewRecyclerViewAdapter(state.list)
                     }
                 }
-                is ReviewFragmentViewState.ReviewsNotFetched -> {
+                is ReviewViewState.ReviewsNotFetched -> {
                     Toast.makeText(requireContext(), "No reviews found", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -84,7 +82,7 @@ class ReviewFragment : DaggerFragment() {
             it.viewAction.observe(viewLifecycleOwner, Observer { eventWrapper ->
                 eventWrapper.getContentIfNotHandled()?.let { action ->
                     when (action) {
-                        ReviewFragmentViewAction.FetchReviews -> {
+                        ReviewViewAction.FetchReviews -> {
                             it.fetchReviews(movieId)
                         }
                     }
@@ -98,22 +96,22 @@ class ReviewFragment : DaggerFragment() {
             it.viewEvent.observe(viewLifecycleOwner, Observer { eventWrapper ->
                 eventWrapper.getContentIfNotHandled()?.let { event ->
                     when (event) {
-                        is ReviewFragmentViewEvent.ReviewsFetched -> {
+                        is ReviewViewEvent.ReviewsFetched -> {
                             val reviews = event.list
-                            it.viewState.postValue(ReviewFragmentViewState.ReviewsFetched(reviews))
+                            it.viewState.postValue(ReviewViewState.ReviewsFetched(reviews))
                             hideProgressBar()
                         }
 
-                        is ReviewFragmentViewEvent.NoReviewsFetched -> {
+                        is ReviewViewEvent.NoReviewsFetched -> {
                             Toast.makeText(requireContext(), "No reviews found", Toast.LENGTH_SHORT)
                                 .show()
-                            it.viewState.postValue(ReviewFragmentViewState.ReviewsNotFetched)
+                            it.viewState.postValue(ReviewViewState.ReviewsNotFetched)
                             hideProgressBar()
                         }
-                        is ReviewFragmentViewEvent.Loading -> {
+                        is ReviewViewEvent.Loading -> {
                             showProgressBar()
                         }
-                        is ReviewFragmentViewEvent.Error -> {
+                        is ReviewViewEvent.Error -> {
                             requireView().snack("Error")
                             showMessage(event.message)
                             hideProgressBar()

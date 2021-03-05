@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
-class GenresFragmentViewModel
+class GenresViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource
 ) : ViewModel() {

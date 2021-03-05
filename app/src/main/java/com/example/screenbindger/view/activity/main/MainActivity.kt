@@ -3,7 +3,6 @@ package com.example.screenbindger.view.activity.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -15,7 +14,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.ActivityMainBinding
-import com.example.screenbindger.view.fragment.profile.ProfileFragmentViewModel
+import com.example.screenbindger.view.fragment.profile.ProfileViewModel
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -26,7 +25,7 @@ class MainActivity : DaggerAppCompatActivity() {
     lateinit var viewModel: MainViewModel
 
     @Inject
-    lateinit var profileViewModel: ProfileFragmentViewModel
+    lateinit var profileViewModel: ProfileViewModel
 
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment

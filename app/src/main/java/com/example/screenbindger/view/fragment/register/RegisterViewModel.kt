@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class RegisterFragmentViewModel
+class RegisterViewModel
 @Inject constructor(
     val userStateObservable: UserStateObservable,
     val remoteDataSource: ScreenBindgerRemoteDataSource,

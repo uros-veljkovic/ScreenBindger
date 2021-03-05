@@ -20,9 +20,9 @@ import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEvent
 import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
+import com.example.screenbindger.view.fragment.details.DetailsViewEvent
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
-import com.example.screenbindger.view.fragment.review.ReviewFragmentViewEvent
+import com.example.screenbindger.view.fragment.review.ReviewViewEvent
 import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import retrofit2.Response
@@ -175,21 +175,21 @@ class ScreenBindgerRemoteDataSource
 
     suspend fun postMarkAsFavorite(
         requestBody: MarkAsFavoriteRequestBody,
-        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
     ) {
         favoritesService.postMarkAsFavorite(session, requestBody, viewEvent)
     }
 
     suspend fun getPeekIsFavoriteMovie(
         movieId: Int,
-        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
     ) {
         favoritesService.getPeekIsFavoriteMovie(movieId, session, viewEvent)
     }
 
     suspend fun getPeekIsFavoriteTvShow(
         showId: Int,
-        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
     ) {
         favoritesService.getPeekIsFavoriteTvShow(showId, session, viewEvent)
     }
@@ -207,21 +207,21 @@ class ScreenBindgerRemoteDataSource
 
     suspend fun getMovieReviews(
         movieId: Int,
-        viewEvent: MutableLiveData<Event<ReviewFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<ReviewViewEvent>>
     ) {
         reviewService.getMovieReviews(movieId, viewEvent)
     }
 
     suspend fun getMovieTrailersInfo(
         movieId: Int,
-        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
     ) {
         movieService.getMovieTrailersInfo(movieId, viewEvent)
     }
 
     suspend fun getTvShowTrailers(
         showId: Int,
-        viewEvent: MutableLiveData<Event<DetailsFragmentViewEvent>>
+        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
     ) {
         tvShowService.getTvShowTrailers(showId, viewEvent)
     }

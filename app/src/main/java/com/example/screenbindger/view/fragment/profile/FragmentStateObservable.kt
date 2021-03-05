@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 
 class FragmentStateObservable {
 
-    private val _state: MutableLiveData<ProfileFragmentState> =
-        MutableLiveData(ProfileFragmentState.NotEditable)
-    val state: LiveData<ProfileFragmentState> = _state
+    private val _state: MutableLiveData<ProfileViewState> =
+        MutableLiveData(ProfileViewState.NotEditable)
+    val state: LiveData<ProfileViewState> = _state
 
-    fun setState(state: ProfileFragmentState) {
+    fun setState(state: ProfileViewState) {
         _state.postValue(state)
     }
 }

@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
@@ -32,8 +31,8 @@ import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snackbar
 import com.example.screenbindger.util.image.ImageProvider
 import com.example.screenbindger.view.activity.main.MainActivity
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewAction
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
+import com.example.screenbindger.view.fragment.details.DetailsViewAction
+import com.example.screenbindger.view.fragment.details.DetailsViewEvent
 import com.example.screenbindger.view.fragment.details.ShowDetailsState
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.CoroutineScope
@@ -137,7 +136,7 @@ class MovieDetailsFragment : DaggerFragment(),
     }
 
     private fun fetchTrailers() {
-        viewModel.setAction(DetailsFragmentViewAction.FetchTrailers)
+        viewModel.setAction(DetailsViewAction.FetchTrailers)
     }
 
     private fun showProgressBar() {
@@ -159,16 +158,16 @@ class MovieDetailsFragment : DaggerFragment(),
         viewModel.viewAction.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let { action ->
                 when (action) {
-                    is DetailsFragmentViewAction.MarkAsFavorite -> {
+                    is DetailsViewAction.MarkAsFavorite -> {
                         viewModel.markAsFavorite(true, action.id)
                     }
-                    is DetailsFragmentViewAction.MarkAsNotFavorite -> {
+                    is DetailsViewAction.MarkAsNotFavorite -> {
                         viewModel.markAsFavorite(false, action.id)
                     }
-                    is DetailsFragmentViewAction.FetchTrailers -> {
+                    is DetailsViewAction.FetchTrailers -> {
                         viewModel.fetchTrailers(movieId)
                     }
-                    DetailsFragmentViewAction.WatchTrailer -> {
+                    DetailsViewAction.WatchTrailer -> {
                         showTrailer(viewModel.trailer)
                     }
                 }
@@ -180,48 +179,48 @@ class MovieDetailsFragment : DaggerFragment(),
         viewModel.viewEvent.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
                 when (it) {
-                    DetailsFragmentViewEvent.IsLoadedAsFavorite -> {
+                    DetailsViewEvent.IsLoadedAsFavorite -> {
                         hideProgressBar()
                         animateFabToFavorite()
                     }
-                    DetailsFragmentViewEvent.IsLoadedAsNotFavorite -> {
+                    DetailsViewEvent.IsLoadedAsNotFavorite -> {
                         hideProgressBar()
                         animateFabToNotFavorite()
                     }
-                    is DetailsFragmentViewEvent.TrailersFetched -> {
+                    is DetailsViewEvent.TrailersFetched -> {
                         hideProgressBar()
                         val firstVideo = it.trailers[0]
                         viewModel.trailer = firstVideo
                     }
-                    is DetailsFragmentViewEvent.TrailersNotFetched -> {
+                    is DetailsViewEvent.TrailersNotFetched -> {
                         hideProgressBar()
                         snackbar("SHIT")
                         hideTrailerButton()
                     }
-                    is DetailsFragmentViewEvent.AddedToFavorites -> {
+                    is DetailsViewEvent.AddedToFavorites -> {
                         hideProgressBar()
                         snackbar(it.message, R.color.green)
                         animateFabToFavorite()
                     }
-                    is DetailsFragmentViewEvent.RemovedFromFavorites -> {
+                    is DetailsViewEvent.RemovedFromFavorites -> {
                         hideProgressBar()
                         animateFabToNotFavorite()
                     }
-                    is DetailsFragmentViewEvent.Error -> {
+                    is DetailsViewEvent.Error -> {
                         hideProgressBar()
                         snackbar(it.message)
                     }
-                    is DetailsFragmentViewEvent.Rest -> {
+                    is DetailsViewEvent.Rest -> {
                         hideProgressBar()
                     }
-                    is DetailsFragmentViewEvent.Loading -> {
+                    is DetailsViewEvent.Loading -> {
                         showProgressBar()
                     }
-                    is DetailsFragmentViewEvent.PosterSaved -> {
+                    is DetailsViewEvent.PosterSaved -> {
                         val socialMediaCode = it.socialMediaRequestCode
                         pickImageForShare(socialMediaCode)
                     }
-                    is DetailsFragmentViewEvent.PosterNotSaved -> {
+                    is DetailsViewEvent.PosterNotSaved -> {
                         snackbar("not saved !", R.color.logout_red)
                     }
                 }
@@ -275,7 +274,7 @@ class MovieDetailsFragment : DaggerFragment(),
             } catch (ex: ActivityNotFoundException) {
                 startActivity(webIntent)
             }
-        }?:viewModel.setEvent(DetailsFragmentViewEvent.Error("Error loading trailer"))
+        }?:viewModel.setEvent(DetailsViewEvent.Error("Error loading trailer"))
     }
 
     private fun animateFabToFavorite() {
@@ -320,7 +319,7 @@ class MovieDetailsFragment : DaggerFragment(),
     }
 
     override fun onBtnWatchTrailer() {
-        viewModel.viewAction.postValue(Event(DetailsFragmentViewAction.WatchTrailer))
+        viewModel.viewAction.postValue(Event(DetailsViewAction.WatchTrailer))
     }
 
     override fun onBtnShareToInstagram(movieEntity: ShowEntity) {
