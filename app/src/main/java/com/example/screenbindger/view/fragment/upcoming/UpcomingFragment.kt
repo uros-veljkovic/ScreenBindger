@@ -3,7 +3,6 @@ package com.example.screenbindger.view.fragment.upcoming
 import android.os.Bundle
 import android.view.*
 import androidx.lifecycle.Observer
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.R
@@ -40,6 +39,7 @@ class UpcomingFragment : DaggerFragment(),
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
 
         val view = bind(inflater, container)
         initRecyclerView()
@@ -104,20 +104,10 @@ class UpcomingFragment : DaggerFragment(),
                         fetchTvShows()
                     }
                     is UpcomingViewAction.GotoNextPage -> {
-                        val currentState = viewModel.getState()
-
-                        if (currentState is UpcomingViewState.Fetched.Movies)
-                            viewModel.nextPageMovies()
-                        else
-                            viewModel.nextPageTvShows()
+                        viewModel.nextPage()
                     }
                     is UpcomingViewAction.GotoPreviousPage -> {
-                        val currentState = viewModel.getState()
-
-                        if (currentState is UpcomingViewState.Fetched.Movies)
-                            viewModel.previousPageMovies()
-                        else
-                            viewModel.previousPageTvShows()
+                        viewModel.previousPage()
                     }
                 }
             })
@@ -174,21 +164,9 @@ class UpcomingFragment : DaggerFragment(),
     }
 
     override fun onCardItemClick(showId: Int) {
-        val currentState = viewModel.getState()
-        val direction: NavDirections?
-
-        direction = when (currentState) {
-            is UpcomingViewState.Fetched.Movies -> {
-                UpcomingFragmentDirections.actionUpcomingFragmentToMovieDetailsFragment(showId)
-            }
-            is UpcomingViewState.Fetched.TvShows -> {
-                UpcomingFragmentDirections.actionUpcomingFragmentToTvShowDetailsFragment(showId)
-            }
-            else -> {
-                return
-            }
+        viewModel.getNavDirection(showId).also {
+            findNavController().navigate(it!!)
         }
-        findNavController().navigate(direction)
     }
 
     private fun showProgressBar() {

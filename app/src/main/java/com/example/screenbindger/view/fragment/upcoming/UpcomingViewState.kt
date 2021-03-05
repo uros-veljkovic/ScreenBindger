@@ -1,9 +1,7 @@
 package com.example.screenbindger.view.fragment.upcoming
 
 import com.example.screenbindger.model.domain.movie.ShowEntity
-import com.example.screenbindger.model.state.ListState
 import com.example.screenbindger.util.event.Event
-import com.example.screenbindger.view.ListViewState
 
 sealed class UpcomingViewState {
     object Fetching : UpcomingViewState()
