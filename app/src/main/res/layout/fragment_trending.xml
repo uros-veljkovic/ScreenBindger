@@ -39,6 +39,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tabContainer"
             tools:listitem="@layout/item_movie_small" />
+
+        <Button
+            android:id="@+id/btnPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_50"
+            android:backgroundTint="@drawable/fab_background_selector"
+            android:contentDescription="@string/previous"
+            android:drawableLeft="@drawable/ic_arrow_left_24"
+            android:src="@drawable/ic_arrow_left_24"
+            android:text="@string/prev"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_50"
+            android:backgroundTint="@drawable/fab_background_selector"
+            android:contentDescription="@string/next"
+            android:drawableRight="@drawable/ic_arror_right_24"
+            android:text="@string/next"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
