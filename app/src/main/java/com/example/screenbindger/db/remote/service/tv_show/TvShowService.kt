@@ -11,7 +11,7 @@ import com.example.screenbindger.util.extensions.ifLet
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import com.example.screenbindger.view.fragment.details.ShowDetailsState
-import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewState
+import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,10 +31,10 @@ class TvShowService @Inject constructor(
                 val body = response.body()!!
 
                 val list = body.list?.sortedByDescending { it.rating } ?: emptyList()
-                val page = body.page
+                val currentPage = body.page
                 val totalPages = body.totalPages
 
-                UpcomingViewState.Fetched.TvShows(list, page, totalPages)
+                UpcomingViewState.Fetched.TvShows(list, currentPage, totalPages)
             } else {
                 val message = response.getErrorResponse().statusMessage
                 UpcomingViewState.NotFetched(Event(message))
@@ -43,22 +43,20 @@ class TvShowService @Inject constructor(
         }
     }
 
-    suspend fun getTrending(viewState: MutableLiveData<TrendingFragmentViewState>) {
-        api.getTrending().let { response ->
-            var state: TrendingFragmentViewState? = null
-            if (response.isSuccessful) {
-                val list = response.body()?.list?.sortedByDescending { it.rating } ?: emptyList()
+    suspend fun getTrending(page: Int, viewState: MutableLiveData<TrendingViewState>) {
+        api.getTrending(page = page).let { response ->
 
-                state = if (response.isSuccessful) {
-                    list.generateGenres()
-                    TrendingFragmentViewState(ListState.Fetched.TvShows, list)
-                } else {
-                    val message = response.getErrorResponse().statusMessage
-                    TrendingFragmentViewState(ListState.NotFetched(Event(message)), null)
-                }
+            val state = if (response.isSuccessful) {
+                val body = response.body()!!
+
+                val list = body.list?.sortedByDescending { it.rating } ?: emptyList()
+                val currentPage = body.page
+                val totalPages = body.totalPages
+
+                TrendingViewState.Fetched.TvShows(list, currentPage, totalPages)
             } else {
                 val message = response.getErrorResponse().statusMessage
-                TrendingFragmentViewState(ListState.NotFetched(Event(message)), null)
+                TrendingViewState.NotFetched(Event(message))
             }
             viewState.postValue(state)
         }

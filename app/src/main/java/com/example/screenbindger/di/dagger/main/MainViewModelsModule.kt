@@ -9,7 +9,7 @@ import com.example.screenbindger.view.fragment.details.movie.MovieDetailsFragmen
 import com.example.screenbindger.view.fragment.details.tv_show.TvShowDetailsViewModel
 import com.example.screenbindger.view.fragment.profile.ProfileFragmentViewModel
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewModel
-import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewModel
+import com.example.screenbindger.view.fragment.trending.TrendingViewModel
 import com.example.screenbindger.view.fragment.upcoming.UpcomingViewModel
 import dagger.Binds
 import dagger.Module
@@ -46,8 +46,8 @@ abstract class MainViewModelsModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(TrendingFragmentViewModel::class)
-    abstract fun bindTrendingViewModel(viewModel: TrendingFragmentViewModel): ViewModel
+    @ViewModelKey(TrendingViewModel::class)
+    abstract fun bindTrendingViewModel(viewModel: TrendingViewModel): ViewModel
 
     @Binds
     @IntoMap

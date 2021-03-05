@@ -21,6 +21,7 @@ interface TvShowApi {
 
     @GET("tv/popular")
     suspend fun getTrending(
+        @Query("page") page: Int = 1,
         @Query("api_key") apiKey: String = API_KEY
     ): Response<UpcomingTvShowResponse>
 

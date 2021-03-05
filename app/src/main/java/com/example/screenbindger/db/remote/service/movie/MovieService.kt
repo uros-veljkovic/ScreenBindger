@@ -12,7 +12,7 @@ import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEven
 import com.example.screenbindger.view.fragment.details.ShowDetailsState
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
-import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewState
+import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,16 +25,22 @@ constructor(
     private val movieApi: MovieApi
 ) {
 
-    suspend fun getTrending(trendingViewState: MutableLiveData<TrendingFragmentViewState>) {
-        movieApi.getTrendingMovies().let { response ->
-            val list = response.body()?.list?.sortedByDescending { it.rating } ?: emptyList()
-            val state: TrendingFragmentViewState
-            state = if (response.isSuccessful) {
-                list.generateGenres()
-                TrendingFragmentViewState(ListState.Fetched.Movies, list)
+    suspend fun getTrending(page: Int, trendingViewState: MutableLiveData<TrendingViewState>) {
+        movieApi.getTrendingMovies(page).let { response ->
+            val state = if (response.isSuccessful) {
+                val body = response.body()!!
+
+                val totalPages = body.totalPages
+                val currentPage = body.page
+
+                val list = body.list.apply {
+                    generateGenres()
+                }
+
+                TrendingViewState.Fetched.Movies(list, currentPage, totalPages)
             } else {
                 val message = response.getErrorResponse().statusMessage
-                TrendingFragmentViewState(ListState.NotFetched(Event(message)), null)
+                TrendingViewState.NotFetched(Event(message))
             }
             trendingViewState.postValue(state)
         }

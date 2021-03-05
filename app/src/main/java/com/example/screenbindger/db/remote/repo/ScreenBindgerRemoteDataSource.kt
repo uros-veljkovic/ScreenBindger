@@ -23,7 +23,7 @@ import com.example.screenbindger.view.fragment.login.AuthorizationEventObservabl
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewEvent
 import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import com.example.screenbindger.view.fragment.review.ReviewFragmentViewEvent
-import com.example.screenbindger.view.fragment.trending.TrendingFragmentViewState
+import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import retrofit2.Response
 import javax.inject.Inject
@@ -60,26 +60,32 @@ class ScreenBindgerRemoteDataSource
         userService.create(userStateObservable)
     }
 
-    suspend fun getTrendingMovies(trendingViewState: MutableLiveData<TrendingFragmentViewState>) {
-        movieService.getTrending(trendingViewState)
+    suspend fun getTrendingMovies(
+        requestedPage: Int,
+        viewState: MutableLiveData<TrendingViewState>
+    ) {
+        movieService.getTrending(requestedPage, viewState)
     }
 
-    suspend fun getTrendingTvShows(trendingViewState: MutableLiveData<TrendingFragmentViewState>) {
-        tvShowService.getTrending(trendingViewState)
+    suspend fun getTrendingTvShows(
+        requestedPage: Int,
+        viewState: MutableLiveData<TrendingViewState>
+    ) {
+        tvShowService.getTrending(requestedPage, viewState)
     }
 
     suspend fun getUpcomingMovies(
-        page: Int,
-        upcomingViewState: MutableLiveData<UpcomingViewState>
+        requestedPage: Int,
+        viewState: MutableLiveData<UpcomingViewState>
     ) {
-        movieService.getUpcoming(page, upcomingViewState)
+        movieService.getUpcoming(requestedPage, viewState)
     }
 
     suspend fun getUpcomingTvShows(
-        page: Int,
-        upcomingViewState: MutableLiveData<UpcomingViewState>
+        requestedPage: Int,
+        viewState: MutableLiveData<UpcomingViewState>
     ) {
-        tvShowService.getUpcoming(page, upcomingViewState)
+        tvShowService.getUpcoming(requestedPage, viewState)
     }
 
     suspend fun getGenres(): Response<AllGenresResponse> {

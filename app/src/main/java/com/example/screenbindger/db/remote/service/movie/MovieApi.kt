@@ -13,7 +13,9 @@ import retrofit2.http.*
 interface MovieApi {
 
     @GET("trending/movie/week?api_key=$API_KEY")
-    suspend fun getTrendingMovies(): Response<MoviesResponse>
+    suspend fun getTrendingMovies(
+        @Query("page") page: Int
+    ): Response<MoviesResponse>
 
     @GET("movie/upcoming?api_key=$API_KEY")
     suspend fun getUpcomingMovies(
