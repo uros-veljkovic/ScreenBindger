@@ -12,6 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabInlineLabel="true"
+        app:tabIconTint="@color/defaultButtonColor"
+        app:tabTextColor="@color/defaultButtonColor"
+        app:tabIndicatorColor="@color/blue"
         app:tabBackground="@drawable/tab_color_selector">
 
         <com.google.android.material.tabs.TabItem
