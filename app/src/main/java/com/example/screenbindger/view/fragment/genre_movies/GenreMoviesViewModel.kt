@@ -2,6 +2,7 @@ package com.example.screenbindger.view.fragment.genre_movies
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.response.movie.MoviesByGenreResponse
 import com.example.screenbindger.db.remote.response.movie.MoviesResponse
@@ -23,10 +24,10 @@ class GenreMoviesViewModel
     val list: List<ShowEntity>? get() = response.value?.body()?.list
 
     fun fetchData(genreId: Int) {
-        CoroutineScope(IO).launch {
+        viewModelScope.launch(IO) {
             val result = remoteDataSource.getMoviesByGenre(genreId.toString())
 
-            CoroutineScope(Default).launch {
+            launch(Default) {
                 result.body()?.list?.forEach { entity ->
                     generateStringGenresFor(entity)
                 }
@@ -36,7 +37,7 @@ class GenreMoviesViewModel
         }
     }
 
-    private fun generateStringGenresFor(entity: ShowEntity) = CoroutineScope(Default).launch {
+    private fun generateStringGenresFor(entity: ShowEntity) = viewModelScope.launch(Default) {
         entity.genreIds?.forEach { singleEntityGenreId ->
             Genres.list.forEach {
                 if (it.id == singleEntityGenreId) {

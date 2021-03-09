@@ -16,7 +16,6 @@ sealed class UpcomingViewState {
             page: Int,
             totalPages: Int
         ) : Fetched(list, page, totalPages)
-
         class TvShows(
             list: List<ShowEntity>,
             page: Int,

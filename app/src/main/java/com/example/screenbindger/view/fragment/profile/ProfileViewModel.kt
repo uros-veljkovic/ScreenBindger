@@ -2,6 +2,7 @@ package com.example.screenbindger.view.fragment.profile
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import kotlinx.coroutines.CoroutineScope
@@ -20,7 +21,7 @@ class ProfileViewModel
         loadInfo()
     }
 
-    private fun loadInfo() = CoroutineScope(IO).launch {
+    private fun loadInfo() = viewModelScope.launch(IO) {
         remoteDataSource.fetchProfilePicture(userStateObservable)
         remoteDataSource.fetchUser(userStateObservable)
     }
@@ -40,20 +41,20 @@ class ProfileViewModel
     }
 
     private fun updateUser() {
-        CoroutineScope(IO).launch {
+        viewModelScope.launch(IO) {
             remoteDataSource.updateUser(userStateObservable)
         }
     }
 
     fun changePassword(newPassword: String) {
-        CoroutineScope(IO).launch {
+        viewModelScope.launch(IO) {
             remoteDataSource.changePassword(newPassword, userStateObservable)
         }
     }
 
     fun uploadImage(uri: Uri) {
         userStateObservable.setProfilePictureUri(uri)
-        CoroutineScope(IO).launch {
+        viewModelScope.launch(IO) {
             remoteDataSource.uploadImage(uri, userStateObservable)
         }
     }

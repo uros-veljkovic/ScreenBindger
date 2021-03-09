@@ -2,11 +2,13 @@ package com.example.screenbindger.view.fragment.trending
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.util.constants.POSITION_TAB_MOVIES
 import com.example.screenbindger.util.constants.POSITION_TAB_TV_SHOWS
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,17 +16,16 @@ class TrendingViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
     val viewState: MutableLiveData<TrendingViewState>,
-    val viewAction: MutableLiveData<TrendingViewAction>,
-    private val coroutineIo: CoroutineScope
+    val viewAction: MutableLiveData<TrendingViewAction>
 ) : ViewModel() {
 
     var currentPage: Int = 1
 
-    fun fetchMovies() = coroutineIo.launch {
+    fun fetchMovies() = viewModelScope.launch(IO) {
         remoteDataSource.getTrendingMovies(currentPage, viewState)
     }
 
-    fun fetchTvShows() = coroutineIo.launch {
+    fun fetchTvShows() = viewModelScope.launch(IO) {
         remoteDataSource.getTrendingTvShows(currentPage, viewState)
     }
 

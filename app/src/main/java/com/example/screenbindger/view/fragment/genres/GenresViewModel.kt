@@ -2,6 +2,7 @@ package com.example.screenbindger.view.fragment.genres
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.response.genre.AllGenresResponse
 import com.example.screenbindger.model.domain.genre.GenreEntity
@@ -23,8 +24,8 @@ class GenresViewModel
         fetchData()
     }
 
-    private fun fetchData(){
-        CoroutineScope(IO).launch {
+    private fun fetchData() {
+        viewModelScope.launch(IO) {
             response.postValue(remoteDataSource.getGenres())
         }
     }

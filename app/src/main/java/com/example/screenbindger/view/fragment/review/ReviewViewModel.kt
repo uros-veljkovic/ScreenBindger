@@ -2,6 +2,7 @@ package com.example.screenbindger.view.fragment.review
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.util.event.Event
 import kotlinx.coroutines.CoroutineScope
@@ -15,11 +16,12 @@ class ReviewViewModel
     val viewState: MutableLiveData<ReviewViewState>,
     val viewAction: MutableLiveData<Event<ReviewViewAction>>,
     val viewEvent: MutableLiveData<Event<ReviewViewEvent>>
-) : ViewModel(){
+) : ViewModel() {
 
     fun fetchReviews(movieId: Int) {
         viewEvent.postValue(Event(ReviewViewEvent.Loading))
-        CoroutineScope(IO).launch {
+
+        viewModelScope.launch(IO) {
             remoteDataSource.getMovieReviews(movieId, viewEvent)
         }
     }

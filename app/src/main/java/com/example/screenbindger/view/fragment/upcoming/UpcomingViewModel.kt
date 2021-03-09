@@ -2,10 +2,12 @@ package com.example.screenbindger.view.fragment.upcoming
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentDirections
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -13,17 +15,16 @@ class UpcomingViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
     val viewState: MutableLiveData<UpcomingViewState>,
-    val viewAction: MutableLiveData<UpcomingViewAction>,
-    private val coroutineIo: CoroutineScope
+    val viewAction: MutableLiveData<UpcomingViewAction>
 ) : ViewModel() {
 
     var currentPage: Int = 1
 
-    fun fetchMovies() = coroutineIo.launch {
+    fun fetchMovies() = viewModelScope.launch(IO) {
         remoteDataSource.getUpcomingMovies(currentPage, viewState)
     }
 
-    fun fetchTvShows() = coroutineIo.launch {
+    fun fetchTvShows() = viewModelScope.launch(IO) {
         remoteDataSource.getUpcomingTvShows(currentPage, viewState)
     }
 

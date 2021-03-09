@@ -11,10 +11,13 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import bloder.com.blitzcore.enableWhenUsing
 import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentLoginBinding
 import com.example.screenbindger.model.state.AuthState
 import com.example.screenbindger.util.constants.REQUEST_CODE_TOKEN_AUTH
+import com.example.screenbindger.util.extensions.hide
+import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snack
 import com.example.screenbindger.util.extensions.startActivityWithDelay
 import com.example.screenbindger.util.validator.FieldValidator

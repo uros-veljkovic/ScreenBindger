@@ -2,6 +2,7 @@ package com.example.screenbindger.view.fragment.favorite_movies
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.util.event.Event
 import kotlinx.coroutines.CoroutineScope
@@ -18,12 +19,11 @@ class FavoritesViewModel
 ) : ViewModel() {
 
     init {
-//        loadFavorites()
         viewAction.postValue(Event(FavoritesViewAction.FetchMovies))
     }
 
     fun fetchFavoriteMovies() {
-        CoroutineScope(IO).launch {
+        viewModelScope.launch(IO) {
             remoteDataSource.getFavoriteMovieList(viewEvent)
         }
     }

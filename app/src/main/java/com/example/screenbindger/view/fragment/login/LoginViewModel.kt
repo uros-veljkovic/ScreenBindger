@@ -1,5 +1,6 @@
 package com.example.screenbindger.view.fragment.login
 
+import androidx.lifecycle.viewModelScope
 import com.example.screenbindger.model.domain.user.UserEntity
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.session.Session
@@ -17,26 +18,26 @@ class LoginViewModel @Inject constructor(
 ) : AuthViewModel() {
 
     override fun onboarding() {
-        CoroutineScope(IO).launch {
+        viewModelScope.launch(IO) {
             authStateObservable.setState(AuthState.Loading)
             remoteDataSource.login(user, authStateObservable)
         }
     }
 
     override fun fetchToken() {
-        CoroutineScope(IO).launch {
+        viewModelScope.launch(IO) {
             remoteDataSource.getRequestToken(authStateObservable)
         }
     }
 
     override fun startSession() {
-        CoroutineScope(IO).launch {
+        viewModelScope.launch(IO) {
             remoteDataSource.createSession(authStateObservable)
         }
     }
 
     override fun fetchAccountDetails() {
-        CoroutineScope(IO).launch {
+        viewModelScope.launch(IO) {
             remoteDataSource.getAccountDetails(authStateObservable)
         }
     }
@@ -59,55 +60,3 @@ class LoginViewModel @Inject constructor(
     }
 
 }
-/*
-class LoginViewModel
-@Inject constructor(
-    val user: UserEntity,
-    val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val authStateObservable: AuthorizationStateObservable
-) : ViewModel() {
-
-    var token: String = ""
-
-    fun login() {
-        CoroutineScope(IO).launch {
-            authStateObservable.setValue(AuthState.Loading)
-            remoteDataSource.login(user, authStateObservable)
-        }
-    }
-
-    fun requestToken() {
-        CoroutineScope(IO).launch {
-            remoteDataSource.getRequestToken(authStateObservable)
-        }
-    }
-
-    fun createSession() {
-        CoroutineScope(IO).launch {
-            remoteDataSource.createSession(authStateObservable)
-        }
-    }
-
-    fun getAccountDetails() {
-        CoroutineScope(IO).launch {
-            remoteDataSource.getAccountDetails(authStateObservable)
-        }
-    }
-
-    fun getState(): AuthState = authStateObservable.getState()
-
-    fun setState(state: AuthState) {
-        authStateObservable.setValue(state)
-    }
-
-    fun setSession(session: Session) {
-        remoteDataSource.setSession(session)
-    }
-
-    fun getErrorMessage(): String {
-        val e = authStateObservable.getState() as AuthState.Error
-        return e.getMessage() ?: "Unknown error"
-    }
-
-
-}*/

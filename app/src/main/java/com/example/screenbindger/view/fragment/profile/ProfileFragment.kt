@@ -11,6 +11,9 @@ import com.example.screenbindger.R
 import com.example.screenbindger.databinding.FragmentProfileBinding
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.constants.INTENT_REQUEST_CODE_IMAGE
+import com.example.screenbindger.util.extensions.hide
+import com.example.screenbindger.util.extensions.setIconAndColor
+import com.example.screenbindger.util.extensions.setUri
 import com.example.screenbindger.util.extensions.snack
 import com.example.screenbindger.view.activity.onboarding.OnboardingActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

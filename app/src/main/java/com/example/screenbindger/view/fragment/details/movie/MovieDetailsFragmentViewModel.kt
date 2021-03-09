@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.db.remote.response.movie.trailer.TrailerDetails
@@ -32,7 +33,7 @@ class MovieDetailsFragmentViewModel
 
     fun fetchData(movieId: Int) {
         this.movieId = movieId
-        CoroutineScope(IO).launch {
+        viewModelScope.launch(IO) {
             launch {
                 remoteDataSource.getMovieDetails(movieId, viewState)
             }
@@ -72,7 +73,7 @@ class MovieDetailsFragmentViewModel
     }
 
     fun markAsFavorite(isFavorite: Boolean, movieId: Int) {
-        CoroutineScope(IO).launch {
+        viewModelScope.launch(IO){
             MarkAsFavoriteRequestBody(mediaId = movieId, favorite = isFavorite).let { body ->
                 remoteDataSource.postMarkAsFavorite(body, viewEvent)
             }
@@ -80,7 +81,7 @@ class MovieDetailsFragmentViewModel
     }
 
     fun fetchTrailers(movieId: Int) {
-        CoroutineScope(IO).launch {
+        viewModelScope.launch(IO) {
             viewEvent.postValue(Event(DetailsViewEvent.Loading))
             remoteDataSource.getMovieTrailersInfo(movieId, viewEvent)
         }
