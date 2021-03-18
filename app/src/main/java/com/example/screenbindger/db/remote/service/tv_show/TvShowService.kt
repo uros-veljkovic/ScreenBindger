@@ -3,6 +3,7 @@ package com.example.screenbindger.db.remote.service.tv_show
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.db.remote.session.Session
+import com.example.screenbindger.model.domain.movie.generateGenres
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
 import com.example.screenbindger.util.extensions.ifLet
@@ -13,53 +14,81 @@ import com.example.screenbindger.view.fragment.trending.TrendingViewState
 import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class TvShowService @Inject constructor(
     private val api: TvShowApi
 ) {
-    suspend fun getUpcoming(
-        page: Int,
-        viewState: MutableLiveData<UpcomingViewState>
-    ) {
-        api.getUpcoming(page = page).let { response ->
+    // TODO : Test when network request fails
+    suspend fun getUpcoming(page: Int): UpcomingViewState {
+        return try {
+            api.getUpcoming(page = page).let { response ->
 
-            val state = if (response.isSuccessful) {
-                val body = response.body()!!
+                if (response.isSuccessful) {
+                    val body = response.body()!!
 
-                val list = body.list?.sortedByDescending { it.rating } ?: emptyList()
-                val currentPage = body.page
-                val totalPages = body.totalPages
+                    val sortedListWithGeneratedGenres = withContext(Default) {
+                        body.list?.apply {
+                            sortedByDescending { it.rating }
+                            generateGenres()
+                        } ?: emptyList()
+                    }
 
-                UpcomingViewState.Fetched.TvShows(list, currentPage, totalPages)
-            } else {
-                val message = response.getErrorResponse().statusMessage
-                UpcomingViewState.NotFetched(Event(message))
+                    val currentPage = body.page
+                    val totalPages = body.totalPages
+
+                    UpcomingViewState.Fetched.TvShows(
+                        sortedListWithGeneratedGenres,
+                        currentPage,
+                        totalPages
+                    )
+                } else {
+                    val message = response.getErrorResponse().statusMessage
+                    UpcomingViewState.NotFetched(Event(message))
+                }
             }
-            viewState.postValue(state)
+        } catch (e: Exception) {
+            UpcomingViewState.NotFetched(Event("Network request fail"))
         }
     }
 
-    suspend fun getTrending(page: Int, viewState: MutableLiveData<TrendingViewState>) {
-        api.getTrending(page = page).let { response ->
+    // TODO: Implement handling request fail
+    suspend fun getTrending(page: Int): TrendingViewState {
+        return try {
+            api.getTrending(page = page).let { response ->
 
-            val state = if (response.isSuccessful) {
-                val body = response.body()!!
+                if (response.isSuccessful) {
+                    val body = response.body()!!
 
-                val list = body.list?.sortedByDescending { it.rating } ?: emptyList()
-                val currentPage = body.page
-                val totalPages = body.totalPages
+                    val sortedListWithGeneratedGenres = withContext(Default) {
+                        body.list?.apply {
+                            sortedByDescending { it.rating }
+                            generateGenres()
+                        } ?: emptyList()
+                    }
 
-                TrendingViewState.Fetched.TvShows(list, currentPage, totalPages)
-            } else {
-                val message = response.getErrorResponse().statusMessage
-                TrendingViewState.NotFetched(Event(message))
+                    val currentPage = body.page
+                    val totalPages = body.totalPages
+
+                    TrendingViewState.Fetched.TvShows(
+                        sortedListWithGeneratedGenres,
+                        currentPage,
+                        totalPages
+                    )
+                } else {
+                    val message = response.getErrorResponse().statusMessage
+                    TrendingViewState.NotFetched(Event(message))
+                }
             }
-            viewState.postValue(state)
+        } catch (e: Exception) {
+            TrendingViewState.NotFetched(Event(e.message!!))
         }
     }
 
+    // TODO: Implement handling request fail
     suspend fun getDetails(
         showId: Int,
         viewState: DetailsFragmentViewState
@@ -68,7 +97,7 @@ class TvShowService @Inject constructor(
             if (response.isSuccessful) {
                 viewState.apply {
                     show = response.body()
-                    CoroutineScope(Dispatchers.Default).launch {
+                    CoroutineScope(Default).launch {
                         show?.generateGenreString()
                     }
                 }
@@ -89,6 +118,7 @@ class TvShowService @Inject constructor(
         }
     }
 
+    // TODO: Implement handling request fail
     suspend fun getCasts(
         showId: Int,
         viewState: DetailsFragmentViewState
@@ -115,80 +145,17 @@ class TvShowService @Inject constructor(
         }
     }
 
-    suspend fun getTvShowTrailers(
-        tvShowId: Int,
-        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
-    ) {
-        api.getTrailers(tvShowId).let { response ->
+    // TODO: Implement handling request fail
+    suspend fun getTvShowTrailers(tvShowId: Int): DetailsViewEvent {
+        return api.getTrailers(tvShowId).let { response ->
             if (response.isSuccessful) {
-                response.body()?.list?.let { list ->
-                    if (list.isNotEmpty()) {
-                        viewEvent.postValue(Event(DetailsViewEvent.TrailersFetched(list)))
-                    } else {
-                        viewEvent.postValue(Event(DetailsViewEvent.TrailersNotFetched))
-                    }
-                }
+                val list = response.body()?.list ?: emptyList()
+                if (list.isNotEmpty())
+                    DetailsViewEvent.TrailersFetched(list)
+                else
+                    DetailsViewEvent.TrailersNotFetched
             } else {
-                viewEvent.postValue(Event(DetailsViewEvent.TrailersNotFetched))
-            }
-        }
-    }
-
-    suspend fun postMovieAsFavorite(
-        session: Session,
-        body: MarkAsFavoriteRequestBody,
-        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
-    ) {
-
-        ifLet(session.id, session.accountId) {
-            api.postMarkAsFavorite(
-                sessionId = session.id!!,
-                accountId = session.accountId!!,
-                body = body
-            ).let { response ->
-                if (response.isSuccessful) {
-                    val isAddedToFavorites = body.favorite
-
-                    if (isAddedToFavorites)
-                        viewEvent.postValue(Event(DetailsViewEvent.AddedToFavorites()))
-                    else
-                        viewEvent.postValue(Event(DetailsViewEvent.RemovedFromFavorites()))
-                } else {
-                    val error = response.getErrorResponse().statusMessage
-                    viewEvent.postValue(Event(DetailsViewEvent.Error(error)))
-                }
-            }
-        }
-
-    }
-
-    suspend fun getIsTvShowFavorite(
-        showId: Int,
-        session: Session,
-        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
-    ) {
-        ifLet(session.id, session.accountId) {
-            api.getFavoriteTvShowList(
-                sessionId = session.id!!,
-                accountId = session.accountId!!
-            ).let { response ->
-                if (response.isSuccessful) {
-                    response.body()?.list?.forEach { show ->
-                        if (show.id!! == showId) {
-                            viewEvent.postValue(Event(DetailsViewEvent.IsLoadedAsFavorite))
-                            return
-                        }
-                    }
-                    viewEvent.postValue(Event(DetailsViewEvent.IsLoadedAsNotFavorite))
-                } else {
-                    viewEvent.postValue(
-                        Event(
-                            DetailsViewEvent.Error(
-                                "Error finding out if this is you favorite movie :("
-                            )
-                        )
-                    )
-                }
+                DetailsViewEvent.TrailersNotFetched
             }
         }
     }

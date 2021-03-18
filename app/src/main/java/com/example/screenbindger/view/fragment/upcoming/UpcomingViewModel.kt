@@ -9,6 +9,7 @@ import com.example.screenbindger.view.fragment.trending.TrendingFragmentDirectio
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class UpcomingViewModel
@@ -21,11 +22,17 @@ class UpcomingViewModel
     var currentPage: Int = 1
 
     fun fetchMovies() = viewModelScope.launch(IO) {
-        remoteDataSource.getUpcomingMovies(currentPage, viewState)
+        val newState = remoteDataSource.getUpcomingMovies(currentPage)
+        setState(newState)
     }
 
     fun fetchTvShows() = viewModelScope.launch(IO) {
-        remoteDataSource.getUpcomingTvShows(currentPage, viewState)
+        val newState = remoteDataSource.getUpcomingTvShows(currentPage)
+        setState(newState)
+    }
+
+    private fun setState(newState: UpcomingViewState) {
+        viewState.postValue(newState)
     }
 
     fun setAction(action: UpcomingViewAction) {

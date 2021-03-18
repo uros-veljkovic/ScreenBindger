@@ -13,6 +13,9 @@ import com.example.screenbindger.util.constants.API_KEY
 import com.example.screenbindger.util.constants.POSTER_SIZE_SMALL
 import com.example.screenbindger.util.dialog.SortBy
 import kotlinx.android.synthetic.main.item_movie_small.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SmallItemMovieRecyclerViewAdapter(
     val listener: OnCardItemClickListener,

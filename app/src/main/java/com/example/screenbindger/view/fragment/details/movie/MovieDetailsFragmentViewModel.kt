@@ -73,7 +73,7 @@ class MovieDetailsFragmentViewModel
     }
 
     fun markAsFavorite(isFavorite: Boolean, movieId: Int) {
-        viewModelScope.launch(IO){
+        viewModelScope.launch(IO) {
             MarkAsFavoriteRequestBody(mediaId = movieId, favorite = isFavorite).let { body ->
                 remoteDataSource.postMarkAsFavorite(body, viewEvent)
             }
@@ -82,8 +82,9 @@ class MovieDetailsFragmentViewModel
 
     fun fetchTrailers(movieId: Int) {
         viewModelScope.launch(IO) {
-            viewEvent.postValue(Event(DetailsViewEvent.Loading))
-            remoteDataSource.getMovieTrailersInfo(movieId, viewEvent)
+            setEvent(DetailsViewEvent.Loading)
+            val newEvent = remoteDataSource.getMovieTrailersInfo(movieId)
+            setEvent(newEvent)
         }
     }
 

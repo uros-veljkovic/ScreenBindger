@@ -61,32 +61,25 @@ class ScreenBindgerRemoteDataSource
     }
 
     suspend fun getTrendingMovies(
-        requestedPage: Int,
-        viewState: MutableLiveData<TrendingViewState>
-    ) {
-        movieService.getTrending(requestedPage, viewState)
-    }
+        requestedPage: Int
+    ): TrendingViewState = movieService.getTrending(requestedPage)
+
 
     suspend fun getTrendingTvShows(
-        requestedPage: Int,
-        viewState: MutableLiveData<TrendingViewState>
-    ) {
-        tvShowService.getTrending(requestedPage, viewState)
-    }
+        requestedPage: Int
+    ) = tvShowService.getTrending(requestedPage)
+
 
     suspend fun getUpcomingMovies(
-        requestedPage: Int,
-        viewState: MutableLiveData<UpcomingViewState>
-    ) {
-        movieService.getUpcoming(requestedPage, viewState)
+        requestedPage: Int
+    ): UpcomingViewState {
+        return movieService.getUpcoming(requestedPage)
     }
 
     suspend fun getUpcomingTvShows(
-        requestedPage: Int,
-        viewState: MutableLiveData<UpcomingViewState>
-    ) {
-        tvShowService.getUpcoming(requestedPage, viewState)
-    }
+        requestedPage: Int
+    ) = tvShowService.getUpcoming(requestedPage)
+
 
     suspend fun getGenres(): Response<AllGenresResponse> {
         return genreService.getAll()
@@ -213,18 +206,14 @@ class ScreenBindgerRemoteDataSource
     }
 
     suspend fun getMovieTrailersInfo(
-        movieId: Int,
-        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
-    ) {
-        movieService.getMovieTrailersInfo(movieId, viewEvent)
+        movieId: Int
+    ): DetailsViewEvent {
+        return movieService.getMovieTrailersInfo(movieId)
     }
 
     suspend fun getTvShowTrailers(
-        showId: Int,
-        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
-    ) {
-        tvShowService.getTvShowTrailers(showId, viewEvent)
-    }
+        showId: Int
+    ): DetailsViewEvent = tvShowService.getTvShowTrailers(showId)
 
 
 }

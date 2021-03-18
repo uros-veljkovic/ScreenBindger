@@ -12,6 +12,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ShowEntity : BaseObservable(), Item {
 
@@ -81,7 +82,7 @@ class ShowEntity : BaseObservable(), Item {
             notifyPropertyChanged(BR.genresString)
         }
 
-    fun generateGenreString() {
+    suspend fun generateGenreString() = withContext(Dispatchers.Default) {
         genres?.forEach { genre ->
             genresString += genre.name + ", "
         }
@@ -92,19 +93,18 @@ class ShowEntity : BaseObservable(), Item {
 
 }
 
-fun List<ShowEntity>.generateGenres() {
-    CoroutineScope(Dispatchers.Default).launch {
-        forEach { movie ->
-            movie.genreIds?.forEach { generId ->
-                Genres.list.forEach { concreteGenre ->
-                    if (concreteGenre.id == generId &&
-                        movie.genresString.contains(concreteGenre.name!!).not()
-                    ) {
-                        movie.genresString += "${concreteGenre.name}, "
-                    }
+fun List<ShowEntity>.generateGenres(): List<ShowEntity> {
+    forEach { movie ->
+        movie.genreIds?.forEach { genreId ->
+            Genres.list.forEach { concreteGenre ->
+                if (concreteGenre.id == genreId &&
+                    movie.genresString.contains(concreteGenre.name!!).not()
+                ) {
+                    movie.genresString += "${concreteGenre.name}, "
                 }
             }
-            movie.genresString = movie.genresString.dropLast(2)
         }
+        movie.genresString = movie.genresString.dropLast(2)
     }
+    return this
 }

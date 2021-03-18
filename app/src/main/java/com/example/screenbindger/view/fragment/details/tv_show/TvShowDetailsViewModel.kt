@@ -2,9 +2,7 @@ package com.example.screenbindger.view.fragment.details.tv_show
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.db.remote.response.movie.trailer.TrailerDetails
@@ -89,8 +87,9 @@ class TvShowDetailsViewModel
 
     fun fetchTrailers(showId: Int) {
         viewModelScope.launch(IO) {
-            viewEvent.postValue(Event(DetailsViewEvent.Loading))
-            remoteDataSource.getTvShowTrailers(showId, viewEvent)
+            setEvent(DetailsViewEvent.Loading)
+            val newEvent = remoteDataSource.getTvShowTrailers(showId)
+            setEvent(newEvent)
         }
     }
 

@@ -22,14 +22,20 @@ class TrendingViewModel
     var currentPage: Int = 1
 
     fun fetchMovies() = viewModelScope.launch(IO) {
-        remoteDataSource.getTrendingMovies(currentPage, viewState)
+        val newState = remoteDataSource.getTrendingMovies(currentPage)
+        setState(newState)
     }
 
     fun fetchTvShows() = viewModelScope.launch(IO) {
-        remoteDataSource.getTrendingTvShows(currentPage, viewState)
+        val newState = remoteDataSource.getTrendingTvShows(currentPage)
+        setState(newState)
     }
 
     fun getState(): TrendingViewState = viewState.value!!
+
+    private fun setState(state: TrendingViewState) {
+        viewState.postValue(state)
+    }
 
     fun setAction(action: TrendingViewAction) {
         viewAction.postValue(action)
