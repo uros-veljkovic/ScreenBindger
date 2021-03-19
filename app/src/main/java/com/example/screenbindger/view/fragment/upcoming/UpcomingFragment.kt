@@ -42,15 +42,19 @@ class UpcomingFragment : DaggerFragment(),
 
 
         val view = bind(inflater, container)
+        fetchMovies()
         initRecyclerView()
         initOnClickListeners()
         return view
     }
 
+    private fun fetchMovies() {
+        viewModel.executeAction(UpcomingViewAction.FetchMovies)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observeFragmentActions()
         observeFragmentState()
     }
 
@@ -75,42 +79,21 @@ class UpcomingFragment : DaggerFragment(),
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     if (tab!!.position == 0) {
-                        viewModel.setAction(UpcomingViewAction.FetchMovies)
+                        viewModel.executeAction(UpcomingViewAction.FetchMovies)
                     } else {
-                        viewModel.setAction(UpcomingViewAction.FetchTvShows)
+                        viewModel.executeAction(UpcomingViewAction.FetchTvShows)
                     }
                 }
 
             })
 
             btnNext.setOnClickListener {
-                viewModel.setAction(UpcomingViewAction.GotoNextPage)
+                viewModel.executeAction(UpcomingViewAction.GotoNextPage)
             }
 
             btnPrevious.setOnClickListener {
-                viewModel.setAction(UpcomingViewAction.GotoPreviousPage)
+                viewModel.executeAction(UpcomingViewAction.GotoPreviousPage)
             }
-        }
-    }
-
-    private fun observeFragmentActions() {
-        with(viewModel) {
-            viewAction.observe(viewLifecycleOwner, Observer { action ->
-                when (action) {
-                    is UpcomingViewAction.FetchMovies -> {
-                        fetchMovies()
-                    }
-                    is UpcomingViewAction.FetchTvShows -> {
-                        fetchTvShows()
-                    }
-                    is UpcomingViewAction.GotoNextPage -> {
-                        viewModel.nextPage()
-                    }
-                    is UpcomingViewAction.GotoPreviousPage -> {
-                        viewModel.previousPage()
-                    }
-                }
-            })
         }
     }
 
@@ -179,7 +162,7 @@ class UpcomingFragment : DaggerFragment(),
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.setAction(UpcomingViewAction.FetchMovies)
+        viewModel.executeAction(UpcomingViewAction.FetchMovies)
         _binding = null
     }
 

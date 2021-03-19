@@ -1,8 +1,6 @@
 package com.example.screenbindger.view.fragment.upcoming
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.navigation.NavDirections
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.view.fragment.trending.TrendingFragmentDirections
@@ -15,38 +13,42 @@ import javax.inject.Inject
 class UpcomingViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val viewState: MutableLiveData<UpcomingViewState>,
-    val viewAction: MutableLiveData<UpcomingViewAction>
+    val viewState: MutableLiveData<UpcomingViewState>
 ) : ViewModel() {
 
     var currentPage: Int = 1
 
-    fun fetchMovies() = viewModelScope.launch(IO) {
-        val newState = remoteDataSource.getUpcomingMovies(currentPage)
-        setState(newState)
+    fun executeAction(action: UpcomingViewAction) {
+        when (action) {
+            is UpcomingViewAction.FetchMovies -> {
+                fetchMovies()
+            }
+            is UpcomingViewAction.FetchTvShows -> {
+                fetchTvShows()
+            }
+            is UpcomingViewAction.GotoNextPage -> {
+                nextPage()
+            }
+            is UpcomingViewAction.GotoPreviousPage -> {
+                previousPage()
+            }
+        }
     }
 
-    fun fetchTvShows() = viewModelScope.launch(IO) {
-        val newState = remoteDataSource.getUpcomingTvShows(currentPage)
-        setState(newState)
+    private fun fetchMovies() = executeActionAndSetState {
+        remoteDataSource.getUpcomingMovies(currentPage)
     }
 
-    private fun setState(newState: UpcomingViewState) {
-        viewState.postValue(newState)
+    private fun fetchTvShows() = executeActionAndSetState {
+        remoteDataSource.getUpcomingTvShows(currentPage)
     }
 
-    fun setAction(action: UpcomingViewAction) {
-        viewAction.postValue(action)
-    }
-
-    fun getState(): UpcomingViewState = viewState.value!!
-
-    fun nextPage() {
+    private fun nextPage() {
         currentPage++
         fetchAccordingToState()
     }
 
-    fun previousPage() {
+    private fun previousPage() {
         currentPage--
         fetchAccordingToState()
     }
@@ -70,6 +72,13 @@ class UpcomingViewModel
             null
         }
     }
+
+    private fun executeActionAndSetState(actionReturningState: suspend () -> UpcomingViewState) =
+        viewModelScope.launch(IO) {
+            val newState = actionReturningState()
+            viewState.postValue(newState)
+        }
+
 
 }
 
