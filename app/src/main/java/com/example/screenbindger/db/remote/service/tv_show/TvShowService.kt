@@ -1,29 +1,24 @@
 package com.example.screenbindger.db.remote.service.tv_show
 
-import androidx.lifecycle.MutableLiveData
-import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
-import com.example.screenbindger.db.remote.session.Session
+import com.example.screenbindger.R
+import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.model.domain.movie.generateGenres
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
-import com.example.screenbindger.util.extensions.ifLet
-import com.example.screenbindger.view.fragment.details.DetailsViewEvent
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
-import com.example.screenbindger.view.fragment.details.ShowDetailsState
-import com.example.screenbindger.view.fragment.trending.TrendingViewState
-import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.example.screenbindger.view.fragment.FetchedTvShows
+import com.example.screenbindger.view.fragment.NotFetched
+import com.example.screenbindger.view.fragment.details.*
+import com.example.screenbindger.view.fragment.ShowListViewState
 import kotlinx.coroutines.Dispatchers.Default
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 import javax.inject.Inject
 
 class TvShowService @Inject constructor(
     private val api: TvShowApi
 ) {
-    // TODO : Test when network request fails
-    suspend fun getUpcoming(page: Int): UpcomingViewState {
+
+    suspend fun getUpcoming(page: Int): ShowListViewState {
         return try {
             api.getUpcoming(page = page).let { response ->
 
@@ -40,23 +35,23 @@ class TvShowService @Inject constructor(
                     val currentPage = body.page
                     val totalPages = body.totalPages
 
-                    UpcomingViewState.Fetched.TvShows(
+                    FetchedTvShows(
                         sortedListWithGeneratedGenres,
                         currentPage,
                         totalPages
                     )
                 } else {
                     val message = response.getErrorResponse().statusMessage
-                    UpcomingViewState.NotFetched(Event(message))
+                    NotFetched(Event(message))
                 }
             }
         } catch (e: Exception) {
-            UpcomingViewState.NotFetched(Event("Network request fail"))
+            NotFetched(Event("Network request fail"))
         }
     }
 
     // TODO: Implement handling request fail
-    suspend fun getTrending(page: Int): TrendingViewState {
+    suspend fun getTrending(page: Int): ShowListViewState {
         return try {
             api.getTrending(page = page).let { response ->
 
@@ -73,75 +68,66 @@ class TvShowService @Inject constructor(
                     val currentPage = body.page
                     val totalPages = body.totalPages
 
-                    TrendingViewState.Fetched.TvShows(
+                    FetchedTvShows(
                         sortedListWithGeneratedGenres,
                         currentPage,
                         totalPages
                     )
                 } else {
                     val message = response.getErrorResponse().statusMessage
-                    TrendingViewState.NotFetched(Event(message))
+                    NotFetched(Event(message))
                 }
             }
         } catch (e: Exception) {
-            TrendingViewState.NotFetched(Event(e.message!!))
+            NotFetched(Event(e.message!!))
         }
     }
 
     // TODO: Implement handling request fail
     suspend fun getDetails(
-        showId: Int,
-        viewState: DetailsFragmentViewState
-    ) {
-        api.getDetails(showId).also { response ->
-            if (response.isSuccessful) {
-                viewState.apply {
-                    show = response.body()
-                    CoroutineScope(Default).launch {
-                        show?.generateGenreString()
+        showId: Int
+    ): ShowViewState {
+        return try {
+            api.getDetails(showId).let { response ->
+                if (response.isSuccessful) {
+                    val showEntity = getShowEntityWithGenres(response)
+
+                    if (showEntity != null) {
+                        ShowViewState.Fetched(showEntity)
+                    } else {
+                        ShowViewState.NotFetched
                     }
-                }
 
-                val isCastsProcessedOrNotFetched =
-                    (viewState.currentState() is ShowDetailsState.CastsProcessed)
-                        .or(viewState.currentState() is ShowDetailsState.Error.CastsNotFetched)
-
-                if (isCastsProcessedOrNotFetched) {
-                    viewState.prepareForFinalState()
                 } else {
-                    viewState.setState(ShowDetailsState.ShowProcessed)
+                    ShowViewState.NotFetched
                 }
-            } else {
-                val message = response.getErrorResponse().statusMessage
-                viewState.setState(ShowDetailsState.Error.ShowNotFetched(message))
             }
+        } catch (e: Exception) {
+            ShowViewState.NotFetched
         }
     }
 
+    private suspend fun getShowEntityWithGenres(response: Response<ShowEntity>): ShowEntity? =
+        withContext(Default) {
+            response.body()?.apply { generateGenreString() }
+        }
+
     // TODO: Implement handling request fail
     suspend fun getCasts(
-        showId: Int,
-        viewState: DetailsFragmentViewState
-    ) {
-        api.getCasts(showId).also { response ->
-            if (response.isSuccessful) {
-                viewState.casts = response.body()?.casts
+        showId: Int
+    ): CastsViewState {
+        return try {
+            api.getCasts(showId).let { response ->
+                if (response.isSuccessful) {
+                    val list = response.body()?.casts
 
-                val movieProcessedOrNotFetched: Boolean =
-                    (viewState.currentState() is ShowDetailsState.ShowProcessed)
-                        .or(viewState.currentState() is ShowDetailsState.Error.ShowNotFetched)
-
-
-                if (movieProcessedOrNotFetched) {
-                    viewState.prepareForFinalState()
+                    CastsViewState.Fetched(list ?: emptyList())
                 } else {
-                    viewState.setState(ShowDetailsState.CastsProcessed)
+                    CastsViewState.NotFetched
                 }
-
-            } else {
-                val message = response.getErrorResponse().statusMessage
-                viewState.setState(ShowDetailsState.Error.CastsNotFetched(message))
             }
+        } catch (e: Exception) {
+            CastsViewState.NotFetched
         }
     }
 
@@ -151,12 +137,9 @@ class TvShowService @Inject constructor(
             if (response.isSuccessful) {
                 val list = response.body()?.list ?: emptyList()
                 if (list.isNotEmpty())
-                    DetailsViewEvent.TrailersFetched(list)
-                else
-                    DetailsViewEvent.TrailersNotFetched
-            } else {
-                DetailsViewEvent.TrailersNotFetched
+                    TrailersFetched(list)
             }
+            TrailersNotFetched(R.string.trailers_not_fetched)
         }
     }
 }

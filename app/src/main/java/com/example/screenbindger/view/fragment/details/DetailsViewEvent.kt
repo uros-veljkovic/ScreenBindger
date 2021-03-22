@@ -1,33 +1,28 @@
 package com.example.screenbindger.view.fragment.details
 
+import com.example.screenbindger.R
 import com.example.screenbindger.db.remote.response.movie.trailer.TrailerDetails
 
-sealed class DetailsViewEvent {
+sealed class DetailsViewEvent
+object Rest : DetailsViewEvent()
+object Loading : DetailsViewEvent()
 
-    object Rest : DetailsViewEvent()
+object MarkedAsFavorite : DetailsViewEvent()
+object MarkedAsNotFavorite : DetailsViewEvent()
 
-    object IsLoadedAsFavorite : DetailsViewEvent()
-    object IsLoadedAsNotFavorite : DetailsViewEvent()
-    object Loading : DetailsViewEvent()
+data class TrailersFetched(
+    val trailers: List<TrailerDetails>
+) : DetailsViewEvent()
 
-    data class AddedToFavorites(
-        val message: String = "Added to favorites :)"
-    ) : DetailsViewEvent()
+data class TrailersNotFetched(
+    val messageStringResId: Int = R.string.trailers_not_fetched
+) : DetailsViewEvent()
 
-    data class RemovedFromFavorites(
-        val message: String = "Removed from favorites."
-    ) : DetailsViewEvent()
+data class PosterSaved(val socialMediaRequestCode: Int) : DetailsViewEvent()
+data class PosterNotSaved(
+    val messageStringResId: Int = R.string.error_sharing_poster
+) : DetailsViewEvent()
 
-    data class TrailersFetched(
-        val trailers: List<TrailerDetails>
-    ) : DetailsViewEvent()
-
-    object TrailersNotFetched : DetailsViewEvent()
-
-    data class PosterSaved(val socialMediaRequestCode: Int) : DetailsViewEvent()
-    object PosterNotSaved : DetailsViewEvent()
-
-    data class Error(
-        val message: String
-    ) : DetailsViewEvent()
-}
+data class NetworkError(
+    val messageStringResId: Int
+) : DetailsViewEvent()

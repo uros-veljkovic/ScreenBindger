@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.screenbindger.view.fragment.details.movie.MovieDetailsFragmentViewModel" />
+            type="com.example.screenbindger.view.fragment.details.movie.MovieDetailsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,6 @@
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/normal_100"
             android:layout_marginBottom="@dimen/normal_100"
-            android:onClick="@{() -> viewModel.manageFavorite()}"
             android:backgroundTint="@color/defaultButtonColor"
             android:scaleType="center"
             android:src="@drawable/ic_favorite_24"

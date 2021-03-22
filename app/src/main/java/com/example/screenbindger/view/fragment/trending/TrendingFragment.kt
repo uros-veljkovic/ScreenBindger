@@ -18,6 +18,7 @@ import com.example.screenbindger.util.dialog.SortBy
 import com.example.screenbindger.util.dialog.SortDialog
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.*
+import com.example.screenbindger.view.fragment.*
 import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -42,16 +43,15 @@ class TrendingFragment : DaggerFragment(),
     ): View? {
 
         val view = bind(inflater, container)
+        fetchMovies()
         initRecyclerView()
         initOnClickListeners()
 
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        observeFragmentState()
+    private fun fetchMovies() {
+        viewModel.executeAction(FetchMovies)
     }
 
     private fun bind(inflater: LayoutInflater, container: ViewGroup?): View? {
@@ -73,27 +73,34 @@ class TrendingFragment : DaggerFragment(),
                 viewModel.tabSelected(position)
             }
             btnNext.setOnClickListener {
-                viewModel.executeAction(TrendingViewAction.GotoNextPage)
+                viewModel.executeAction(GotoNextPage)
             }
 
             btnPrevious.setOnClickListener {
-                viewModel.executeAction(TrendingViewAction.GotoPreviousPage)
+                viewModel.executeAction(GotoPreviousPage)
             }
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        observeFragmentState()
     }
 
     private fun observeFragmentState() {
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
-                is TrendingViewState.Fetching -> {
+                is Fetching -> {
                     showProgressBar()
                 }
-                is TrendingViewState.Fetched -> {
-                    hideProgressBar()
-                    configPaginationButtons(state.currentPage, state.totalPages)
-                    populateRecyclerView(state.list)
+                is FetchedMovies -> {
+                    updateUi(state.list, state.currentPage, state.totalPages)
                 }
-                is TrendingViewState.NotFetched -> {
+                is FetchedTvShows -> {
+                    updateUi(state.list, state.currentPage, state.totalPages)
+                }
+                is NotFetched -> {
                     hideProgressBar()
                     showMessage(state.message)
                 }
@@ -101,9 +108,15 @@ class TrendingFragment : DaggerFragment(),
         })
     }
 
+    private fun updateUi(list: List<ShowEntity>, currentPageNumber: Int, totalPages: Int) {
+        hideProgressBar()
+        configPaginationButtons(currentPageNumber, totalPages)
+        populateRecyclerView(list)
+    }
+
     private fun populateRecyclerView(list: List<ShowEntity>) {
         with(binding.rvTrending) {
-            if(adapter is SmallItemMovieRecyclerViewAdapter){
+            if (adapter is SmallItemMovieRecyclerViewAdapter) {
                 (adapter as SmallItemMovieRecyclerViewAdapter).setList(list)
             }
         }
@@ -148,7 +161,7 @@ class TrendingFragment : DaggerFragment(),
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.executeAction(TrendingViewAction.FetchMovies)
+        viewModel.executeAction(ResetState)
         _binding = null
     }
 

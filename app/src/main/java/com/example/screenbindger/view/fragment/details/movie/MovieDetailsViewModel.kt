@@ -1,8 +1,9 @@
-package com.example.screenbindger.view.fragment.details.tv_show
+package com.example.screenbindger.view.fragment.details.movie
 
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.*
+import com.example.screenbindger.R
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.db.remote.response.movie.trailer.TrailerDetails
@@ -15,7 +16,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class TvShowDetailsViewModel
+class MovieDetailsViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
     var showViewState: ShowViewState,
@@ -45,13 +46,13 @@ class TvShowDetailsViewModel
         this.movieId = movieId
         viewModelScope.launch(IO) {
             launch {
-                val newMovieViewState = remoteDataSource.getTvShowDetails(movieId)
-                this@TvShowDetailsViewModel.showViewState = newMovieViewState
+                val newMovieViewState = remoteDataSource.getMovieDetails(movieId)
+                this@MovieDetailsViewModel.showViewState = newMovieViewState
                 movieViewStateProcessed.postValue(true)
             }
             launch {
-                val newCastsViewState = remoteDataSource.getTvShowCasts(movieId)
-                this@TvShowDetailsViewModel.castsViewState = newCastsViewState
+                val newCastsViewState = remoteDataSource.getMovieCasts(movieId)
+                this@MovieDetailsViewModel.castsViewState = newCastsViewState
                 castsViewStateProcessed.postValue(true)
             }
             launch {
@@ -80,12 +81,7 @@ class TvShowDetailsViewModel
     private fun addOrRemoveFromFavorites() {
         viewModelScope.launch(IO) {
             isFavorite = isFavorite.reverse()
-            val requestBody =
-                MarkAsFavoriteRequestBody(
-                    mediaType = "tv_show",
-                    mediaId = movieId!!,
-                    favorite = isFavorite
-                )
+            val requestBody = MarkAsFavoriteRequestBody(mediaId = movieId!!, favorite = isFavorite)
             val newEvent = remoteDataSource.postMarkAsFavorite(requestBody)
 
             when (newEvent) {
@@ -129,7 +125,7 @@ class TvShowDetailsViewModel
             if (isSaved) {
                 viewEvent.postValue(Event(PosterSaved(socialMediaCode)))
             } else {
-                viewEvent.postValue(Event(PosterNotSaved()))
+                viewEvent.postValue(Event(PosterNotSaved(R.string.error_sharing_poster)))
             }
         }
     }

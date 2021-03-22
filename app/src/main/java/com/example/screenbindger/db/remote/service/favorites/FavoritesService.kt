@@ -1,13 +1,17 @@
 package com.example.screenbindger.db.remote.service.favorites
 
 import androidx.lifecycle.MutableLiveData
+import com.example.screenbindger.R
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.model.domain.movie.generateGenres
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
 import com.example.screenbindger.util.extensions.ifLet
+import com.example.screenbindger.view.fragment.details.NetworkError
 import com.example.screenbindger.view.fragment.details.DetailsViewEvent
+import com.example.screenbindger.view.fragment.details.MarkedAsFavorite
+import com.example.screenbindger.view.fragment.details.MarkedAsNotFavorite
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEvent
 import javax.inject.Inject
 
@@ -68,10 +72,9 @@ class FavoritesService
 
     suspend fun postMarkAsFavorite(
         session: Session,
-        body: MarkAsFavoriteRequestBody,
-        viewEffect: MutableLiveData<Event<DetailsViewEvent>>
-    ) {
-        ifLet(session.id, session.accountId) {
+        body: MarkAsFavoriteRequestBody
+    ): DetailsViewEvent {
+        return try {
             api.postMarkAsFavorite(
                 sessionId = session.id!!,
                 accountId = session.accountId!!,
@@ -79,23 +82,23 @@ class FavoritesService
             ).let {
                 if (it.isSuccessful) {
                     if (body.favorite)
-                        viewEffect.postValue(Event(DetailsViewEvent.AddedToFavorites()))
+                        MarkedAsFavorite
                     else
-                        viewEffect.postValue(Event(DetailsViewEvent.RemovedFromFavorites()))
+                        MarkedAsNotFavorite
                 } else {
-                    val error = it.getErrorResponse().statusMessage
-                    viewEffect.postValue(Event(DetailsViewEvent.Error(error)))
+                    NetworkError(R.string.error_post_as_favorite)
                 }
             }
+        } catch (e: Exception) {
+            NetworkError(R.string.network_error)
         }
     }
 
     suspend fun getPeekIsFavoriteMovie(
         showId: Int,
-        session: Session,
-        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
-    ) {
-        ifLet(session.id, session.accountId) {
+        session: Session
+    ): DetailsViewEvent {
+        return try {
             api.getFavoriteMovieList(
                 sessionId = session.id!!,
                 accountId = session.accountId!!
@@ -103,21 +106,16 @@ class FavoritesService
                 if (response.isSuccessful) {
                     response.body()?.list?.forEach { show ->
                         if (show.id!! == showId) {
-                            viewEvent.postValue(Event(DetailsViewEvent.IsLoadedAsFavorite))
-                            return
+                            MarkedAsFavorite
                         }
                     }
-                    viewEvent.postValue(Event(DetailsViewEvent.IsLoadedAsNotFavorite))
+                    MarkedAsNotFavorite
                 } else {
-                    viewEvent.postValue(
-                        Event(
-                            DetailsViewEvent.Error(
-                                "Error finding out if this is you favorite movie :("
-                            )
-                        )
-                    )
+                    NetworkError(R.string.error_peek_is_favorite)
                 }
             }
+        } catch (e: Exception) {
+            NetworkError(R.string.network_error)
         }
     }
 
@@ -134,18 +132,14 @@ class FavoritesService
                 if (response.isSuccessful) {
                     response.body()?.list?.forEach { show ->
                         if (show.id!! == showId) {
-                            viewEvent.postValue(Event(DetailsViewEvent.IsLoadedAsFavorite))
+                            viewEvent.postValue(Event(MarkedAsFavorite))
                             return
                         }
                     }
-                    viewEvent.postValue(Event(DetailsViewEvent.IsLoadedAsNotFavorite))
+                    viewEvent.postValue(Event(MarkedAsNotFavorite))
                 } else {
                     viewEvent.postValue(
-                        Event(
-                            DetailsViewEvent.Error(
-                                "Error finding out if this is you favorite movie :("
-                            )
-                        )
+                        Event(NetworkError(R.string.network_error))
                     )
                 }
             }

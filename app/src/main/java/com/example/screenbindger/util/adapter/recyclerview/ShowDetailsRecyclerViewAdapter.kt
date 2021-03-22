@@ -17,7 +17,6 @@ class ShowDetailsRecyclerViewAdapter(
     val list: MutableList<Item> = mutableListOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var containsMovieAndCast = false
     private lateinit var recyclerView: RecyclerView
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -86,6 +85,7 @@ class ShowDetailsRecyclerViewAdapter(
             addAll(items)
         }
         notifyDataSetChanged()
+        recyclerView.startLayoutAnimation()
     }
 
     fun hideTrailerIcon() {

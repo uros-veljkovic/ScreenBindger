@@ -15,6 +15,7 @@ import com.example.screenbindger.util.dialog.SortBy
 import com.example.screenbindger.util.dialog.SortDialog
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.*
+import com.example.screenbindger.view.fragment.*
 import com.google.android.material.tabs.TabLayout
 import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference
@@ -49,7 +50,7 @@ class UpcomingFragment : DaggerFragment(),
     }
 
     private fun fetchMovies() {
-        viewModel.executeAction(UpcomingViewAction.FetchMovies)
+        viewModel.executeAction(FetchMovies)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,20 +80,20 @@ class UpcomingFragment : DaggerFragment(),
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     if (tab!!.position == 0) {
-                        viewModel.executeAction(UpcomingViewAction.FetchMovies)
+                        viewModel.executeAction(FetchMovies)
                     } else {
-                        viewModel.executeAction(UpcomingViewAction.FetchTvShows)
+                        viewModel.executeAction(FetchTvShows)
                     }
                 }
 
             })
 
             btnNext.setOnClickListener {
-                viewModel.executeAction(UpcomingViewAction.GotoNextPage)
+                viewModel.executeAction(GotoNextPage)
             }
 
             btnPrevious.setOnClickListener {
-                viewModel.executeAction(UpcomingViewAction.GotoPreviousPage)
+                viewModel.executeAction(GotoPreviousPage)
             }
         }
     }
@@ -100,21 +101,28 @@ class UpcomingFragment : DaggerFragment(),
     private fun observeFragmentState() {
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
-                is UpcomingViewState.Fetching -> {
+                is Fetching -> {
                     showProgressBar()
                 }
-                is UpcomingViewState.Fetched -> {
-                    hideProgressBar()
-                    configPaginationButtons(state.currentPage, state.totalPages)
-                    populateRecyclerView(state.list)
+                is FetchedMovies -> {
+                    updateUi(state.list, state.currentPage, state.totalPages)
                 }
-                is UpcomingViewState.NotFetched -> {
+                is FetchedTvShows -> {
+                    updateUi(state.list, state.currentPage, state.totalPages)
+                }
+                is NotFetched -> {
                     hideProgressBar()
                     showMessage(state.message)
                 }
             }
         })
 
+    }
+
+    private fun updateUi(list: List<ShowEntity>, currentPage: Int, totalPages: Int) {
+        hideProgressBar()
+        configPaginationButtons(currentPage, totalPages)
+        populateRecyclerView(list)
     }
 
     private fun populateRecyclerView(list: List<ShowEntity>) {
@@ -162,7 +170,7 @@ class UpcomingFragment : DaggerFragment(),
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.executeAction(UpcomingViewAction.FetchMovies)
+        viewModel.executeAction(ResetState)
         _binding = null
     }
 

@@ -71,4 +71,11 @@
     <string name="page">Page</string>
     <string name="next">Next</string>
     <string name="prev">Prev</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="trailers_not_fetched">Unable to fetch trailer</string>
+    <string name="error_sharing_poster">Error sharing poster</string>
+    <string name="error_post_as_favorite">Unable to mark as favorite</string>
+    <string name="network_error">Network error</string>
+    <string name="error_peek_is_favorite">Couldn\'t see if this movie is your favorite</string>
+    <string name="could_not_load_trailer">Couldn\'t load trailer</string>
 </resources>

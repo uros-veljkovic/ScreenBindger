@@ -1,16 +1,17 @@
 package com.example.screenbindger.db.remote.service.movie
 
+import com.example.screenbindger.R
+import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.model.domain.movie.generateGenres
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
-import com.example.screenbindger.view.fragment.details.ShowDetailsState
-import com.example.screenbindger.view.fragment.details.DetailsViewEvent
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
-import com.example.screenbindger.view.fragment.trending.TrendingViewState
-import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
-import kotlinx.coroutines.CoroutineScope
+import com.example.screenbindger.view.fragment.FetchedMovies
+import com.example.screenbindger.view.fragment.NotFetched
+import com.example.screenbindger.view.fragment.details.*
+import com.example.screenbindger.view.fragment.ShowListViewState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Response
 import javax.inject.Inject
 
 //TODO: Implement network request handling
@@ -20,7 +21,7 @@ constructor(
     private val movieApi: MovieApi
 ) {
 
-    suspend fun getTrending(page: Int): TrendingViewState {
+    suspend fun getTrending(page: Int): ShowListViewState {
         return try {
 
             movieApi.getTrendingMovies(page).let { response ->
@@ -31,25 +32,24 @@ constructor(
                     val currentPage = body.page
 
                     val listWithGeneratedGenres = body.list.generateGenres()
-
-                    TrendingViewState.Fetched.Movies(
+                    FetchedMovies(
                         listWithGeneratedGenres,
                         currentPage,
                         totalPages
                     )
                 } else {
                     val message = response.getErrorResponse().statusMessage
-                    TrendingViewState.NotFetched(Event(message))
+                    NotFetched(Event(message))
                 }
             }
         } catch (e: Exception) {
-            TrendingViewState.NotFetched(Event("Network request failed"))
+            NotFetched(Event("Network request failed"))
         }
     }
 
     suspend fun getUpcoming(
         page: Int
-    ): UpcomingViewState {
+    ): ShowListViewState {
         return movieApi.getUpcomingMovies(page).let { response ->
             if (response.isSuccessful) {
                 val body = response.body()!!
@@ -59,66 +59,61 @@ constructor(
 
                 val list = body.list.generateGenres()
 
-                UpcomingViewState.Fetched.Movies(list, currentPage, totalPages)
+                FetchedMovies(
+                    list,
+                    currentPage,
+                    totalPages
+                )
             } else {
                 val message = response.getErrorResponse().statusMessage
-                UpcomingViewState.NotFetched(Event(message))
+                NotFetched(Event(message))
             }
         }
     }
 
     suspend fun getMovieDetails(
-        movieId: Int,
-        viewState: DetailsFragmentViewState
-    ) {
-        movieApi.getMovieDetails(movieId).also { response ->
-            if (response.isSuccessful) {
-                viewState.apply {
-                    show = response.body()
-                    CoroutineScope(Dispatchers.Default).launch {
-                        show?.generateGenreString()
+        movieId: Int
+    ): ShowViewState {
+        return try {
+            movieApi.getMovieDetails(movieId).let { response ->
+                if (response.isSuccessful) {
+                    val showEntity = getShowEntityWithGenres(response)
+
+                    if (showEntity != null) {
+                        ShowViewState.Fetched(showEntity)
+                    } else {
+                        ShowViewState.NotFetched
                     }
-                }
 
-                val isCastsProcessedOrNotFetched =
-                    (viewState.currentState() is ShowDetailsState.CastsProcessed)
-                        .or(viewState.currentState() is ShowDetailsState.Error.CastsNotFetched)
-
-                if (isCastsProcessedOrNotFetched) {
-                    viewState.prepareForFinalState()
                 } else {
-                    viewState.setState(ShowDetailsState.ShowProcessed)
+                    ShowViewState.NotFetched
                 }
-            } else {
-                val message = response.getErrorResponse().statusMessage
-                viewState.setState(ShowDetailsState.Error.ShowNotFetched(message))
             }
+        } catch (e: Exception) {
+            ShowViewState.NotFetched
         }
     }
 
+    private suspend fun getShowEntityWithGenres(response: Response<ShowEntity>): ShowEntity? =
+        withContext(Dispatchers.Default) {
+            response.body()?.apply { generateGenreString() }
+        }
+
     suspend fun getMovieCasts(
-        movieId: Int,
-        viewState: DetailsFragmentViewState
-    ) {
-        movieApi.getMovieCasts(movieId).also { response ->
-            if (response.isSuccessful) {
-                viewState.casts = response.body()?.casts
+        movieId: Int
+    ): CastsViewState {
+        return try {
+            movieApi.getMovieCasts(movieId).let { response ->
+                if (response.isSuccessful) {
+                    val list = response.body()?.casts
 
-                val movieProcessedOrNotFetched: Boolean =
-                    (viewState.currentState() is ShowDetailsState.ShowProcessed)
-                        .or(viewState.currentState() is ShowDetailsState.Error.ShowNotFetched)
-
-
-                if (movieProcessedOrNotFetched) {
-                    viewState.prepareForFinalState()
+                    CastsViewState.Fetched(list ?: emptyList())
                 } else {
-                    viewState.setState(ShowDetailsState.CastsProcessed)
+                    CastsViewState.NotFetched
                 }
-
-            } else {
-                val message = response.getErrorResponse().statusMessage
-                viewState.setState(ShowDetailsState.Error.CastsNotFetched(message))
             }
+        } catch (e: Exception) {
+            CastsViewState.NotFetched
         }
     }
 
@@ -129,13 +124,9 @@ constructor(
             if (response.isSuccessful) {
                 val list = response.body()?.list ?: emptyList()
                 if (list.isNotEmpty())
-                    DetailsViewEvent.TrailersFetched(list)
-                else
-                    DetailsViewEvent.TrailersNotFetched
-
-            } else {
-                DetailsViewEvent.TrailersNotFetched
+                    TrailersFetched(list)
             }
+            TrailersNotFetched(R.string.trailers_not_fetched)
         }
     }
 

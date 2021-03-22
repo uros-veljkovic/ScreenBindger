@@ -31,14 +31,13 @@ import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snackbar
 import com.example.screenbindger.util.image.ImageProvider
 import com.example.screenbindger.view.activity.main.MainActivity
-import com.example.screenbindger.view.fragment.details.DetailsViewAction
-import com.example.screenbindger.view.fragment.details.DetailsViewEvent
-import com.example.screenbindger.view.fragment.details.ShowDetailsState
+import com.example.screenbindger.view.fragment.details.*
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.Error
 
 class TvShowDetailsFragment : DaggerFragment(),
     ShowDetailsRecyclerViewAdapter.OnClickListener {
@@ -64,9 +63,10 @@ class TvShowDetailsFragment : DaggerFragment(),
         val view = bind(inflater, container)
 
         modifyToolbarForFragment()
+        initOnClickListeners()
         initRecyclerView()
         fetchData()
-        observeViewModelState()
+        observeViewState()
         return view
     }
 
@@ -80,6 +80,12 @@ class TvShowDetailsFragment : DaggerFragment(),
         (activity as MainActivity).modifyToolbarForFragment()
     }
 
+    private fun initOnClickListeners() {
+        binding.btnAddOrRemoveAsFavorite.setOnClickListener {
+            viewModel.setAction(AddOrRemoveFromFavorites)
+        }
+    }
+
     private fun initRecyclerView() {
         binding.rvMovieDetails.apply {
             adapter = ShowDetailsRecyclerViewAdapter(this@TvShowDetailsFragment)
@@ -91,35 +97,25 @@ class TvShowDetailsFragment : DaggerFragment(),
         viewModel.fetchData(showId)
     }
 
-    private fun observeViewModelState() {
-        viewModel.viewState.eventState.observe(viewLifecycleOwner, Observer {
-            it?.getContentIfNotHandled()?.let { state ->
-                when (state) {
-                    is ShowDetailsState.Fetching -> {
-                        showProgressBar()
-                    }
-                    is ShowDetailsState.FetchedAll -> {
-                        val movie = viewModel.viewState.show as Item
-                        val casts = viewModel.viewState.casts as List<Item>
-                        val list = mutableListOf<Item>().apply {
-                            add(movie)
-                            addAll(casts)
-                        }
-                        populateList(list)
-                        fetchTrailers()
-                    }
-                    is ShowDetailsState.Error -> {
-                        snackbar(state.message)
-                    }
-                    is ShowDetailsState.NoDataAvailable -> {
-                        snackbar("No data available", R.color.design_default_color_error)
-                    }
-                    else -> {
-                    }
-                }
-            }
+    private fun observeViewState() {
+        with(viewModel) {
+            dataProcessed.observe(viewLifecycleOwner, Observer { isProcessedData ->
+                if (isProcessedData) {
+                    val show: Item? = showViewState.getData()
 
-        })
+                    val casts: List<Item> = castsViewState.getData()
+
+                    val list = mutableListOf<Item>().apply {
+                        show?.let {
+                            add(show)
+                        }
+                        addAll(casts)
+                    }
+                    populateList(list)
+                    fetchTrailers()
+                }
+            })
+        }
     }
 
     private fun populateList(list: List<Item>) {
@@ -141,80 +137,53 @@ class TvShowDetailsFragment : DaggerFragment(),
     }
 
     private fun fetchTrailers() {
-        viewModel.setAction(DetailsViewAction.FetchTrailers)
+        viewModel.setAction(FetchTrailers)
     }
 
     override fun onResume() {
         super.onResume()
 
-        observeViewModelAction()
         observeViewModelEvents()
-    }
-
-    private fun observeViewModelAction() {
-        viewModel.viewAction.observe(viewLifecycleOwner, EventObserver { action ->
-            when (action) {
-                is DetailsViewAction.MarkAsFavorite -> {
-                    viewModel.markAsFavorite(true, action.id)
-                }
-                is DetailsViewAction.MarkAsNotFavorite -> {
-                    viewModel.markAsFavorite(false, action.id)
-                }
-                is DetailsViewAction.FetchTrailers -> {
-                    viewModel.fetchTrailers(showId)
-                }
-                is DetailsViewAction.WatchTrailer -> {
-                    showTrailer(viewModel.trailer)
-                }
-            }
-        })
     }
 
     private fun observeViewModelEvents() {
         viewModel.viewEvent.observe(viewLifecycleOwner, EventObserver { event ->
             when (event) {
-                is DetailsViewEvent.IsLoadedAsFavorite -> {
+                is MarkedAsFavorite -> {
                     hideProgressBar()
                     animateFabToFavorite()
                 }
-                is DetailsViewEvent.IsLoadedAsNotFavorite -> {
+                is MarkedAsNotFavorite -> {
                     hideProgressBar()
                     animateFabToNotFavorite()
                 }
-                is DetailsViewEvent.TrailersFetched -> {
+                is TrailersFetched -> {
                     hideProgressBar()
                     val firstVideo = event.trailers[0]
                     viewModel.trailer = firstVideo
                 }
-                is DetailsViewEvent.TrailersNotFetched -> {
+                is TrailersNotFetched -> {
                     hideProgressBar()
                     hideTrailerButton()
                 }
-                is DetailsViewEvent.AddedToFavorites -> {
+                is NetworkError -> {
                     hideProgressBar()
-                    snackbar(event.message, R.color.green)
-                    animateFabToFavorite()
+                    val message = getString(event.messageStringResId)
+                    snackbar(message)
                 }
-                is DetailsViewEvent.RemovedFromFavorites -> {
-                    hideProgressBar()
-                    animateFabToNotFavorite()
-                }
-                is DetailsViewEvent.Error -> {
-                    hideProgressBar()
-                    snackbar(event.message)
-                }
-                is DetailsViewEvent.Rest -> {
+                is Rest -> {
                     hideProgressBar()
                 }
-                is DetailsViewEvent.Loading -> {
+                is Loading -> {
                     showProgressBar()
                 }
-                is DetailsViewEvent.PosterSaved -> {
+                is PosterSaved -> {
                     val socialMediaCode = event.socialMediaRequestCode
                     pickImageForShare(socialMediaCode)
                 }
-                is DetailsViewEvent.PosterNotSaved -> {
-                    snackbar("not saved !", R.color.logout_red)
+                is PosterNotSaved -> {
+                    val message = getString(event.messageStringResId)
+                    snackbar(message, R.color.logout_red)
                 }
             }
         })
@@ -264,7 +233,7 @@ class TvShowDetailsFragment : DaggerFragment(),
             } catch (ex: ActivityNotFoundException) {
                 startActivity(webIntent)
             }
-        }?:viewModel.setEvent(DetailsViewEvent.Error("Error loading trailer"))
+        } ?: viewModel.setEvent(NetworkError(R.string.could_not_load_trailer))
     }
 
     private fun animateFabToFavorite() {
@@ -298,7 +267,6 @@ class TvShowDetailsFragment : DaggerFragment(),
     override fun onDestroyView() {
         super.onDestroyView()
 
-        viewModel.reset()
         modifyToolbarForActivity()
         animateFabToNotFavorite()
         _binding = null
@@ -309,7 +277,7 @@ class TvShowDetailsFragment : DaggerFragment(),
     }
 
     override fun onBtnWatchTrailer() {
-        viewModel.setAction(DetailsViewAction.WatchTrailer)
+        showTrailer(viewModel.trailer)
     }
 
     override fun onBtnShareToInstagram(movieEntity: ShowEntity) {
@@ -334,6 +302,7 @@ class TvShowDetailsFragment : DaggerFragment(),
             }
         }
     }
+
     private fun verifyPermissions(): Boolean {
 
         val isGrantedPermission =

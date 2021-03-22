@@ -7,7 +7,7 @@ import androidx.navigation.NavDirections
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.util.constants.POSITION_TAB_MOVIES
 import com.example.screenbindger.util.constants.POSITION_TAB_TV_SHOWS
-import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
+import com.example.screenbindger.view.fragment.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,28 +15,27 @@ import javax.inject.Inject
 class TrendingViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val viewState: MutableLiveData<TrendingViewState>
+    val viewState: MutableLiveData<ShowListViewState>
 ) : ViewModel() {
 
     var currentPage: Int = 1
 
-    init {
-        executeAction(TrendingViewAction.FetchMovies)
-    }
-
-    fun executeAction(action: TrendingViewAction) {
+    fun executeAction(action: ShowListViewAction) {
         when (action) {
-            TrendingViewAction.FetchMovies -> {
+            is FetchMovies -> {
                 fetchMovies()
             }
-            TrendingViewAction.FetchTvShows -> {
+            is FetchTvShows -> {
                 fetchTvShows()
             }
-            TrendingViewAction.GotoNextPage -> {
+            is GotoNextPage -> {
                 nextPage()
             }
-            TrendingViewAction.GotoPreviousPage -> {
+            is GotoPreviousPage -> {
                 previousPage()
+            }
+            is ResetState -> {
+                viewState.value = Fetching
             }
         }
     }
@@ -53,8 +52,8 @@ class TrendingViewModel
 
     private fun fetchBasedOnState() {
         when (viewState.value) {
-            is TrendingViewState.Fetched.Movies -> fetchMovies()
-            is TrendingViewState.Fetched.TvShows -> fetchTvShows()
+            is FetchedTvShows -> fetchMovies()
+            is FetchedMovies -> fetchTvShows()
             else -> return
         }
     }
@@ -69,10 +68,10 @@ class TrendingViewModel
 
 
     fun getDirection(showId: Int): NavDirections? = when (viewState.value) {
-        is TrendingViewState.Fetched.Movies -> {
+        is FetchedMovies -> {
             TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(showId)
         }
-        is TrendingViewState.Fetched.TvShows -> {
+        is FetchedTvShows -> {
             TrendingFragmentDirections.actionTrendingFragmentToTvShowDetailsFragment(showId)
         }
         else -> {
@@ -82,13 +81,13 @@ class TrendingViewModel
 
     fun tabSelected(position: Int) {
         when (position) {
-            POSITION_TAB_MOVIES -> executeAction(TrendingViewAction.FetchMovies)
-            POSITION_TAB_TV_SHOWS -> executeAction(TrendingViewAction.FetchTvShows)
+            POSITION_TAB_MOVIES -> executeAction(FetchMovies)
+            POSITION_TAB_TV_SHOWS -> executeAction(FetchTvShows)
         }
     }
 
 
-    private fun executeActionAndSetState(actionReturningState: suspend () -> TrendingViewState) =
+    private fun executeActionAndSetState(actionReturningState: suspend () -> ShowListViewState) =
         viewModelScope.launch(IO) {
             val newState = actionReturningState()
             viewState.postValue(newState)

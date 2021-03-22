@@ -5,7 +5,7 @@ import com.example.screenbindger.di.dagger.ViewModelKey
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewModel
 import com.example.screenbindger.view.fragment.genre_movies.GenreMoviesViewModel
 import com.example.screenbindger.view.fragment.genres.GenresViewModel
-import com.example.screenbindger.view.fragment.details.movie.MovieDetailsFragmentViewModel
+import com.example.screenbindger.view.fragment.details.movie.MovieDetailsViewModel
 import com.example.screenbindger.view.fragment.details.tv_show.TvShowDetailsViewModel
 import com.example.screenbindger.view.fragment.profile.ProfileViewModel
 import com.example.screenbindger.view.fragment.review.ReviewViewModel
@@ -31,8 +31,8 @@ abstract class MainViewModelsModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(MovieDetailsFragmentViewModel::class)
-    abstract fun bindMovieDetailsViewModel(viewModel: MovieDetailsFragmentViewModel): ViewModel
+    @ViewModelKey(MovieDetailsViewModel::class)
+    abstract fun bindMovieDetailsViewModel(viewModel: MovieDetailsViewModel): ViewModel
 
     @Binds
     @IntoMap

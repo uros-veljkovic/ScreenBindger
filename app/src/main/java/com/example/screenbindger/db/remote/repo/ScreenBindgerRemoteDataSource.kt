@@ -18,13 +18,11 @@ import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.db.remote.service.user.UserService
 import com.example.screenbindger.db.remote.session.Session
 import com.example.screenbindger.util.event.Event
+import com.example.screenbindger.view.fragment.details.*
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEvent
 import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
-import com.example.screenbindger.view.fragment.details.DetailsViewEvent
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import com.example.screenbindger.view.fragment.review.ReviewViewEvent
-import com.example.screenbindger.view.fragment.trending.TrendingViewState
-import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
+import com.example.screenbindger.view.fragment.ShowListViewState
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -60,58 +58,43 @@ class ScreenBindgerRemoteDataSource
         userService.create(userStateObservable)
     }
 
-    suspend fun getTrendingMovies(
-        requestedPage: Int
-    ): TrendingViewState = movieService.getTrending(requestedPage)
+    suspend fun getTrendingMovies(requestedPage: Int): ShowListViewState =
+        movieService.getTrending(requestedPage)
 
 
-    suspend fun getTrendingTvShows(
-        requestedPage: Int
-    ) = tvShowService.getTrending(requestedPage)
+    suspend fun getTrendingTvShows(requestedPage: Int): ShowListViewState =
+        tvShowService.getTrending(requestedPage)
 
 
-    suspend fun getUpcomingMovies(
-        requestedPage: Int
-    ): UpcomingViewState {
-        return movieService.getUpcoming(requestedPage)
-    }
+    suspend fun getUpcomingMovies(requestedPage: Int): ShowListViewState =
+        movieService.getUpcoming(requestedPage)
 
-    suspend fun getUpcomingTvShows(
-        requestedPage: Int
-    ) = tvShowService.getUpcoming(requestedPage)
+
+    suspend fun getUpcomingTvShows(requestedPage: Int): ShowListViewState =
+        tvShowService.getUpcoming(requestedPage)
 
 
     suspend fun getGenres(): Response<AllGenresResponse> {
         return genreService.getAll()
     }
 
-    suspend fun getMovieDetails(
-        showId: Int,
-        viewState: DetailsFragmentViewState
-    ) {
-        movieService.getMovieDetails(showId, viewState)
-    }
+    suspend fun getMovieDetails(showId: Int): ShowViewState =
+        movieService.getMovieDetails(showId)
 
-    suspend fun getMovieCasts(
-        showId: Int,
-        viewState: DetailsFragmentViewState
-    ) {
-        movieService.getMovieCasts(showId, viewState)
-    }
 
-    suspend fun getTvShowDetails(
-        showId: Int,
-        viewState: DetailsFragmentViewState
-    ) {
-        tvShowService.getDetails(showId, viewState)
-    }
+    suspend fun getMovieCasts(showId: Int): CastsViewState =
+        movieService.getMovieCasts(showId)
+
+
+    suspend fun getTvShowDetails(showId: Int): ShowViewState =
+        tvShowService.getDetails(showId)
+
 
     suspend fun getTvShowCasts(
-        showId: Int,
-        viewState: DetailsFragmentViewState
-    ) {
-        tvShowService.getCasts(showId, viewState)
-    }
+        showId: Int
+    ): CastsViewState =
+        tvShowService.getCasts(showId)
+
 
     suspend fun getMoviesByGenre(id: String): Response<MoviesResponse> {
         return genreService.getMoviesByGenre(id)
@@ -167,18 +150,16 @@ class ScreenBindgerRemoteDataSource
     }
 
     suspend fun postMarkAsFavorite(
-        requestBody: MarkAsFavoriteRequestBody,
-        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
-    ) {
-        favoritesService.postMarkAsFavorite(session, requestBody, viewEvent)
-    }
+        requestBody: MarkAsFavoriteRequestBody
+    ): DetailsViewEvent =
+        favoritesService.postMarkAsFavorite(session, requestBody)
+
 
     suspend fun getPeekIsFavoriteMovie(
-        movieId: Int,
-        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
-    ) {
-        favoritesService.getPeekIsFavoriteMovie(movieId, session, viewEvent)
-    }
+        movieId: Int
+    ): DetailsViewEvent =
+        favoritesService.getPeekIsFavoriteMovie(movieId, session)
+
 
     suspend fun getPeekIsFavoriteTvShow(
         showId: Int,

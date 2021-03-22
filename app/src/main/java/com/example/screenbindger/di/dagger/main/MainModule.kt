@@ -4,22 +4,19 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.model.domain.user.UserEntity
 import com.example.screenbindger.db.remote.service.user.UserStateObservable
+import com.example.screenbindger.model.domain.cast.CastEntity
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.event.Event
+import com.example.screenbindger.view.fragment.Fetching
+import com.example.screenbindger.view.fragment.details.*
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewAction
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEvent
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewState
-import com.example.screenbindger.view.fragment.details.DetailsViewAction
-import com.example.screenbindger.view.fragment.details.DetailsViewEvent
-import com.example.screenbindger.view.fragment.details.DetailsFragmentViewState
 import com.example.screenbindger.view.fragment.profile.FragmentStateObservable
 import com.example.screenbindger.view.fragment.review.ReviewViewAction
 import com.example.screenbindger.view.fragment.review.ReviewViewEvent
 import com.example.screenbindger.view.fragment.review.ReviewViewState
-import com.example.screenbindger.view.fragment.trending.TrendingViewAction
-import com.example.screenbindger.view.fragment.trending.TrendingViewState
-import com.example.screenbindger.view.fragment.upcoming.UpcomingViewAction
-import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
+import com.example.screenbindger.view.fragment.ShowListViewState
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
@@ -63,35 +60,32 @@ class MainModule {
 
     @MainScope
     @Provides
-    fun provideTrendingViewState(): MutableLiveData<TrendingViewState> =
-        MutableLiveData(TrendingViewState.Fetching)
+    fun provideUpcomingViewState(): MutableLiveData<ShowListViewState> =
+        MutableLiveData(Fetching)
 
-    @MainScope
-    @Provides
-    fun provideTrendingViewAction(): MutableLiveData<TrendingViewAction> =
-        MutableLiveData(TrendingViewAction.FetchMovies)
-
-
-    @MainScope
-    @Provides
-    fun provideUpcomingViewState(): MutableLiveData<UpcomingViewState> =
-        MutableLiveData(UpcomingViewState.Fetching)
-
-    @MainScope
-    @Provides
-    fun provideUpcomingViewAction(): MutableLiveData<UpcomingViewAction> =
-        MutableLiveData(UpcomingViewAction.FetchMovies)
-
-    @MainScope
-    @Provides
-    fun provideMovieDetailsViewState(): DetailsFragmentViewState {
-        return DetailsFragmentViewState()
-    }
 
     @MainScope
     @Provides
     fun provideMovieDetailsViewAction(): MutableLiveData<Event<DetailsViewAction>> {
         return MutableLiveData()
+    }
+
+    @MainScope
+    @Provides
+    fun provideShowViewState(): ShowViewState {
+        return ShowViewState.Fetching
+    }
+
+    @MainScope
+    @Provides
+    fun provideCastsViewState(): CastsViewState {
+        return CastsViewState.Fetching
+    }
+
+    @MainScope
+    @Provides
+    fun provideCastsList(): List<CastEntity> {
+        return listOf()
     }
 
     @MainScope

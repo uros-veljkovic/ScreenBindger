@@ -3,34 +3,35 @@ package com.example.screenbindger.view.fragment.upcoming
 import androidx.lifecycle.*
 import androidx.navigation.NavDirections
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
-import com.example.screenbindger.view.fragment.trending.TrendingFragmentDirections
-import kotlinx.coroutines.CoroutineScope
+import com.example.screenbindger.view.fragment.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class UpcomingViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val viewState: MutableLiveData<UpcomingViewState>
+    val viewState: MutableLiveData<ShowListViewState>
 ) : ViewModel() {
 
     var currentPage: Int = 1
 
-    fun executeAction(action: UpcomingViewAction) {
+    fun executeAction(action: ShowListViewAction) {
         when (action) {
-            is UpcomingViewAction.FetchMovies -> {
+            is FetchMovies -> {
                 fetchMovies()
             }
-            is UpcomingViewAction.FetchTvShows -> {
+            is FetchTvShows -> {
                 fetchTvShows()
             }
-            is UpcomingViewAction.GotoNextPage -> {
+            is GotoNextPage -> {
                 nextPage()
             }
-            is UpcomingViewAction.GotoPreviousPage -> {
+            is GotoPreviousPage -> {
                 previousPage()
+            }
+            is ResetState -> {
+                viewState.value = Fetching
             }
         }
     }
@@ -55,25 +56,25 @@ class UpcomingViewModel
 
     private fun fetchAccordingToState() {
         when (viewState.value) {
-            is UpcomingViewState.Fetched.Movies -> fetchTvShows()
-            is UpcomingViewState.Fetched.TvShows -> fetchMovies()
+            is FetchedTvShows -> fetchTvShows()
+            is FetchedMovies -> fetchMovies()
             else -> return
         }
     }
 
     fun getNavDirection(showId: Int): NavDirections? = when (viewState.value) {
-        is UpcomingViewState.Fetched.Movies -> {
-            TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(showId)
+        is FetchedMovies -> {
+            UpcomingFragmentDirections.actionUpcomingFragmentToMovieDetailsFragment(showId)
         }
-        is UpcomingViewState.Fetched.TvShows -> {
-            TrendingFragmentDirections.actionTrendingFragmentToTvShowDetailsFragment(showId)
+        is FetchedTvShows -> {
+            UpcomingFragmentDirections.actionUpcomingFragmentToTvShowDetailsFragment(showId)
         }
         else -> {
             null
         }
     }
 
-    private fun executeActionAndSetState(actionReturningState: suspend () -> UpcomingViewState) =
+    private fun executeActionAndSetState(actionReturningState: suspend () -> ShowListViewState) =
         viewModelScope.launch(IO) {
             val newState = actionReturningState()
             viewState.postValue(newState)
