@@ -7,7 +7,7 @@ import androidx.navigation.NavDirections
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.util.constants.POSITION_TAB_MOVIES
 import com.example.screenbindger.util.constants.POSITION_TAB_TV_SHOWS
-import kotlinx.coroutines.CoroutineScope
+import com.example.screenbindger.view.fragment.upcoming.UpcomingViewState
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,34 +15,43 @@ import javax.inject.Inject
 class TrendingViewModel
 @Inject constructor(
     val remoteDataSource: ScreenBindgerRemoteDataSource,
-    val viewState: MutableLiveData<TrendingViewState>,
-    val viewAction: MutableLiveData<TrendingViewAction>
+    val viewState: MutableLiveData<TrendingViewState>
 ) : ViewModel() {
 
     var currentPage: Int = 1
 
-    fun fetchMovies() = viewModelScope.launch(IO) {
-        val newState = remoteDataSource.getTrendingMovies(currentPage)
-        setState(newState)
+    init {
+        executeAction(TrendingViewAction.FetchMovies)
     }
 
-    fun fetchTvShows() = viewModelScope.launch(IO) {
-        val newState = remoteDataSource.getTrendingTvShows(currentPage)
-        setState(newState)
+    fun executeAction(action: TrendingViewAction) {
+        when (action) {
+            TrendingViewAction.FetchMovies -> {
+                fetchMovies()
+            }
+            TrendingViewAction.FetchTvShows -> {
+                fetchTvShows()
+            }
+            TrendingViewAction.GotoNextPage -> {
+                nextPage()
+            }
+            TrendingViewAction.GotoPreviousPage -> {
+                previousPage()
+            }
+        }
     }
 
-    fun getState(): TrendingViewState = viewState.value!!
-
-    private fun setState(state: TrendingViewState) {
-        viewState.postValue(state)
-    }
-
-    fun setAction(action: TrendingViewAction) {
-        viewAction.postValue(action)
-    }
-
-    fun nextPage() {
+    private fun nextPage() {
         currentPage++
+        fetchBasedOnState()
+    }
+
+    private fun previousPage() {
+        currentPage--
+        fetchBasedOnState()
+    }
+
+    private fun fetchBasedOnState() {
         when (viewState.value) {
             is TrendingViewState.Fetched.Movies -> fetchMovies()
             is TrendingViewState.Fetched.TvShows -> fetchTvShows()
@@ -50,14 +59,14 @@ class TrendingViewModel
         }
     }
 
-    fun previousPage() {
-        currentPage--
-        when (viewState.value) {
-            is TrendingViewState.Fetched.Movies -> fetchMovies()
-            is TrendingViewState.Fetched.TvShows -> fetchTvShows()
-            else -> return
-        }
+    private fun fetchMovies() = executeActionAndSetState {
+        remoteDataSource.getTrendingMovies(currentPage)
     }
+
+    private fun fetchTvShows() = executeActionAndSetState {
+        remoteDataSource.getTrendingTvShows(currentPage)
+    }
+
 
     fun getDirection(showId: Int): NavDirections? = when (viewState.value) {
         is TrendingViewState.Fetched.Movies -> {
@@ -73,9 +82,16 @@ class TrendingViewModel
 
     fun tabSelected(position: Int) {
         when (position) {
-            POSITION_TAB_MOVIES -> setAction(TrendingViewAction.FetchMovies)
-            POSITION_TAB_TV_SHOWS -> setAction(TrendingViewAction.FetchTvShows)
+            POSITION_TAB_MOVIES -> executeAction(TrendingViewAction.FetchMovies)
+            POSITION_TAB_TV_SHOWS -> executeAction(TrendingViewAction.FetchTvShows)
         }
     }
+
+
+    private fun executeActionAndSetState(actionReturningState: suspend () -> TrendingViewState) =
+        viewModelScope.launch(IO) {
+            val newState = actionReturningState()
+            viewState.postValue(newState)
+        }
 
 }

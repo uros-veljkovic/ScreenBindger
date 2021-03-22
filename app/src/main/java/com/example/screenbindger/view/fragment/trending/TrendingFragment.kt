@@ -51,7 +51,6 @@ class TrendingFragment : DaggerFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observeFragmentActions()
         observeFragmentState()
     }
 
@@ -74,33 +73,12 @@ class TrendingFragment : DaggerFragment(),
                 viewModel.tabSelected(position)
             }
             btnNext.setOnClickListener {
-                viewModel.setAction(TrendingViewAction.GotoNextPage)
+                viewModel.executeAction(TrendingViewAction.GotoNextPage)
             }
 
             btnPrevious.setOnClickListener {
-                viewModel.setAction(TrendingViewAction.GotoPreviousPage)
+                viewModel.executeAction(TrendingViewAction.GotoPreviousPage)
             }
-        }
-    }
-
-    private fun observeFragmentActions() {
-        with(viewModel) {
-            viewAction.observe(viewLifecycleOwner, Observer { action ->
-                when (action) {
-                    TrendingViewAction.FetchMovies -> {
-                        fetchMovies()
-                    }
-                    TrendingViewAction.FetchTvShows -> {
-                        fetchTvShows()
-                    }
-                    TrendingViewAction.GotoNextPage -> {
-                        viewModel.nextPage()
-                    }
-                    TrendingViewAction.GotoPreviousPage -> {
-                        viewModel.previousPage()
-                    }
-                }
-            })
         }
     }
 
@@ -125,7 +103,9 @@ class TrendingFragment : DaggerFragment(),
 
     private fun populateRecyclerView(list: List<ShowEntity>) {
         with(binding.rvTrending) {
-            (adapter as SmallItemMovieRecyclerViewAdapter).setList(list)
+            if(adapter is SmallItemMovieRecyclerViewAdapter){
+                (adapter as SmallItemMovieRecyclerViewAdapter).setList(list)
+            }
         }
     }
 
@@ -168,7 +148,7 @@ class TrendingFragment : DaggerFragment(),
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.setAction(TrendingViewAction.FetchMovies)
+        viewModel.executeAction(TrendingViewAction.FetchMovies)
         _binding = null
     }
 
