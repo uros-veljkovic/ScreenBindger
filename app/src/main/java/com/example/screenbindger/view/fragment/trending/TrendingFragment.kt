@@ -19,6 +19,7 @@ import com.example.screenbindger.util.dialog.SortDialog
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.*
 import com.example.screenbindger.view.fragment.*
+import com.example.screenbindger.view.fragment.details.CastsViewState
 import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -91,16 +92,18 @@ class TrendingFragment : DaggerFragment(),
     private fun observeFragmentState() {
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
-                is Fetching -> {
+                is ShowListViewState.Fetching -> {
                     showProgressBar()
                 }
-                is FetchedMovies -> {
+                is ShowListViewState.FetchedMovies -> {
+                    hideProgressBar()
                     updateUi(state.list, state.currentPage, state.totalPages)
                 }
-                is FetchedTvShows -> {
+                is ShowListViewState.FetchedTvShows -> {
+                    hideProgressBar()
                     updateUi(state.list, state.currentPage, state.totalPages)
                 }
-                is NotFetched -> {
+                is ShowListViewState.NotFetched -> {
                     hideProgressBar()
                     showMessage(state.message)
                 }

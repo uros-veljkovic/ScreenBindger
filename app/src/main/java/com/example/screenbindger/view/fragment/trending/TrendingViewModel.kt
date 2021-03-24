@@ -35,7 +35,7 @@ class TrendingViewModel
                 previousPage()
             }
             is ResetState -> {
-                viewState.value = Fetching
+                viewState.value = ShowListViewState.Fetching
             }
         }
     }
@@ -52,8 +52,8 @@ class TrendingViewModel
 
     private fun fetchBasedOnState() {
         when (viewState.value) {
-            is FetchedTvShows -> fetchMovies()
-            is FetchedMovies -> fetchTvShows()
+            is ShowListViewState.FetchedTvShows -> fetchMovies()
+            is ShowListViewState.FetchedMovies -> fetchTvShows()
             else -> return
         }
     }
@@ -68,10 +68,10 @@ class TrendingViewModel
 
 
     fun getDirection(showId: Int): NavDirections? = when (viewState.value) {
-        is FetchedMovies -> {
+        is ShowListViewState.FetchedMovies -> {
             TrendingFragmentDirections.actionTrendingFragmentToMovieDetailsFragment(showId)
         }
-        is FetchedTvShows -> {
+        is ShowListViewState.FetchedTvShows -> {
             TrendingFragmentDirections.actionTrendingFragmentToTvShowDetailsFragment(showId)
         }
         else -> {

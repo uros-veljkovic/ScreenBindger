@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.telecom.Call
 import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
@@ -31,6 +32,7 @@ import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snackbar
 import com.example.screenbindger.util.image.ImageProvider
 import com.example.screenbindger.view.activity.main.MainActivity
+import com.example.screenbindger.view.fragment.ShowListViewState
 import com.example.screenbindger.view.fragment.details.*
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.CoroutineScope
@@ -73,8 +75,8 @@ class MovieDetailsFragment : DaggerFragment(),
     fun observeViewState() {
         with(viewModel) {
             dataProcessed.observe(viewLifecycleOwner, Observer { isProcessedData ->
-                hideProgressBar()
                 if (isProcessedData) {
+                    hideProgressBar()
                     val show: Item? = showViewState.getData()
                     val casts: List<Item> = castsViewState.getData()
 
@@ -103,7 +105,7 @@ class MovieDetailsFragment : DaggerFragment(),
 
     private fun initOnClickListener() {
         binding.btnAddOrRemoveAsFavorite.setOnClickListener {
-            viewModel.setAction(AddOrRemoveFromFavorites)
+            viewModel.addOrRemoveFromFavorites()
         }
     }
 
@@ -127,10 +129,6 @@ class MovieDetailsFragment : DaggerFragment(),
         }
     }
 
-    private fun fetchTrailers() {
-        viewModel.setAction(FetchTrailers)
-    }
-
     private fun showProgressBar() {
         binding.progressBar.show()
     }
@@ -148,34 +146,34 @@ class MovieDetailsFragment : DaggerFragment(),
     private fun observeViewModelEvents() {
         viewModel.viewEvent.observe(viewLifecycleOwner, EventObserver { event ->
             when (event) {
-                is MarkedAsFavorite -> {
+                is DetailsViewEvent.MarkedAsFavorite -> {
                     animateFabToFavorite()
                 }
-                is MarkedAsNotFavorite -> {
+                is DetailsViewEvent.MarkedAsNotFavorite -> {
                     animateFabToNotFavorite()
                 }
-                is TrailersFetched -> {
+                is DetailsViewEvent.TrailersFetched -> {
                     val firstVideo = event.trailers[0]
                     viewModel.trailer = firstVideo
                 }
-                is TrailersNotFetched -> {
+                is DetailsViewEvent.TrailersNotFetched -> {
                     hideTrailerButton()
                 }
-                is NetworkError -> {
+                is DetailsViewEvent.NetworkError -> {
                     val message = getString(event.messageStringResId)
                     snackbar(message)
                 }
-                is Rest -> {
+                is DetailsViewEvent.Rest -> {
                     hideProgressBar()
                 }
-                is Loading -> {
+                is DetailsViewEvent.Loading -> {
                     showProgressBar()
                 }
-                is PosterSaved -> {
+                is DetailsViewEvent.PosterSaved -> {
                     val socialMediaCode = event.socialMediaRequestCode
                     pickImageForShare(socialMediaCode)
                 }
-                is PosterNotSaved -> {
+                is DetailsViewEvent.PosterNotSaved -> {
                     snackbar("not saved !", R.color.logout_red)
                 }
             }
@@ -228,7 +226,7 @@ class MovieDetailsFragment : DaggerFragment(),
             } catch (ex: ActivityNotFoundException) {
                 startActivity(webIntent)
             }
-        } ?: viewModel.setEvent(NetworkError(R.string.trailers_not_fetched))
+        } ?: viewModel.setEvent(DetailsViewEvent.NetworkError(R.string.trailers_not_fetched))
     }
 
     private fun animateFabToFavorite() {

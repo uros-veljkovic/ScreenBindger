@@ -31,7 +31,7 @@ class UpcomingViewModel
                 previousPage()
             }
             is ResetState -> {
-                viewState.value = Fetching
+                viewState.value = ShowListViewState.Fetching
             }
         }
     }
@@ -56,17 +56,17 @@ class UpcomingViewModel
 
     private fun fetchAccordingToState() {
         when (viewState.value) {
-            is FetchedTvShows -> fetchTvShows()
-            is FetchedMovies -> fetchMovies()
+            is ShowListViewState.FetchedTvShows -> fetchTvShows()
+            is ShowListViewState.FetchedMovies -> fetchMovies()
             else -> return
         }
     }
 
     fun getNavDirection(showId: Int): NavDirections? = when (viewState.value) {
-        is FetchedMovies -> {
+        is ShowListViewState.FetchedMovies -> {
             UpcomingFragmentDirections.actionUpcomingFragmentToMovieDetailsFragment(showId)
         }
-        is FetchedTvShows -> {
+        is ShowListViewState.FetchedTvShows -> {
             UpcomingFragmentDirections.actionUpcomingFragmentToTvShowDetailsFragment(showId)
         }
         else -> {

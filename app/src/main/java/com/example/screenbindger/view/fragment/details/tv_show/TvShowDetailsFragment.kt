@@ -31,6 +31,7 @@ import com.example.screenbindger.util.extensions.show
 import com.example.screenbindger.util.extensions.snackbar
 import com.example.screenbindger.util.image.ImageProvider
 import com.example.screenbindger.view.activity.main.MainActivity
+import com.example.screenbindger.view.fragment.ShowListViewState
 import com.example.screenbindger.view.fragment.details.*
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.CoroutineScope
@@ -82,7 +83,7 @@ class TvShowDetailsFragment : DaggerFragment(),
 
     private fun initOnClickListeners() {
         binding.btnAddOrRemoveAsFavorite.setOnClickListener {
-            viewModel.setAction(AddOrRemoveFromFavorites)
+            viewModel.addOrRemoveFromFavorites()
         }
     }
 
@@ -136,10 +137,6 @@ class TvShowDetailsFragment : DaggerFragment(),
         binding.progressBar.hide()
     }
 
-    private fun fetchTrailers() {
-        viewModel.setAction(FetchTrailers)
-    }
-
     override fun onResume() {
         super.onResume()
 
@@ -149,39 +146,39 @@ class TvShowDetailsFragment : DaggerFragment(),
     private fun observeViewModelEvents() {
         viewModel.viewEvent.observe(viewLifecycleOwner, EventObserver { event ->
             when (event) {
-                is MarkedAsFavorite -> {
+                is DetailsViewEvent.MarkedAsFavorite -> {
                     hideProgressBar()
                     animateFabToFavorite()
                 }
-                is MarkedAsNotFavorite -> {
+                is DetailsViewEvent.MarkedAsNotFavorite -> {
                     hideProgressBar()
                     animateFabToNotFavorite()
                 }
-                is TrailersFetched -> {
+                is DetailsViewEvent.TrailersFetched -> {
                     hideProgressBar()
                     val firstVideo = event.trailers[0]
                     viewModel.trailer = firstVideo
                 }
-                is TrailersNotFetched -> {
+                is DetailsViewEvent.TrailersNotFetched -> {
                     hideProgressBar()
                     hideTrailerButton()
                 }
-                is NetworkError -> {
+                is DetailsViewEvent.NetworkError -> {
                     hideProgressBar()
                     val message = getString(event.messageStringResId)
                     snackbar(message)
                 }
-                is Rest -> {
+                is DetailsViewEvent.Rest -> {
                     hideProgressBar()
                 }
-                is Loading -> {
+                is DetailsViewEvent.Loading -> {
                     showProgressBar()
                 }
-                is PosterSaved -> {
+                is DetailsViewEvent.PosterSaved -> {
                     val socialMediaCode = event.socialMediaRequestCode
                     pickImageForShare(socialMediaCode)
                 }
-                is PosterNotSaved -> {
+                is DetailsViewEvent.PosterNotSaved -> {
                     val message = getString(event.messageStringResId)
                     snackbar(message, R.color.logout_red)
                 }
@@ -233,7 +230,7 @@ class TvShowDetailsFragment : DaggerFragment(),
             } catch (ex: ActivityNotFoundException) {
                 startActivity(webIntent)
             }
-        } ?: viewModel.setEvent(NetworkError(R.string.could_not_load_trailer))
+        } ?: viewModel.setEvent(DetailsViewEvent.NetworkError(R.string.could_not_load_trailer))
     }
 
     private fun animateFabToFavorite() {

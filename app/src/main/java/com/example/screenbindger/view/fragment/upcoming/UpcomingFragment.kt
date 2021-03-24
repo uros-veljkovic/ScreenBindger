@@ -101,16 +101,18 @@ class UpcomingFragment : DaggerFragment(),
     private fun observeFragmentState() {
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
-                is Fetching -> {
+                is ShowListViewState.Fetching -> {
                     showProgressBar()
                 }
-                is FetchedMovies -> {
+                is ShowListViewState.FetchedMovies -> {
+                    hideProgressBar()
                     updateUi(state.list, state.currentPage, state.totalPages)
                 }
-                is FetchedTvShows -> {
+                is ShowListViewState.FetchedTvShows -> {
+                    hideProgressBar()
                     updateUi(state.list, state.currentPage, state.totalPages)
                 }
-                is NotFetched -> {
+                is ShowListViewState.NotFetched -> {
                     hideProgressBar()
                     showMessage(state.message)
                 }
