@@ -7,7 +7,6 @@ import com.example.screenbindger.db.remote.service.user.UserStateObservable
 import com.example.screenbindger.model.domain.cast.CastEntity
 import com.example.screenbindger.model.state.ObjectState
 import com.example.screenbindger.util.event.Event
-import com.example.screenbindger.view.fragment.Fetching
 import com.example.screenbindger.view.fragment.details.*
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewAction
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEvent
@@ -61,14 +60,8 @@ class MainModule {
     @MainScope
     @Provides
     fun provideUpcomingViewState(): MutableLiveData<ShowListViewState> =
-        MutableLiveData(Fetching)
+        MutableLiveData(ShowListViewState.Fetching)
 
-
-    @MainScope
-    @Provides
-    fun provideMovieDetailsViewAction(): MutableLiveData<Event<DetailsViewAction>> {
-        return MutableLiveData()
-    }
 
     @MainScope
     @Provides
