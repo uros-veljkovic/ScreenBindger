@@ -23,6 +23,8 @@ import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEven
 import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
 import com.example.screenbindger.view.fragment.review.ReviewViewEvent
 import com.example.screenbindger.view.fragment.ShowListViewState
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -43,47 +45,52 @@ class ScreenBindgerRemoteDataSource
     suspend fun login(
         user: UserEntity,
         authStateObservable: AuthorizationEventObservable
-    ) {
+    ) = withContext(IO) {
         authService.signIn(user.email, user.password, authStateObservable)
     }
 
     suspend fun register(
         user: UserEntity,
         authStateObservable: AuthorizationEventObservable
-    ) {
+    ) = withContext(IO) {
         authService.signUp(user.email, user.password, authStateObservable)
     }
 
-    suspend fun create(userStateObservable: UserStateObservable) {
+    suspend fun create(userStateObservable: UserStateObservable) = withContext(IO) {
         userService.create(userStateObservable)
     }
 
-    suspend fun getTrendingMovies(requestedPage: Int): ShowListViewState =
+    suspend fun getTrendingMovies(requestedPage: Int): ShowListViewState = withContext(IO) {
         movieService.getTrending(requestedPage)
-
-
-    suspend fun getTrendingTvShows(requestedPage: Int): ShowListViewState =
-        tvShowService.getTrending(requestedPage)
-
-
-    suspend fun getUpcomingMovies(requestedPage: Int): ShowListViewState =
-        movieService.getUpcoming(requestedPage)
-
-
-    suspend fun getUpcomingTvShows(requestedPage: Int): ShowListViewState =
-        tvShowService.getUpcoming(requestedPage)
-
-
-    suspend fun getGenres(): Response<AllGenresResponse> {
-        return genreService.getAll()
     }
 
-    suspend fun getMovieDetails(showId: Int): ShowViewState =
+
+    suspend fun getTrendingTvShows(requestedPage: Int): ShowListViewState = withContext(IO) {
+        tvShowService.getTrending(requestedPage)
+    }
+
+
+    suspend fun getUpcomingMovies(requestedPage: Int): ShowListViewState = withContext(IO) {
+        movieService.getUpcoming(requestedPage)
+    }
+
+
+    suspend fun getUpcomingTvShows(requestedPage: Int): ShowListViewState = withContext(IO) {
+        tvShowService.getUpcoming(requestedPage)
+    }
+
+    suspend fun getGenres(): Response<AllGenresResponse> = withContext(IO) {
+        genreService.getAll()
+    }
+
+    suspend fun getMovieDetails(showId: Int): ShowViewState = withContext(IO) {
         movieService.getMovieDetails(showId)
+    }
 
 
-    suspend fun getMovieCasts(showId: Int): CastsViewState =
+    suspend fun getMovieCasts(showId: Int): CastsViewState = withContext(IO) {
         movieService.getMovieCasts(showId)
+    }
 
 
     suspend fun getTvShowDetails(showId: Int): ShowViewState =
@@ -96,44 +103,49 @@ class ScreenBindgerRemoteDataSource
         tvShowService.getCasts(showId)
 
 
-    suspend fun getMoviesByGenre(id: String): Response<MoviesResponse> {
-        return genreService.getMoviesByGenre(id)
+    suspend fun getMoviesByGenre(id: String): Response<MoviesResponse> = withContext(IO) {
+        genreService.getMoviesByGenre(id)
     }
 
     suspend fun getRequestToken(
         authStateObservable: AuthorizationEventObservable
-    ) {
+    ) = withContext(IO) {
         tmdbAuthService.getRequestToken(authStateObservable)
     }
 
-    suspend fun createSession(authStateObservable: AuthorizationEventObservable) {
+    suspend fun createSession(
+        authStateObservable: AuthorizationEventObservable
+    ) = withContext(IO)
+    {
         tmdbAuthService.createSession(authStateObservable)
     }
 
-    suspend fun getAccountDetails(authStateObservable: AuthorizationEventObservable) {
+    suspend fun getAccountDetails(
+        authStateObservable: AuthorizationEventObservable
+    ) = withContext(IO) {
         tmdbAuthService.getAccountDetails(session, authStateObservable)
     }
 
     suspend fun changePassword(
         newPassword: String,
         userStateObservable: UserStateObservable
-    ) {
+    ) = withContext(IO) {
         authService.changePassword(newPassword, userStateObservable)
     }
 
-    suspend fun fetchUser(userStateObservable: UserStateObservable) {
+    suspend fun fetchUser(userStateObservable: UserStateObservable) = withContext(IO) {
         userService.read(userStateObservable)
     }
 
-    suspend fun updateUser(userStateObservable: UserStateObservable) {
+    suspend fun updateUser(userStateObservable: UserStateObservable) = withContext(IO) {
         userService.update(userStateObservable)
     }
 
-    suspend fun uploadImage(uri: Uri, userStateObservable: UserStateObservable) {
+    suspend fun uploadImage(uri: Uri, userStateObservable: UserStateObservable) = withContext(IO) {
         storageService.uploadImage(uri, userStateObservable)
     }
 
-    suspend fun fetchProfilePicture(userStateObservable: UserStateObservable) {
+    suspend fun fetchProfilePicture(userStateObservable: UserStateObservable) = withContext(IO) {
         storageService.downloadImage(userStateObservable)
     }
 
@@ -145,37 +157,31 @@ class ScreenBindgerRemoteDataSource
         }
     }
 
-    fun getDetails(): String {
-        return "SessionID: $session.id\n AccountID: ${session.accountId}"
-    }
-
     suspend fun postMarkAsFavorite(
         requestBody: MarkAsFavoriteRequestBody
-    ): DetailsViewEvent =
+    ): DetailsViewEvent = withContext(IO) {
         favoritesService.postMarkAsFavorite(session, requestBody)
-
-
-    suspend fun getPeekIsFavoriteMovie(
-        movieId: Int
-    ): DetailsViewEvent =
-        favoritesService.getPeekIsFavoriteMovie(movieId, session)
-
-
-    suspend fun getPeekIsFavoriteTvShow(
-        showId: Int,
-        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
-    ) {
-        favoritesService.getPeekIsFavoriteTvShow(showId, session, viewEvent)
     }
 
+
+    suspend fun getPeekIsFavoriteMovie(movieId: Int): DetailsViewEvent = withContext(IO) {
+        favoritesService.getPeekIsFavoriteMovie(movieId, session)
+    }
+
+
+    suspend fun getPeekIsFavoriteTvShow(showId: Int): DetailsViewEvent = withContext(IO) {
+        favoritesService.getPeekIsFavoriteTvShow(showId, session)
+    }
 
     suspend fun getFavoriteMovieList(
         viewEvent: MutableLiveData<Event<FavoritesViewEvent>>
-    ) {
+    ) = withContext(IO) {
         favoritesService.getFavoriteMovieList(session, viewEvent)
     }
 
-    suspend fun getFavoriteTvShowList(viewEvent: MutableLiveData<Event<FavoritesViewEvent>>) {
+    suspend fun getFavoriteTvShowList(
+        viewEvent: MutableLiveData<Event<FavoritesViewEvent>>
+    ) = withContext(IO) {
         favoritesService.getFavoriteTvShowList(session, viewEvent)
     }
 
@@ -186,15 +192,13 @@ class ScreenBindgerRemoteDataSource
         reviewService.getMovieReviews(movieId, viewEvent)
     }
 
-    suspend fun getMovieTrailersInfo(
-        movieId: Int
-    ): DetailsViewEvent {
-        return movieService.getMovieTrailersInfo(movieId)
+    suspend fun getMovieTrailersInfo(movieId: Int): DetailsViewEvent = withContext(IO) {
+        movieService.getMovieTrailersInfo(movieId)
     }
 
-    suspend fun getTvShowTrailers(
-        showId: Int
-    ): DetailsViewEvent = tvShowService.getTvShowTrailers(showId)
+    suspend fun getTvShowTrailers(showId: Int): DetailsViewEvent = withContext(IO) {
+        tvShowService.getTvShowTrailers(showId)
+    }
 
 
 }
