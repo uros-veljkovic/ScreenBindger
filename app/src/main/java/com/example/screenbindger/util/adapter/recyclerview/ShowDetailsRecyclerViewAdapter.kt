@@ -90,12 +90,12 @@ class ShowDetailsRecyclerViewAdapter(
 
     fun hideTrailerIcon() {
         val holder = recyclerView.findViewHolderForAdapterPosition(0)
-        holder as ShowDetailsRecyclerViewAdapter.MovieDetailsViewHolder
-
-        holder.binding.apply {
-            btnWatchTrailer.hide()
-            tvWatchTrailerPlaceholder.hide()
-            invalidateAll()
+        if (holder is ShowDetailsRecyclerViewAdapter.MovieDetailsViewHolder) {
+            holder.binding.apply {
+                btnWatchTrailer.hide()
+                tvWatchTrailerPlaceholder.hide()
+                invalidateAll()
+            }
         }
     }
 
