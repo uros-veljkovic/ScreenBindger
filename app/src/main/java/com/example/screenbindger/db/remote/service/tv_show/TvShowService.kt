@@ -5,8 +5,6 @@ import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.model.domain.movie.generateGenres
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
-import com.example.screenbindger.view.fragment.FetchedTvShows
-import com.example.screenbindger.view.fragment.NotFetched
 import com.example.screenbindger.view.fragment.details.*
 import com.example.screenbindger.view.fragment.ShowListViewState
 import kotlinx.coroutines.Dispatchers.Default
@@ -35,22 +33,21 @@ class TvShowService @Inject constructor(
                     val currentPage = body.page
                     val totalPages = body.totalPages
 
-                    FetchedTvShows(
+                    ShowListViewState.FetchedTvShows(
                         sortedListWithGeneratedGenres,
                         currentPage,
                         totalPages
                     )
                 } else {
                     val message = response.getErrorResponse().statusMessage
-                    NotFetched(Event(message))
+                    ShowListViewState.NotFetched(Event(message))
                 }
             }
         } catch (e: Exception) {
-            NotFetched(Event("Network request fail"))
+            ShowListViewState.NotFetched(Event("Network request fail"))
         }
     }
 
-    // TODO: Implement handling request fail
     suspend fun getTrending(page: Int): ShowListViewState {
         return try {
             api.getTrending(page = page).let { response ->
@@ -68,18 +65,18 @@ class TvShowService @Inject constructor(
                     val currentPage = body.page
                     val totalPages = body.totalPages
 
-                    FetchedTvShows(
+                    ShowListViewState.FetchedTvShows(
                         sortedListWithGeneratedGenres,
                         currentPage,
                         totalPages
                     )
                 } else {
                     val message = response.getErrorResponse().statusMessage
-                    NotFetched(Event(message))
+                    ShowListViewState.NotFetched(Event(message))
                 }
             }
         } catch (e: Exception) {
-            NotFetched(Event(e.message!!))
+            ShowListViewState.NotFetched(Event(e.message!!))
         }
     }
 
@@ -131,15 +128,20 @@ class TvShowService @Inject constructor(
         }
     }
 
-    // TODO: Implement handling request fail
     suspend fun getTvShowTrailers(tvShowId: Int): DetailsViewEvent {
-        return api.getTrailers(tvShowId).let { response ->
-            if (response.isSuccessful) {
-                val list = response.body()?.list ?: emptyList()
-                if (list.isNotEmpty())
-                    TrailersFetched(list)
+        return try {
+            api.getTrailers(tvShowId).let { response ->
+                if (response.isSuccessful) {
+                    val list = response.body()?.list ?: emptyList()
+                    if (list.isNotEmpty())
+                        DetailsViewEvent.TrailersFetched(list)
+                    else
+                        DetailsViewEvent.TrailersNotFetched(R.string.trailers_not_fetched)
+                } else
+                    DetailsViewEvent.TrailersNotFetched(R.string.trailers_not_fetched)
             }
-            TrailersNotFetched(R.string.trailers_not_fetched)
+        } catch (e: Exception) {
+            DetailsViewEvent.NetworkError(R.string.network_error)
         }
     }
 }

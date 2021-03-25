@@ -5,8 +5,6 @@ import com.example.screenbindger.model.domain.movie.ShowEntity
 import com.example.screenbindger.model.domain.movie.generateGenres
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
-import com.example.screenbindger.view.fragment.FetchedMovies
-import com.example.screenbindger.view.fragment.NotFetched
 import com.example.screenbindger.view.fragment.details.*
 import com.example.screenbindger.view.fragment.ShowListViewState
 import kotlinx.coroutines.Dispatchers
@@ -32,18 +30,18 @@ constructor(
                     val currentPage = body.page
 
                     val listWithGeneratedGenres = body.list.generateGenres()
-                    FetchedMovies(
+                    ShowListViewState.FetchedMovies(
                         listWithGeneratedGenres,
                         currentPage,
                         totalPages
                     )
                 } else {
                     val message = response.getErrorResponse().statusMessage
-                    NotFetched(Event(message))
+                    ShowListViewState.NotFetched(Event(message))
                 }
             }
         } catch (e: Exception) {
-            NotFetched(Event("Network request failed"))
+            ShowListViewState.NotFetched(Event("Network request failed"))
         }
     }
 
@@ -59,14 +57,14 @@ constructor(
 
                 val list = body.list.generateGenres()
 
-                FetchedMovies(
+                ShowListViewState.FetchedMovies(
                     list,
                     currentPage,
                     totalPages
                 )
             } else {
                 val message = response.getErrorResponse().statusMessage
-                NotFetched(Event(message))
+                ShowListViewState.NotFetched(Event(message))
             }
         }
     }
@@ -124,9 +122,11 @@ constructor(
             if (response.isSuccessful) {
                 val list = response.body()?.list ?: emptyList()
                 if (list.isNotEmpty())
-                    TrailersFetched(list)
-            }
-            TrailersNotFetched(R.string.trailers_not_fetched)
+                    DetailsViewEvent.TrailersFetched(list)
+                else
+                    DetailsViewEvent.TrailersNotFetched(R.string.trailers_not_fetched)
+            } else
+                DetailsViewEvent.NetworkError(R.string.network_error)
         }
     }
 

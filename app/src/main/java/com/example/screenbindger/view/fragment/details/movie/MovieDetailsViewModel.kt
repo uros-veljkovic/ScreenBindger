@@ -44,69 +44,77 @@ class MovieDetailsViewModel
 
     fun fetchData(movieId: Int) {
         this.movieId = movieId
-        viewModelScope.launch(IO) {
+        viewModelScope.launch {
             launch {
-                val newMovieViewState = remoteDataSource.getMovieDetails(movieId)
-                this@MovieDetailsViewModel.showViewState = newMovieViewState
-                movieViewStateProcessed.postValue(true)
+                fetchMovieDetails()
             }
             launch {
-                val newCastsViewState = remoteDataSource.getMovieCasts(movieId)
-                this@MovieDetailsViewModel.castsViewState = newCastsViewState
-                castsViewStateProcessed.postValue(true)
+                fetchCastsDetails()
             }
             launch {
-                val newEvent = remoteDataSource.getPeekIsFavoriteMovie(movieId)
-                viewEvent.postValue(Event(newEvent))
-
-                isFavorite = when (newEvent) {
-                    is MarkedAsFavorite -> true
-                    else -> false
-                }
+                fetchTrailers()
+            }
+            launch {
+                peakIsFavorite()
             }
         }
     }
 
-    fun setAction(action: DetailsViewAction) {
-        when (action) {
-            is FetchTrailers -> fetchTrailers()
-            is AddOrRemoveFromFavorites -> addOrRemoveFromFavorites()
+    private suspend fun peakIsFavorite() {
+        val newEvent = remoteDataSource.getPeekIsFavoriteMovie(movieId!!)
+        setEvent(newEvent)
+
+        isFavorite = when (newEvent) {
+            is DetailsViewEvent.MarkedAsFavorite -> true
+            else -> false
         }
+    }
+
+    private suspend fun fetchCastsDetails() {
+        val newCastsViewState = remoteDataSource.getMovieCasts(movieId!!)
+        this.castsViewState = newCastsViewState
+        castsViewStateProcessed.postValue(true)
+    }
+
+    private suspend fun fetchMovieDetails() {
+        val newMovieViewState = remoteDataSource.getMovieDetails(movieId!!)
+        this.showViewState = newMovieViewState
+        movieViewStateProcessed.postValue(true)
     }
 
     fun setEvent(event: DetailsViewEvent) {
         viewEvent.postValue(Event(event))
     }
 
-    private fun addOrRemoveFromFavorites() {
-        viewModelScope.launch(IO) {
+    fun addOrRemoveFromFavorites() {
+        viewModelScope.launch {
             isFavorite = isFavorite.reverse()
             val requestBody = MarkAsFavoriteRequestBody(mediaId = movieId!!, favorite = isFavorite)
             val newEvent = remoteDataSource.postMarkAsFavorite(requestBody)
 
             when (newEvent) {
-                is MarkedAsFavorite -> {
+                is DetailsViewEvent.MarkedAsFavorite -> {
                     isFavorite = true
                 }
-                is MarkedAsNotFavorite -> {
+                is DetailsViewEvent.MarkedAsNotFavorite -> {
                     isFavorite = false
                 }
                 else -> {
                 }
             }
+            setEvent(newEvent)
         }
     }
 
     fun fetchTrailers() {
-        viewModelScope.launch(IO) {
-            setEvent(Loading)
+        viewModelScope.launch {
             val newEvent = remoteDataSource.getMovieTrailersInfo(movieId!!)
             setEvent(newEvent)
         }
     }
 
     fun saveToGalleryForInstagram(bitmap: Bitmap, context: Context, folderName: String) {
-        viewEvent.postValue(Event(Loading))
+        viewEvent.postValue(Event(DetailsViewEvent.Loading))
         saveToGallery(
             INTENT_REQUEST_CODE_INSTAGRAM,
             bitmap,
@@ -123,9 +131,9 @@ class MovieDetailsViewModel
     ) {
         galleryManager.saveImage(bitmap, context, folderName).let { isSaved ->
             if (isSaved) {
-                viewEvent.postValue(Event(PosterSaved(socialMediaCode)))
+                viewEvent.postValue(Event(DetailsViewEvent.PosterSaved(socialMediaCode)))
             } else {
-                viewEvent.postValue(Event(PosterNotSaved(R.string.error_sharing_poster)))
+                viewEvent.postValue(Event(DetailsViewEvent.PosterNotSaved(R.string.error_sharing_poster)))
             }
         }
     }

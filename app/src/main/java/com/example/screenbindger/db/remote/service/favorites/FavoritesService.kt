@@ -8,10 +8,7 @@ import com.example.screenbindger.model.domain.movie.generateGenres
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
 import com.example.screenbindger.util.extensions.ifLet
-import com.example.screenbindger.view.fragment.details.NetworkError
 import com.example.screenbindger.view.fragment.details.DetailsViewEvent
-import com.example.screenbindger.view.fragment.details.MarkedAsFavorite
-import com.example.screenbindger.view.fragment.details.MarkedAsNotFavorite
 import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEvent
 import javax.inject.Inject
 
@@ -79,18 +76,19 @@ class FavoritesService
                 sessionId = session.id!!,
                 accountId = session.accountId!!,
                 body = body
-            ).let {
-                if (it.isSuccessful) {
+            ).let {response ->
+                if (response.isSuccessful) {
                     if (body.favorite)
-                        MarkedAsFavorite
+                        DetailsViewEvent.MarkedAsFavorite
                     else
-                        MarkedAsNotFavorite
+                        DetailsViewEvent.MarkedAsNotFavorite
                 } else {
-                    NetworkError(R.string.error_post_as_favorite)
+                    val message = response.getErrorResponse().statusMessage
+                    DetailsViewEvent.NetworkError(R.string.error_post_as_favorite)
                 }
             }
         } catch (e: Exception) {
-            NetworkError(R.string.network_error)
+            DetailsViewEvent.NetworkError(R.string.network_error)
         }
     }
 
@@ -106,43 +104,42 @@ class FavoritesService
                 if (response.isSuccessful) {
                     response.body()?.list?.forEach { show ->
                         if (show.id!! == showId) {
-                            MarkedAsFavorite
+                            DetailsViewEvent.MarkedAsFavorite
                         }
                     }
-                    MarkedAsNotFavorite
+                    DetailsViewEvent.MarkedAsNotFavorite
                 } else {
-                    NetworkError(R.string.error_peek_is_favorite)
+                    DetailsViewEvent.NetworkError(R.string.error_peek_is_favorite)
                 }
             }
         } catch (e: Exception) {
-            NetworkError(R.string.network_error)
+            DetailsViewEvent.NetworkError(R.string.network_error)
         }
     }
 
     suspend fun getPeekIsFavoriteTvShow(
         showId: Int,
-        session: Session,
-        viewEvent: MutableLiveData<Event<DetailsViewEvent>>
-    ) {
-        ifLet(session.id, session.accountId) {
+        session: Session
+    ): DetailsViewEvent {
+        return try {
             api.getFavoriteTvShowList(
                 sessionId = session.id!!,
                 accountId = session.accountId!!
             ).let { response ->
+                val favoriteShowList = response.body()?.list ?: emptyList()
                 if (response.isSuccessful) {
-                    response.body()?.list?.forEach { show ->
+                    favoriteShowList.forEach { show ->
                         if (show.id!! == showId) {
-                            viewEvent.postValue(Event(MarkedAsFavorite))
-                            return
+                            return@let DetailsViewEvent.MarkedAsFavorite
                         }
                     }
-                    viewEvent.postValue(Event(MarkedAsNotFavorite))
+                    return@let DetailsViewEvent.MarkedAsNotFavorite
                 } else {
-                    viewEvent.postValue(
-                        Event(NetworkError(R.string.network_error))
-                    )
+                    return@let DetailsViewEvent.NetworkError(R.string.network_error)
                 }
             }
+        } catch (e: Exception) {
+            return DetailsViewEvent.NetworkError(R.string.network_error)
         }
     }
 }

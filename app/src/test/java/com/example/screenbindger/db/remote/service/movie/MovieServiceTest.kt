@@ -41,7 +41,7 @@ class MovieServiceTest {
 
         val viewState: ShowListViewState = movieService.getUpcoming(MOVIE_ID)
 
-        assertThat(viewState, instanceOf(ShowListViewState.Fetched.Movies::class.java))
+        assertThat(viewState, instanceOf(ShowListViewState.FetchedMovies::class.java))
     }
 
     @Test
@@ -50,7 +50,7 @@ class MovieServiceTest {
 
         val viewState = movieService.getUpcoming(MOVIE_ID)
 
-        assertThat(viewState, instanceOf(ShowListViewState.Fetched.Movies::class.java))
+        assertThat(viewState, instanceOf(ShowListViewState.FetchedMovies::class.java))
     }
 
     @Test

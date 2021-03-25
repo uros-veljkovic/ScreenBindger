@@ -23,13 +23,13 @@ class FavoritesViewModel
     }
 
     fun fetchFavoriteMovies() {
-        viewModelScope.launch(IO) {
+        viewModelScope.launch {
             remoteDataSource.getFavoriteMovieList(viewEvent)
         }
     }
 
     fun fetchFavoriteTvShows() {
-        CoroutineScope(IO).launch {
+        viewModelScope.launch {
             remoteDataSource.getFavoriteTvShowList(viewEvent)
         }
     }
