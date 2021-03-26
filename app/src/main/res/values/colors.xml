@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--?xml version="1.0" encoding="UTF-8"?-->
-    <color name="primaryColor">#dadada</color>
-    <color name="primaryLightColor">#ffffff</color>
-    <color name="primaryDarkColor">#a8a8a8</color>
+    <color name="primaryColor">#ffca28</color>
+    <color name="primaryLightColor">#fffd61</color>
+    <color name="primaryDarkColor">#c79a00</color>
     <color name="primaryTextColor">#000000</color>
-    <color name="secondaryColor">#e50913</color>
-    <color name="secondaryLightColor">#ff573f</color>
-    <color name="secondaryDarkColor">#aa0000</color>
+
+    <color name="secondaryColor">#d50000</color>
+    <color name="secondaryLightColor">#ff5131</color>
+    <color name="secondaryDarkColor">#9b0000</color>
     <color name="secondaryTextColor">#ffffff</color>
 
-    <color name="defaultBackground">#e5e5e5</color>
-    <color name="defaultButtonColor">#3c3c3c</color>
     <color name="defaultCircularImageViewBackground">#797979</color>
-    <color name="text_input_layout_box_stroke_color">#8a8a8a</color>
 
     <color name="yellow">#ffea00</color>
     <color name="orange">#F4B400</color>
