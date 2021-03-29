@@ -13,14 +13,9 @@
             type="com.example.screenbindger.model.domain.cast.CastEntity" />
     </data>
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/defaultBackground">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/ivCastImage"
@@ -63,6 +58,5 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvCastMovieName"
                 tools:text="@string/real_name_placeholder" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
 
 </layout>

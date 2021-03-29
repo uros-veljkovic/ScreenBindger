@@ -10,7 +10,7 @@
             type="com.example.screenbindger.model.domain.movie.ShowEntity" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="@dimen/small_100"
@@ -65,16 +65,14 @@
 
                 <TextView
                     android:id="@+id/tvMovieTitle"
-                    style="@style/TextAppearance.MaterialComponents.Headline4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/normal_100"
                     android:layout_marginTop="@dimen/small_100"
-                    android:fontFamily="@font/cardo"
                     android:text="@{movie.title}"
                     android:textAlignment="textStart"
                     android:textIsSelectable="true"
-                    app:fontFamily="@font/cardo"
+                    android:textSize="36sp"
                     app:layout_constraintEnd_toStartOf="@id/pbRating"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ivMoviePoster"
@@ -89,7 +87,6 @@
                     android:text="@{movie.genresString}"
                     android:textIsSelectable="true"
                     android:textSize="18sp"
-                    app:fontFamily="@font/cardo"
                     app:layout_constraintEnd_toStartOf="@id/pbRating"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvMovieTitle"
@@ -133,5 +130,5 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

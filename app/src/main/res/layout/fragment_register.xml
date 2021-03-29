@@ -30,38 +30,26 @@
             android:id="@+id/ivScreenBindger"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:src="@mipmap/ic_launcher"
-            app:layout_constraintBottom_toTopOf="@+id/tvScreenBindgerText"
+            android:layout_marginBottom="@dimen/large_100"
+            android:src="@drawable/ic_screen_bindger"
+            app:layout_constraintBottom_toTopOf="@+id/tilUserFullName"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <TextView
-            android:id="@+id/tvScreenBindgerText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/normal_100"
-            android:text="Screen Bindger"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
-            app:layout_constraintBottom_toTopOf="@id/tilUserFullName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivScreenBindger" />
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilUserFullName"
             style="@style/Widget.ScreenBindger.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/full_name_required_placeholder"
+            android:hint="@string/full_name_placeholder"
             app:layout_constraintBottom_toTopOf="@+id/tilUserEmail"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvScreenBindgerText"
+            app:layout_constraintTop_toBottomOf="@+id/ivScreenBindger"
             app:startIconDrawable="@drawable/ic_profile_filled_black_24">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -78,7 +66,7 @@
             style="@style/Widget.ScreenBindger.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/email_required_placeholder"
+            android:hint="@string/email_placeholder"
             app:layout_constraintBottom_toTopOf="@+id/tilUserPassword"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -100,7 +88,7 @@
             style="@style/Widget.ScreenBindger.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password_required_placeholder"
+            android:hint="@string/password_placeholder"
             app:layout_constraintBottom_toTopOf="@+id/tilUserDateOfBirth"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -142,7 +130,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegister"
-            style="@style/Widget.ScreenBindger.Button.Outlined"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/large_100"

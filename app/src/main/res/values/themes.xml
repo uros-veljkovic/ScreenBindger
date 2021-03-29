@@ -15,8 +15,9 @@
         <item name="textInputStyle">@style/Widget.ScreenBindger.TextInputLayout</item>
         <item name="fontFamily">@font/fjord_one</item>
         <item name="android:fontFamily">@font/fjord_one</item>
-        <item name="extendedFloatingActionButtonStyle">
-            @style/Widget.MaterialComponents.ExtendedFloatingActionButton
+
+        <item name="floatingActionButtonStyle">
+            @style/Widget.ScreenBindger.FloatingActionButton
         </item>
 
 
@@ -28,26 +29,17 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <!-- Hint text style-->
-    <style name="TextAppearance.ScreenBindger.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="android:textColor">@color/primaryDarkColor</item>
-    </style>
-
-    <!-- Widget shape appearance 'NoCut'-->
-    <style name="Widget.ScreenBindger.ShapeAppearance.NoCut" parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-        <item name="cornerSizeTopRight">0dp</item>
-        <item name="cornerSizeTopLeft">0dp</item>
-    </style>
-
     <!-- TextInputLayout styling-->
     <style name="Widget.ScreenBindger.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_marginHorizontal" tools:targetApi="o">@dimen/large_125</item>
         <item name="android:paddingBottom">@dimen/small_100</item>
         <item name="hintTextAppearance">@style/TextAppearance.ScreenBindger.HintText</item>
         <item name="boxStrokeWidth">2dp</item>
+    </style>
+
+    <!-- Hint text style-->
+    <style name="TextAppearance.ScreenBindger.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">@color/primaryDarkColor</item>
     </style>
 
     <!-- TextInputEditText styling-->
@@ -58,33 +50,20 @@
         <item name="autoSizeTextType">uniform</item>
     </style>
 
-    <!-- Outlined button styling-->
-    <style name="Widget.ScreenBindger.Button" parent="Widget.MaterialComponents.Button">
-        <item name="drawableTint">?attr/colorOnPrimary</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-        <item name="backgroundTint">?attr/colorPrimary</item>
-    </style>
-
     <style name="Widget.ScreenBindger.ImageView.Circle" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="Widget.ScreenBindger.MaterialAlertDialog" parent="">
-        <item name="buttonBarPositiveButtonStyle">
-            @style/Widget.ScreenBindger.Dialog.Button.Positive
-        </item>
-        <item name="android:buttonBarPositiveButtonStyle">
-            @style/Widget.ScreenBindger.Dialog.Button.Positive
-        </item>
-    </style>
-
-    <style name="Widget.ScreenBindger.Dialog.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">?attr/colorPrimary</item>
-    </style>
-
+    <!-- Rating bar styling-->
     <style name="Widget.ScreenBindger.RatingBar" parent="">
         <item name="android:indeterminateOnly">false</item>
         <item name="android:progressDrawable">@drawable/rating_bar</item>
+    </style>
+
+    <style name="Widget.ScreenBindger.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="iconTint">?attr/colorOnPrimary</item>
+        <item name="android:iconTint" tools:targetApi="o">?attr/colorOnPrimary</item>
     </style>
 </resources>

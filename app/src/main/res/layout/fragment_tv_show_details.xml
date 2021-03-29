@@ -20,15 +20,13 @@
             android:id="@+id/btnAddOrRemoveAsFavorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/normal_100"
             android:layout_marginBottom="@dimen/normal_100"
-            android:backgroundTint="@color/defaultButtonColor"
-            android:scaleType="center"
+            android:backgroundTint="@color/cardview_dark_background"
             android:src="@drawable/ic_favorite_24"
-            app:borderWidth="0dp"
+            app:borderWidth="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"  />
 
         <ProgressBar
             android:id="@+id/progressBar"

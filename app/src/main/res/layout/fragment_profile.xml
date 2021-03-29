@@ -34,9 +34,10 @@
             android:layout_marginTop="@dimen/normal_100"
             android:layout_marginEnd="@dimen/normal_100"
             android:drawableEnd="@drawable/ic_logout_24"
+            android:drawableTint="?attr/colorSecondary"
             android:text="@string/logout"
             android:textAllCaps="false"
-            android:textColor="@color/logout_red"
+            android:textColor="?attr/colorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,7 +60,6 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/orange"
             android:src="@drawable/ic_image_plus_black_24"
-            android:tint="@color/orange"
             app:borderWidth="0dp"
             app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="@id/ivUserImage"
@@ -80,7 +80,7 @@
                 style="@style/Widget.ScreenBindger.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/full_name_required_placeholder"
+                android:hint="@string/full_name_placeholder"
                 app:startIconDrawable="@drawable/ic_profile_filled_black_24">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -98,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:hint="@string/email_required_placeholder"
+                android:hint="@string/email_placeholder"
                 app:startIconDrawable="@drawable/ic_email_24">
 
                 <com.google.android.material.textfield.TextInputEditText
