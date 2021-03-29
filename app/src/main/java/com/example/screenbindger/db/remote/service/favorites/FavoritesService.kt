@@ -76,7 +76,7 @@ class FavoritesService
                 sessionId = session.id!!,
                 accountId = session.accountId!!,
                 body = body
-            ).let {response ->
+            ).let { response ->
                 if (response.isSuccessful) {
                     if (body.favorite)
                         DetailsViewEvent.MarkedAsFavorite
@@ -104,16 +104,16 @@ class FavoritesService
                 if (response.isSuccessful) {
                     response.body()?.list?.forEach { show ->
                         if (show.id!! == showId) {
-                            DetailsViewEvent.MarkedAsFavorite
+                            return@let DetailsViewEvent.MarkedAsFavorite
                         }
                     }
-                    DetailsViewEvent.MarkedAsNotFavorite
+                    return@let DetailsViewEvent.MarkedAsNotFavorite
                 } else {
-                    DetailsViewEvent.NetworkError(R.string.error_peek_is_favorite)
+                    return@let DetailsViewEvent.NetworkError(R.string.error_peek_is_favorite)
                 }
             }
         } catch (e: Exception) {
-            DetailsViewEvent.NetworkError(R.string.network_error)
+            return DetailsViewEvent.NetworkError(R.string.network_error)
         }
     }
 
