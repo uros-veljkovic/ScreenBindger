@@ -4,8 +4,6 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.example.screenbindger.db.remote.request.MarkAsFavoriteRequestBody
 import com.example.screenbindger.model.domain.user.UserEntity
-import com.example.screenbindger.db.remote.response.genre.AllGenresResponse
-import com.example.screenbindger.db.remote.response.movie.MoviesResponse
 import com.example.screenbindger.db.remote.service.auth.firebase.AuthService
 import com.example.screenbindger.db.remote.service.auth.tmdb.TmdbAuthService
 import com.example.screenbindger.db.remote.service.favorites.FavoritesService
@@ -23,9 +21,9 @@ import com.example.screenbindger.view.fragment.favorite_movies.FavoritesViewEven
 import com.example.screenbindger.view.fragment.login.AuthorizationEventObservable
 import com.example.screenbindger.view.fragment.review.ReviewViewEvent
 import com.example.screenbindger.view.fragment.ShowListViewState
+import com.example.screenbindger.view.fragment.genres.GenresViewState
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
-import retrofit2.Response
 import javax.inject.Inject
 
 class ScreenBindgerRemoteDataSource
@@ -79,7 +77,7 @@ class ScreenBindgerRemoteDataSource
         tvShowService.getUpcoming(requestedPage)
     }
 
-    suspend fun getGenres(): Response<AllGenresResponse> = withContext(IO) {
+    suspend fun getGenres(): GenresViewState = withContext(IO) {
         genreService.getAll()
     }
 
@@ -103,12 +101,12 @@ class ScreenBindgerRemoteDataSource
         tvShowService.getCasts(showId)
 
 
-    suspend fun getMoviesByGenre(id: String): ShowListViewState = withContext(IO) {
-        genreService.getMoviesByGenre(id)
+    suspend fun getMoviesByGenre(id: String, page: Int): ShowListViewState = withContext(IO) {
+        genreService.getMoviesByGenre(id, page)
     }
 
-    suspend fun getTvShowsByGenre(id: String): ShowListViewState = withContext(IO) {
-        genreService.getTvShowsByGenre(id)
+    suspend fun getTvShowsByGenre(id: String, page: Int): ShowListViewState = withContext(IO) {
+        genreService.getTvShowsByGenre(id, page)
     }
 
     suspend fun getRequestToken(

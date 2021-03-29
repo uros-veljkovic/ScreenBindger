@@ -14,8 +14,14 @@ interface GenreApi {
     suspend fun getAllGenres():Response<AllGenresResponse>
 
     @GET("discover/movie?api_key=${API_KEY}")
-    suspend fun getMoviesByGenre(@Query("with_genres")id: String): Response<MoviesResponse>
+    suspend fun getMoviesByGenre(
+        @Query("with_genres")id: String,
+        @Query("page") page: Int = 1
+    ): Response<MoviesResponse>
 
     @GET("discover/tv?api_key=${API_KEY}")
-    suspend fun getTvShowsByGenre(@Query("with_genres")id: String): Response<MoviesResponse>
+    suspend fun getTvShowsByGenre(
+        @Query("with_genres")id: String,
+        @Query("page") page: Int = 1
+    ): Response<MoviesResponse>
 }

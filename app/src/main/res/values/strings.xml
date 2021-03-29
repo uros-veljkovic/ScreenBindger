@@ -75,4 +75,5 @@
     <string name="network_error">Network error</string>
     <string name="error_peek_is_favorite">Couldn\'t see if this movie is your favorite</string>
     <string name="could_not_load_trailer">Couldn\'t load trailer</string>
+    <string name="data_not_fetched">Data not fetched</string>
 </resources>

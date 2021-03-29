@@ -6,9 +6,13 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.screenbindger.databinding.FragmentGenresBinding
+import com.example.screenbindger.model.global.Genres
 import com.example.screenbindger.util.adapter.recyclerview.ItemGenreRecyclerViewAdapter
 import com.example.screenbindger.util.adapter.recyclerview.listener.OnCardItemClickListener
 import com.example.screenbindger.util.decorator.GridLayoutRecyclerViewDecorator
+import com.example.screenbindger.util.extensions.hide
+import com.example.screenbindger.util.extensions.show
+import com.example.screenbindger.util.extensions.snack
 import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -50,20 +54,48 @@ class GenresFragment : DaggerFragment(), OnCardItemClickListener {
     }
 
     private fun observeViewModel() {
-        viewModel.response.observe(viewLifecycleOwner, Observer { response ->
-            if (response != null && response.isSuccessful) {
-                val list = response.body()?.list?.toMutableList() ?: mutableListOf()
-                binding.rvGenres.adapter =
-                    ItemGenreRecyclerViewAdapter(WeakReference(requireContext()), this, list)
-                binding.rvGenres.startLayoutAnimation()
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is GenresViewState.Loading -> {
+                    showProgressBar()
+                }
+                is GenresViewState.Fetched -> {
+                    hideProgressBar()
+                    val list = state.list
+                    binding.rvGenres.adapter =
+                        ItemGenreRecyclerViewAdapter(
+                            WeakReference(requireContext()),
+                            this,
+                            list.toMutableList()
+                        )
+                    binding.rvGenres.startLayoutAnimation()
+
+                }
+                is GenresViewState.NotFetched -> {
+                    val message = getString(state.messageStringResId)
+                    showMessage(message)
+                    hideProgressBar()
+                }
             }
         })
     }
 
+    private fun showProgressBar() {
+        binding.progressBar.show()
+    }
+
+    private fun hideProgressBar() {
+        binding.progressBar.hide()
+    }
+
+    private fun showMessage(message: String) {
+        requireView().snack(message)
+    }
+
     override fun onCardItemClick(movieId: Int) {
-        val genre = viewModel.list?.get(movieId)
-        val genreId = genre?.id
-        val genreName = genre?.name
+        val chosenGenre = Genres.list.find { it.id == movieId }
+        val genreId = chosenGenre?.id
+        val genreName = chosenGenre?.name
 
         if (genreId != null) {
             val action = GenresFragmentDirections.actionGenresFragmentToGenreMoviesFragment(

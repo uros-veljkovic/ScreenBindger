@@ -16,6 +16,7 @@ import com.example.screenbindger.view.fragment.review.ReviewViewAction
 import com.example.screenbindger.view.fragment.review.ReviewViewEvent
 import com.example.screenbindger.view.fragment.review.ReviewViewState
 import com.example.screenbindger.view.fragment.ShowListViewState
+import com.example.screenbindger.view.fragment.genres.GenresViewState
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
@@ -61,6 +62,11 @@ class MainModule {
     @Provides
     fun provideUpcomingViewState(): MutableLiveData<ShowListViewState> =
         MutableLiveData(ShowListViewState.Fetching)
+
+    @MainScope
+    @Provides
+    fun provideGenresViewState(): MutableLiveData<GenresViewState> =
+        MutableLiveData(GenresViewState.Loading)
 
 
     @MainScope

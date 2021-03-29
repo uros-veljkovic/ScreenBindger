@@ -5,20 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
-import com.example.screenbindger.db.remote.response.movie.MoviesByGenreResponse
-import com.example.screenbindger.db.remote.response.movie.MoviesResponse
-import com.example.screenbindger.model.domain.movie.ShowEntity
-import com.example.screenbindger.model.global.Genres
 import com.example.screenbindger.util.constants.POSITION_TAB_MOVIES
 import com.example.screenbindger.util.constants.POSITION_TAB_TV_SHOWS
-import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.view.fragment.*
-import com.example.screenbindger.view.fragment.upcoming.UpcomingFragmentDirections
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import retrofit2.Response
 import javax.inject.Inject
 
 class GenreMoviesViewModel
@@ -51,11 +42,11 @@ class GenreMoviesViewModel
     }
 
     private fun fetchMovies() = executeActionAndSetState {
-        remoteDataSource.getMoviesByGenre(genreId!!)
+        remoteDataSource.getMoviesByGenre(genreId!!, currentPage)
     }
 
     private fun fetchTvShows() = executeActionAndSetState {
-        remoteDataSource.getTvShowsByGenre(genreId!!)
+        remoteDataSource.getTvShowsByGenre(genreId!!, currentPage)
     }
 
     private fun nextPage() {

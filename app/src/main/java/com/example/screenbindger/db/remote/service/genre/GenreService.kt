@@ -1,26 +1,40 @@
 package com.example.screenbindger.db.remote.service.genre
 
-import com.example.screenbindger.db.remote.response.movie.MoviesByGenreResponse
-import com.example.screenbindger.db.remote.response.genre.AllGenresResponse
-import com.example.screenbindger.db.remote.response.movie.MoviesResponse
+import com.example.screenbindger.R
 import com.example.screenbindger.model.domain.movie.generateGenres
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.getErrorResponse
 import com.example.screenbindger.view.fragment.ShowListViewState
-import retrofit2.Response
-import java.lang.Exception
+import com.example.screenbindger.view.fragment.genres.GenresViewState
 
 class GenreService
 constructor(
     private val genreApi: GenreApi
 ) {
 
-    suspend fun getAll(): Response<AllGenresResponse> {
-        return genreApi.getAllGenres()
+    suspend fun getAll(): GenresViewState {
+        return try {
+            genreApi.getAllGenres().let { response ->
+                if (response.isSuccessful) {
+                    val list = response.body()?.list
+
+                    if (list.isNullOrEmpty().not()) {
+                        GenresViewState.Fetched(list!!)
+                    } else {
+                        GenresViewState.NotFetched(R.string.data_not_fetched)
+                    }
+
+                } else {
+                    GenresViewState.NotFetched(R.string.data_not_fetched)
+                }
+            }
+        } catch (e: Exception) {
+            GenresViewState.NotFetched(R.string.network_error)
+        }
     }
 
-    suspend fun getMoviesByGenre(id: String): ShowListViewState {
-        return genreApi.getMoviesByGenre(id).let { response ->
+    suspend fun getMoviesByGenre(id: String, page: Int): ShowListViewState {
+        return genreApi.getMoviesByGenre(id, page).let { response ->
             if (response.isSuccessful) {
                 val body = response.body()!!
 
@@ -41,8 +55,8 @@ constructor(
         }
     }
 
-    suspend fun getTvShowsByGenre(id: String): ShowListViewState {
-        return genreApi.getTvShowsByGenre(id).let { response ->
+    suspend fun getTvShowsByGenre(id: String, page: Int): ShowListViewState {
+        return genreApi.getTvShowsByGenre(id, page).let { response ->
             if (response.isSuccessful) {
                 val body = response.body()!!
 
@@ -62,5 +76,4 @@ constructor(
             }
         }
     }
-
 }

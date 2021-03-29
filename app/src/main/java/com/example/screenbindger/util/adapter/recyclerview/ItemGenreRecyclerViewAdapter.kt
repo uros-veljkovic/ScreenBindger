@@ -30,7 +30,7 @@ class ItemGenreRecyclerViewAdapter(
         holder.bind(genre)
         setGenreImage(genre, holder)
 
-        holder.itemView.setOnClickListener { listener.onCardItemClick(position) }
+        holder.itemView.setOnClickListener { listener.onCardItemClick(genre.id!!) }
     }
 
     private fun setGenreImage(genre: GenreEntity, holder: ItemGenreViewHolder) {

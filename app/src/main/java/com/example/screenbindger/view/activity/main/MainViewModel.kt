@@ -1,9 +1,11 @@
 package com.example.screenbindger.view.activity.main
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.screenbindger.model.domain.user.UserEntity
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.model.global.Genres
+import com.example.screenbindger.view.fragment.genres.GenresViewState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -16,8 +18,18 @@ class MainViewModel
 ) : ViewModel() {
 
     fun fetchGenres() {
-        CoroutineScope(IO).launch {
-            Genres.list.addAll(db.getGenres().body()?.list ?: mutableListOf())
+        viewModelScope.launch {
+            when (val state = db.getGenres()) {
+                is GenresViewState.Fetched -> {
+                    Genres.list.clear()
+                    Genres.list.addAll(state.list)
+                }
+                is GenresViewState.NotFetched -> {
+                    Genres.list.addAll(emptyList())
+                }
+                else -> {
+                }
+            }
         }
     }
 

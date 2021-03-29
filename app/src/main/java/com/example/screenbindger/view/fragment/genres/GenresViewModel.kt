@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
 import com.example.screenbindger.db.remote.response.genre.AllGenresResponse
 import com.example.screenbindger.model.domain.genre.GenreEntity
+import com.example.screenbindger.view.fragment.ShowListViewState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -14,19 +15,17 @@ import javax.inject.Inject
 
 class GenresViewModel
 @Inject constructor(
-    val remoteDataSource: ScreenBindgerRemoteDataSource
+    val remoteDataSource: ScreenBindgerRemoteDataSource,
+    val viewState: MutableLiveData<GenresViewState>
 ) : ViewModel() {
 
-    val response: MutableLiveData<Response<AllGenresResponse>?> = MutableLiveData(null)
-    val list: List<GenreEntity>? get() = response.value?.body()?.list
-
     init {
-        fetchData()
+        executeActionAndSetState { remoteDataSource.getGenres() }
     }
 
-    private fun fetchData() {
+    private fun executeActionAndSetState(actionReturningState: suspend () -> GenresViewState) =
         viewModelScope.launch(IO) {
-            response.postValue(remoteDataSource.getGenres())
+            val newState = actionReturningState()
+            viewState.postValue(newState)
         }
-    }
 }
