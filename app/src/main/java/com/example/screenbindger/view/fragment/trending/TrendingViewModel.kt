@@ -52,8 +52,9 @@ class TrendingViewModel
 
     private fun fetchBasedOnState() {
         when (viewState.value) {
-            is ShowListViewState.FetchedTvShows -> fetchMovies()
-            is ShowListViewState.FetchedMovies -> fetchTvShows()
+            is ShowListViewState.FetchedTvShows -> fetchTvShows()
+            is ShowListViewState.Fetching,
+            is ShowListViewState.FetchedMovies -> fetchMovies()
             else -> return
         }
     }
@@ -80,6 +81,7 @@ class TrendingViewModel
     }
 
     fun tabSelected(position: Int) {
+        currentPage = 1
         when (position) {
             POSITION_TAB_MOVIES -> executeAction(FetchMovies)
             POSITION_TAB_TV_SHOWS -> executeAction(FetchTvShows)

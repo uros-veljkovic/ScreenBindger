@@ -19,7 +19,6 @@ import com.example.screenbindger.util.dialog.SortDialog
 import com.example.screenbindger.util.event.Event
 import com.example.screenbindger.util.extensions.*
 import com.example.screenbindger.view.fragment.*
-import com.example.screenbindger.view.fragment.details.CastsViewState
 import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -73,11 +72,10 @@ class TrendingFragment : DaggerFragment(),
             tabContainer.tabs.onTabSelected { position ->
                 viewModel.tabSelected(position)
             }
-            btnNext.setOnClickListener {
+            pagingContainer.btnNext.setOnClickListener {
                 viewModel.executeAction(GotoNextPage)
             }
-
-            btnPrevious.setOnClickListener {
+            pagingContainer.btnPrevious.setOnClickListener {
                 viewModel.executeAction(GotoPreviousPage)
             }
         }
@@ -113,7 +111,7 @@ class TrendingFragment : DaggerFragment(),
 
     private fun updateUi(list: List<ShowEntity>, currentPageNumber: Int, totalPages: Int) {
         hideProgressBar()
-        configPaginationButtons(currentPageNumber, totalPages)
+        configPagination(currentPageNumber, totalPages)
         populateRecyclerView(list)
     }
 
@@ -125,9 +123,10 @@ class TrendingFragment : DaggerFragment(),
         }
     }
 
-    private fun configPaginationButtons(currentPageNumber: Int, lastPageNumber: Int) {
+    private fun configPagination(currentPageNumber: Int, lastPageNumber: Int) {
         viewModel.currentPage = currentPageNumber
-        with(binding) {
+        setCurrentAndLastPage(currentPageNumber, lastPageNumber)
+        with(binding.pagingContainer) {
             when (currentPageNumber) {
                 1 -> {
                     disable(btnPrevious)
@@ -139,6 +138,13 @@ class TrendingFragment : DaggerFragment(),
                     enable(btnNext, btnPrevious)
                 }
             }
+        }
+    }
+
+    private fun setCurrentAndLastPage(currentPageNumber: Int, lastPageNumber: Int) {
+        with(binding.pagingContainer) {
+            tvPageCurrent.text = currentPageNumber.toString()
+            tvPageLast.text = lastPageNumber.toString()
         }
     }
 
