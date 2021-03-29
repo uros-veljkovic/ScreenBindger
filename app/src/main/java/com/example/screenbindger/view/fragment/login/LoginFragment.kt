@@ -131,8 +131,7 @@ class LoginFragment : DaggerFragment() {
 
     private fun showSessionFailDialog(message: String?) {
         MaterialAlertDialogBuilder(
-            requireContext(),
-            R.style.Widget_ScreenBindger_MaterialAlertDialog
+            requireContext()
         )
             .setTitle(resources.getString(R.string.message_title_token_auth_failed))
             .setMessage(message)

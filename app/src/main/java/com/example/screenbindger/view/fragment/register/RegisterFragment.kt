@@ -145,8 +145,7 @@ class RegisterFragment : DaggerFragment() {
 
     private fun confirmEmail() {
         MaterialAlertDialogBuilder(
-            requireContext(),
-            R.style.Widget_ScreenBindger_MaterialAlertDialog
+            requireContext()
         )
             .setTitle(resources.getString(R.string.message_confirm_email_title))
             .setMessage(resources.getString(R.string.message_confirm_email_body))
@@ -192,8 +191,7 @@ class RegisterFragment : DaggerFragment() {
 
     private fun showSessionFailDialog(message: String?) {
         MaterialAlertDialogBuilder(
-            requireContext(),
-            R.style.Widget_ScreenBindger_MaterialAlertDialog
+            requireContext()
         )
             .setTitle(resources.getString(R.string.message_title_token_auth_failed))
             .setMessage(message)

@@ -89,8 +89,7 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
 
     private fun showLogoutDialog() {
         MaterialAlertDialogBuilder(
-            requireContext(),
-            R.style.Widget_ScreenBindger_MaterialAlertDialog
+            requireContext()
         )
             .setTitle(resources.getString(R.string.logout))
             .setMessage(resources.getString(R.string.message_logout))
@@ -177,7 +176,7 @@ class ProfileFragment : DaggerFragment(), PasswordDialogFragment.ChangePasswordL
             }
             fabUpdate.setIconAndColor(
                 R.drawable.ic_pencil_black_24,
-                R.color.orange
+                R.color.primaryColor
             )
         }
     }
