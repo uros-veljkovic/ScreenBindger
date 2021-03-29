@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--?xml version="1.0" encoding="UTF-8"?-->
-    <color name="primaryColor">#ffca28</color>
-    <color name="primaryLightColor">#fffd61</color>
-    <color name="primaryDarkColor">#c79a00</color>
-    <color name="primaryTextColor">#000000</color>
 
-    <color name="secondaryColor">#d50000</color>
-    <color name="secondaryLightColor">#ff5131</color>
-    <color name="secondaryDarkColor">#9b0000</color>
-    <color name="secondaryTextColor">#ffffff</color>
+    <color name="primaryColor">#ffcc80</color>
+    <color name="primaryLightColor">#ffffb0</color>
+    <color name="primaryDarkColor">#ca9b52</color>
+    <color name="secondaryColor">#4d95ff</color>
+
+    <color name="secondaryLightColor">#8ac5ff</color>
+    <color name="secondaryDarkColor">#0068cb</color>
+    <color name="primaryTextColor">#000000</color>
+    <color name="secondaryTextColor">#000000</color>
 
     <color name="defaultCircularImageViewBackground">#797979</color>
 
