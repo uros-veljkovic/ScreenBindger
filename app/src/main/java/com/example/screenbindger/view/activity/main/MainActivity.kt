@@ -109,7 +109,7 @@ class MainActivity : DaggerAppCompatActivity() {
     fun modifyToolbarForActivity() {
 
         val transparentBackground =
-            ContextCompat.getColor(this, R.color.defaultBackground)
+            ContextCompat.getColor(this, android.R.color.transparent)
         binding.toolbar.setBackgroundColor(transparentBackground)
 
         val constraintLayout = binding.container
