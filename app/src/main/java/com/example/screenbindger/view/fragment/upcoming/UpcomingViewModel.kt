@@ -3,7 +3,10 @@ package com.example.screenbindger.view.fragment.upcoming
 import androidx.lifecycle.*
 import androidx.navigation.NavDirections
 import com.example.screenbindger.db.remote.repo.ScreenBindgerRemoteDataSource
+import com.example.screenbindger.util.constants.POSITION_TAB_MOVIES
+import com.example.screenbindger.util.constants.POSITION_TAB_TV_SHOWS
 import com.example.screenbindger.view.fragment.*
+import com.example.screenbindger.view.fragment.details.CastsViewState
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -57,6 +60,7 @@ class UpcomingViewModel
     private fun fetchAccordingToState() {
         when (viewState.value) {
             is ShowListViewState.FetchedTvShows -> fetchTvShows()
+            is ShowListViewState.Fetching,
             is ShowListViewState.FetchedMovies -> fetchMovies()
             else -> return
         }
@@ -80,6 +84,13 @@ class UpcomingViewModel
             viewState.postValue(newState)
         }
 
+    fun tabSelected(position: Int) {
+        currentPage = 1
+        when (position) {
+            POSITION_TAB_MOVIES -> executeAction(FetchMovies)
+            POSITION_TAB_TV_SHOWS -> executeAction(FetchTvShows)
+        }
+    }
 
 }
 

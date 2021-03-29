@@ -74,25 +74,13 @@ class UpcomingFragment : DaggerFragment(),
 
     private fun initOnClickListeners() {
         with(binding) {
-            tabContainer.tabs.addOnTabSelectedListener(object :
-                TabLayout.OnTabSelectedListener {
-                override fun onTabReselected(tab: TabLayout.Tab?) {}
-                override fun onTabUnselected(tab: TabLayout.Tab?) {}
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    if (tab!!.position == 0) {
-                        viewModel.executeAction(FetchMovies)
-                    } else {
-                        viewModel.executeAction(FetchTvShows)
-                    }
-                }
-
-            })
-
-            btnNext.setOnClickListener {
+            tabContainer.tabs.onTabSelected { position ->
+                viewModel.tabSelected(position)
+            }
+            pagingContainer.btnNext.setOnClickListener {
                 viewModel.executeAction(GotoNextPage)
             }
-
-            btnPrevious.setOnClickListener {
+            pagingContainer.btnPrevious.setOnClickListener {
                 viewModel.executeAction(GotoPreviousPage)
             }
         }
@@ -135,7 +123,8 @@ class UpcomingFragment : DaggerFragment(),
 
     private fun configPaginationButtons(currentPageNumber: Int, lastPageNumber: Int) {
         viewModel.currentPage = currentPageNumber
-        with(binding) {
+        setCurrentAndLastPage(currentPageNumber, lastPageNumber)
+        with(binding.pagingContainer) {
             when (currentPageNumber) {
                 1 -> {
                     disable(btnPrevious)
@@ -147,6 +136,13 @@ class UpcomingFragment : DaggerFragment(),
                     enable(btnNext, btnPrevious)
                 }
             }
+        }
+    }
+
+    private fun setCurrentAndLastPage(currentPageNumber: Int, lastPageNumber: Int) {
+        with(binding.pagingContainer) {
+            tvPageCurrent.text = currentPageNumber.toString()
+            tvPageLast.text = lastPageNumber.toString()
         }
     }
 
