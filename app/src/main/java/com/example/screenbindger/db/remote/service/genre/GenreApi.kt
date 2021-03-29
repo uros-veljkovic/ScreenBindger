@@ -15,4 +15,7 @@ interface GenreApi {
 
     @GET("discover/movie?api_key=${API_KEY}")
     suspend fun getMoviesByGenre(@Query("with_genres")id: String): Response<MoviesResponse>
+
+    @GET("discover/tv?api_key=${API_KEY}")
+    suspend fun getTvShowsByGenre(@Query("with_genres")id: String): Response<MoviesResponse>
 }

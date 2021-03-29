@@ -82,6 +82,9 @@
         <argument
             android:name="genreId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_genreMoviesFragment_to_tvShowDetailsFragment"
+            app:destination="@id/tvShowDetailsFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_profileFragment"

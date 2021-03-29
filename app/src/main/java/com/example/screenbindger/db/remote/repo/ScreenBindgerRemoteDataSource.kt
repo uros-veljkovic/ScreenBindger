@@ -103,8 +103,12 @@ class ScreenBindgerRemoteDataSource
         tvShowService.getCasts(showId)
 
 
-    suspend fun getMoviesByGenre(id: String): Response<MoviesResponse> = withContext(IO) {
+    suspend fun getMoviesByGenre(id: String): ShowListViewState = withContext(IO) {
         genreService.getMoviesByGenre(id)
+    }
+
+    suspend fun getTvShowsByGenre(id: String): ShowListViewState = withContext(IO) {
+        genreService.getTvShowsByGenre(id)
     }
 
     suspend fun getRequestToken(
