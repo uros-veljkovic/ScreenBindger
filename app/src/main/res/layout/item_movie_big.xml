@@ -101,7 +101,7 @@
                     android:justificationMode="inter_word"
                     android:text="@{movie.description}"
                     android:textSize="14sp"
-                    app:colorClickableText="#FF0000"
+                    app:colorClickableText="?attr/colorSecondaryVariant"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvMovieGenres"
